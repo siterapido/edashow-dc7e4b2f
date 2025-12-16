@@ -1,0 +1,127 @@
+import { getEvents, getImageUrl } from '@/lib/payload/api'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Card, CardContent } from '@/components/ui/card'
+import { Calendar, MapPin } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+
+// Imagens de exemplo para eventos
+const eventExampleImages = [
+  "/conference-healthcare-panel.jpg",
+  "/workshop-business-meeting.jpg",
+  "/healthcare-launch-event.jpg",
+  "/award-ceremony-healthcare.jpg",
+  "/corporate-event-celebration.png",
+  "/healthcare-award-ceremony.jpg",
+  "/odont-award-ceremony.jpg",
+]
+
+// Função para garantir que eventos sempre tenham uma imagem de exemplo
+function ensureEventImage(event: any, index: number): any {
+  if (!event.image) {
+    // Usa uma imagem de exemplo baseada no índice do evento
+    const imageIndex = index % eventExampleImages.length
+    return {
+      ...event,
+      image: eventExampleImages[imageIndex]
+    }
+  }
+  return event
+}
+
+export const metadata = {
+  title: 'Todos os Eventos | EdaShow',
+  description: 'Confira todos os eventos do setor de saúde',
+}
+
+export default async function EventsPage() {
+  const events = await getEvents({ 
+    limit: 50, 
+    status: 'upcoming',
+    revalidate: 60 
+  })
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-12">
+        <header className="mb-12 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Todos os Eventos</h1>
+          <p className="text-xl text-muted-foreground">
+            Participe dos principais eventos do setor de saúde
+          </p>
+        </header>
+
+        {events.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-4">
+              Nenhum evento próximo no momento.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Acesse <Link href="/admin" className="text-primary hover:underline">/admin</Link> para criar eventos.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {events.map((event: any, index: number) => {
+              const eventDate = new Date(event.startDate)
+              const day = format(eventDate, 'dd')
+              const month = format(eventDate, 'MMM', { locale: ptBR }).toUpperCase()
+              
+              // Garante que sempre há uma imagem de exemplo
+              const eventWithImage = ensureEventImage(event, index)
+              const imageUrl = typeof eventWithImage.image === 'string' 
+                ? eventWithImage.image 
+                : getImageUrl(eventWithImage.image, 'card')
+              
+              return (
+                <Link href={`/events/${event.slug}`} key={event.id}>
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                    <div className="relative">
+                      <div className="relative w-full h-48">
+                        <Image
+                          src={imageUrl}
+                          alt={event.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="absolute top-3 left-3 bg-white text-center p-2 rounded shadow">
+                        <div className="text-2xl font-bold text-blue-600">{day}</div>
+                        <div className="text-xs uppercase">{month}</div>
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="font-bold text-base mb-3 line-clamp-2">
+                        {event.title}
+                      </h3>
+                      <div className="space-y-2 text-xs text-gray-600">
+                        <div className="flex items-start gap-2">
+                          <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          <span>
+                            {format(eventDate, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                          </span>
+                        </div>
+                        {event.location && (
+                          <div className="flex items-start gap-2">
+                            <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                            <span>{event.location}</span>
+                          </div>
+                        )}
+                      </div>
+                      <Button variant="outline" className="w-full mt-4 text-sm bg-transparent">
+                        Ver Detalhes
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+

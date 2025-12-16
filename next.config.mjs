@@ -1,3 +1,5 @@
+import { withPayload } from '@payloadcms/next/withPayload'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -5,8 +7,22 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
- 
+  reactCompiler: false,
 }
 
-export default nextConfig
+// Desabilita o bundling de pacotes do servidor durante desenvolvimento
+// para melhor performance e compatibilidade
+export default withPayload(nextConfig, { 
+  devBundleServerPackages: false 
+})
