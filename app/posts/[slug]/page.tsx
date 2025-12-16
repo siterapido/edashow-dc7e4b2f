@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { LexicalRenderer } from '@/components/lexical-renderer'
 
 interface PostPageProps {
   params: {
@@ -44,8 +45,657 @@ export async function generateMetadata({ params }: PostPageProps) {
   }
 }
 
+// Dados fallback para posts de exemplo
+const fallbackPosts: Record<string, any> = {
+  'ans-define-novas-regras-para-portabilidade-de-carencias': {
+    title: 'ANS define novas regras para portabilidade de carências',
+    excerpt: 'Medida visa facilitar a troca de planos para beneficiários em todo o país a partir do próximo mês.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/regulatory-agency-logo.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A Agência Nacional de Saúde Suplementar (ANS) publicou novas regras para facilitar a portabilidade de carências entre planos de saúde. A medida beneficia milhões de brasileiros que desejam trocar de operadora sem perder o tempo já cumprido de carência.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'usisaude-seguro-cresceu-em-2025-e-projeta-expansao-nacional-em-2026': {
+    title: 'Usisaúde Seguro cresceu em 2025 e projeta expansão nacional em 2026 sob liderança de Ricardo Rodrigues',
+    excerpt: 'A Usisaúde alcançou resultados expressivos em 2025, ampliando sua presença no mercado e consolidando...',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/professional-man-ricardo-rodrigues.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A Usisaúde Seguro demonstrou crescimento significativo em 2025, consolidando sua posição no mercado de saúde suplementar. Sob a liderança de Ricardo Rodrigues, a empresa planeja expandir suas operações para todo o território nacional em 2026.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'ministerio-da-saude-anuncia-investimento-recorde-no-sus': {
+    title: 'Ministério da Saúde anuncia investimento recorde no SUS',
+    excerpt: 'Recursos serão destinados à digitalização e modernização de hospitais públicos.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/modern-healthcare-building.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'O Ministério da Saúde anunciou um investimento recorde para modernização do Sistema Único de Saúde (SUS). Os recursos serão destinados principalmente à digitalização e modernização de hospitais públicos em todo o país.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'novas-diretrizes-para-planos-de-saude-coletivos-em-2026': {
+    title: 'Novas diretrizes para planos de saúde coletivos em 2026',
+    excerpt: 'Entenda o que muda para empresas e beneficiários com a nova resolução normativa.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/business-man-professional.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A ANS publicou novas diretrizes para planos de saúde coletivos que entrarão em vigor em 2026. As mudanças afetam tanto empresas quanto beneficiários, trazendo mais transparência e direitos aos usuários.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'judicializacao-da-saude-novos-precedentes-do-stj': {
+    title: 'Judicialização da saúde: novos precedentes do STJ',
+    excerpt: 'Decisões recentes trazem mais segurança jurídica para operadoras e usuários.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/ans-building-court.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'O Superior Tribunal de Justiça (STJ) estabeleceu novos precedentes importantes sobre judicialização da saúde. As decisões trazem mais segurança jurídica tanto para operadoras quanto para usuários de planos de saúde.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'ia-generativa-revoluciona-triagem-em-prontos-socorros': {
+    title: 'IA Generativa revoluciona triagem em prontos-socorros',
+    excerpt: 'Hospitais de SP reportam redução de 30% no tempo de espera com novo sistema.',
+    category: 'analysis',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/smartphone-health-app.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A inteligência artificial generativa está revolucionando o atendimento em prontos-socorros. Hospitais de São Paulo reportam redução de até 30% no tempo de espera após implementação de sistemas de triagem baseados em IA.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'telemedicina-atinge-marca-de-10-milhoes-de-atendimentos': {
+    title: 'Telemedicina atinge marca de 10 milhões de atendimentos',
+    excerpt: 'Crescimento de 45% no último ano consolida modalidade no país.',
+    category: 'analysis',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/business-executive-professional.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A telemedicina atingiu a marca histórica de 10 milhões de atendimentos no Brasil. O crescimento de 45% no último ano consolida a modalidade como parte essencial do sistema de saúde brasileiro.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'wearables-e-monitoramento-remoto-de-pacientes-cronicos': {
+    title: 'Wearables e monitoramento remoto de pacientes crônicos',
+    excerpt: 'Dispositivos conectados reduzem internações em até 25%, aponta estudo.',
+    category: 'analysis',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/conference-healthcare-panel.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Dispositivos vestíveis (wearables) estão revolucionando o monitoramento de pacientes crônicos. Estudo recente aponta redução de até 25% nas internações hospitalares com o uso dessas tecnologias.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'blockchain-na-gestao-de-prontuarios-eletronicos': {
+    title: 'Blockchain na gestão de prontuários eletrônicos',
+    excerpt: 'Segurança e interoperabilidade são os principais benefícios da tecnologia.',
+    category: 'analysis',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/modern-building-ans.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A tecnologia blockchain está sendo implementada na gestão de prontuários eletrônicos. Segurança e interoperabilidade são os principais benefícios destacados por especialistas do setor.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'odont-reforca-protagonismo-no-nordeste': {
+    title: 'Odont reforça protagonismo no Nordeste',
+    excerpt: 'A Odont, maior cooperativa de Odontologia em número de cooperados (mais de 15mil), anunciou...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 86400000).toISOString(),
+    featuredImage: '/odont-award-ceremony.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A Odont, maior cooperativa de Odontologia em número de cooperados, com mais de 15 mil profissionais, anunciou expansão de suas operações na região Nordeste, reforçando seu protagonismo no setor.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'stf-publica-acordao-com-regras-para-judicializacao-da-cobertura-fora-do-rol-da-ans': {
+    title: 'STF publica acórdão com regras para judicialização da cobertura fora do rol da ANS',
+    excerpt: 'Todas as ações judiciais envolvendo cobertura de tratamentos que não estejam no rol...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 172800000).toISOString(),
+    featuredImage: '/ans-building-court.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'O Supremo Tribunal Federal (STF) publicou acórdão estabelecendo novas regras para ações judiciais envolvendo cobertura de tratamentos que não estejam no rol da ANS, trazendo mais clareza para o setor.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'reajuste-medio-dos-planos-de-saude-foi-de-11-15-veja-aumento-das-principais-operadoras': {
+    title: 'Reajuste médio dos planos de saúde foi de 11,15%; veja aumento das principais operadoras',
+    excerpt: 'Em 2024, o reajuste médio dos planos de saúde individuais registrou aumento que varia por operadora, saiba mais...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 259200000).toISOString(),
+    featuredImage: '/healthcare-operators-increase.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'O reajuste médio dos planos de saúde individuais em 2024 foi de 11,15%. Confira como ficou o aumento nas principais operadoras do país e entenda os fatores que influenciaram os índices.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'telemedicina-ganha-forca-com-novas-regulamentacoes-da-ans': {
+    title: 'Telemedicina ganha força com novas regulamentações da ANS',
+    excerpt: 'Novas diretrizes facilitam acesso a consultas remotas e ampliam cobertura para pacientes em todo o país...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 345600000).toISOString(),
+    featuredImage: '/smartphone-health-app.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A ANS publicou novas regulamentações que fortalecem a telemedicina no Brasil. As diretrizes facilitam o acesso a consultas remotas e ampliam a cobertura para pacientes em todo o território nacional.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'operadoras-investem-em-tecnologia-para-reduzir-custos-administrativos': {
+    title: 'Operadoras investem em tecnologia para reduzir custos administrativos',
+    excerpt: 'Sistemas de gestão integrados e automação de processos prometem economia de até 30% nos custos operacionais...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 432000000).toISOString(),
+    featuredImage: '/modern-healthcare-building.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Operadoras de planos de saúde estão investindo pesadamente em tecnologia para reduzir custos administrativos. Sistemas de gestão integrados e automação de processos prometem economia de até 30% nos custos operacionais.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'ans-anuncia-novas-regras-para-planos-odontologicos-em-2026': {
+    title: 'ANS anuncia novas regras para planos odontológicos em 2026',
+    excerpt: 'Mudanças visam aumentar transparência e melhorar qualidade do atendimento odontológico para beneficiários...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 518400000).toISOString(),
+    featuredImage: '/business-executive-professional.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A ANS anunciou novas regras para planos odontológicos que entrarão em vigor em 2026. As mudanças visam aumentar a transparência e melhorar a qualidade do atendimento odontológico para beneficiários.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'setor-de-saude-suplementar-debate-futuro-do-setor-em-congresso-nacional': {
+    title: 'Setor de saúde suplementar debate futuro do setor em congresso nacional',
+    excerpt: 'Líderes do setor se reúnem para discutir inovações, regulamentações e tendências do mercado de planos de saúde...',
+    category: 'news',
+    publishedDate: new Date(Date.now() - 604800000).toISOString(),
+    featuredImage: '/conference-healthcare-panel.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Líderes do setor de saúde suplementar se reuniram em congresso nacional para discutir o futuro do setor. O evento abordou inovações, regulamentações e tendências do mercado de planos de saúde.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  }
+}
+
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPostBySlug(params.slug)
+  let post = await getPostBySlug(params.slug)
+  
+  // Se não encontrar no CMS, tenta usar dados fallback
+  if (!post && fallbackPosts[params.slug]) {
+    post = fallbackPosts[params.slug]
+  }
   
   if (!post) {
     notFound()
@@ -148,16 +798,16 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
 
         {/* Conteúdo */}
-        <div className="prose prose-lg max-w-none mb-8">
-          {/* Aqui você pode renderizar o conteúdo rico do Lexical */}
-          {/* Por enquanto, vamos mostrar uma mensagem */}
-          <div className="bg-muted p-6 rounded-lg">
-            <p className="text-muted-foreground">
-              O conteúdo completo do post será renderizado aqui. 
-              Para renderizar o conteúdo rico do Lexical, você precisará 
-              instalar e configurar o componente de renderização apropriado.
-            </p>
-          </div>
+        <div className="mb-8">
+          {post.content ? (
+            <LexicalRenderer content={post.content} />
+          ) : (
+            <div className="bg-muted p-6 rounded-lg">
+              <p className="text-muted-foreground">
+                Conteúdo não disponível.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Tags */}

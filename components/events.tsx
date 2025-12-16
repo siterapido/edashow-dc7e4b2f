@@ -70,20 +70,38 @@ export function Events() {
 
   useEffect(() => {
     const fetchData = async () => {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:73',message:'Events fetchData started',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
       try {
         let data = await getEvents({ 
           limit: 3, 
           status: 'upcoming',
           revalidate: 60 
         });
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:82',message:'getEvents returned',data:{dataLength:data?.length,dataIsArray:Array.isArray(data),dataValue:data},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
         if (!data || data.length === 0) {
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:85',message:'Using fallback events - no data from API',data:{dataIsNull:data===null,dataIsUndefined:data===undefined,dataLength:data?.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+          // #endregion
           data = fallbackEvents;
         } else {
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:88',message:'Processing CMS events with ensureEventImage',data:{eventCount:data.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
           // Garante que eventos do CMS sempre tenham imagens de exemplo
           data = data.map((event: any, index: number) => ensureEventImage(event, index));
         }
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:93',message:'Setting events state',data:{finalEventCount:data.length,firstEvent:data[0]},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
         setEvents(data);
       } catch (e) {
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:97',message:'Error caught in fetchData',data:{error:e instanceof Error?e.message:String(e),errorType:typeof e},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
         setEvents(fallbackEvents);
       }
     };
@@ -105,15 +123,24 @@ export function Events() {
 
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {events.map((event: any, index: number) => {
+            // #region agent log
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:108',message:'Rendering event card',data:{eventId:event.id,eventTitle:event.title,eventSlug:event.slug,hasImage:!!event.image,imageType:typeof event.image,index},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            // #endregion
             const eventDate = new Date(event.startDate)
             const day = format(eventDate, 'dd')
             const month = format(eventDate, 'MMM', { locale: ptBR }).toUpperCase()
             
             // Garante que sempre há uma imagem de exemplo
             const eventWithImage = ensureEventImage(event, index)
+            // #region agent log
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:117',message:'After ensureEventImage call',data:{originalImage:event.image,processedImage:eventWithImage.image,imageType:typeof eventWithImage.image},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            // #endregion
             const imageUrl = typeof eventWithImage.image === 'string' 
               ? eventWithImage.image 
               : getImageUrl(eventWithImage.image, 'card')
+            // #region agent log
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:123',message:'Final imageUrl computed',data:{imageUrl,eventSlug:event.slug},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            // #endregion
             
             return (
               <motion.div
@@ -123,9 +150,11 @@ export function Events() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <Link href={`/events/${event.slug}`} className="block h-full">
-                  <Card className="overflow-hidden bg-white hover:shadow-2xl transition-all h-full flex flex-col border-0 shadow-lg group/card">
-                    <div className="relative group">
-                      <div className="relative w-full h-40 overflow-hidden">
+                  <Card className="overflow-hidden bg-white hover:shadow-2xl transition-all h-full flex flex-col border-0 shadow-lg group/card pt-0">
+                    {/* Borda infinita apenas ao redor da imagem */}
+                    <div className="relative p-[3px] rounded-t-xl overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-conic animate-[spin_3s_linear_infinite] opacity-80"></div>
+                      <div className="relative w-full h-40 overflow-hidden rounded-t-xl bg-white">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.6 }}
@@ -139,7 +168,7 @@ export function Events() {
                           />
                         </motion.div>
                       </div>
-                      <div className="absolute top-3 left-3 bg-white text-center p-1.5 px-2.5 rounded-lg shadow-md border-l-4 border-orange-500">
+                      <div className="absolute top-3 left-3 bg-white text-center p-1.5 px-2.5 rounded-lg shadow-md border-l-4 border-orange-500 z-10">
                         <div className="text-xl font-bold text-gray-900 leading-none mb-1">{day}</div>
                         <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider leading-none">{month}</div>
                       </div>
@@ -178,8 +207,14 @@ export function Events() {
                       <Button 
                         className="w-full mt-5 text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition-all duration-300 uppercase tracking-wide"
                         onClick={(e) => {
+                          // #region agent log
+                          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:184',message:'Button clicked',data:{hasRegistrationUrl:!!event.registrationUrl,registrationUrl:event.registrationUrl,eventSlug:event.slug},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+                          // #endregion
                           if (event.registrationUrl) {
                             e.preventDefault()
+                            // #region agent log
+                            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:189',message:'Opening registration URL',data:{url:event.registrationUrl},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+                            // #endregion
                             window.open(event.registrationUrl, '_blank')
                           }
                         }}

@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "seed:posts": "ts-node --esm scripts/seed-example-posts.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

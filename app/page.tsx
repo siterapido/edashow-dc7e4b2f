@@ -97,7 +97,8 @@ export default async function HomePage() {
       excerpt: "Medida visa facilitar a troca de planos para beneficiários em todo o país a partir do próximo mês.",
       image: "/regulatory-agency-logo.jpg",
       category: "Regulação",
-      date: "Há 4 horas"
+      date: "Há 4 horas",
+      slug: "ans-define-novas-regras-para-portabilidade-de-carencias"
     },
     {
       type: "news" as CardType,
@@ -105,7 +106,8 @@ export default async function HomePage() {
       excerpt: "Recursos serão destinados à digitalização e modernização de hospitais públicos.",
       image: "/modern-healthcare-building.jpg",
       category: "Governo",
-      date: "Há 6 horas"
+      date: "Há 6 horas",
+      slug: "ministerio-da-saude-anuncia-investimento-recorde-no-sus"
     },
     {
       type: "news" as CardType,
@@ -113,7 +115,8 @@ export default async function HomePage() {
       excerpt: "Entenda o que muda para empresas e beneficiários com a nova resolução normativa.",
       image: "/business-man-professional.jpg",
       category: "Mercado",
-      date: "Há 8 horas"
+      date: "Há 8 horas",
+      slug: "novas-diretrizes-para-planos-de-saude-coletivos-em-2026"
     },
     {
       type: "news" as CardType,
@@ -121,7 +124,8 @@ export default async function HomePage() {
       excerpt: "Decisões recentes trazem mais segurança jurídica para operadoras e usuários.",
       image: "/ans-building-court.jpg",
       category: "Jurídico",
-      date: "Há 12 horas"
+      date: "Há 12 horas",
+      slug: "judicializacao-da-saude-novos-precedentes-do-stj"
     }
   ]
 
@@ -132,7 +136,8 @@ export default async function HomePage() {
       excerpt: "Hospitais de SP reportam redução de 30% no tempo de espera com novo sistema.",
       image: "/smartphone-health-app.jpg",
       category: "Inovação",
-      date: "Há 2 horas"
+      date: "Há 2 horas",
+      slug: "ia-generativa-revoluciona-triagem-em-prontos-socorros"
     },
     {
       type: "news" as CardType,
@@ -140,7 +145,8 @@ export default async function HomePage() {
       excerpt: "Crescimento de 45% no último ano consolida modalidade no país.",
       image: "/business-executive-professional.jpg",
       category: "Digital",
-      date: "Há 5 horas"
+      date: "Há 5 horas",
+      slug: "telemedicina-atinge-marca-de-10-milhoes-de-atendimentos"
     },
     {
       type: "news" as CardType,
@@ -148,7 +154,8 @@ export default async function HomePage() {
       excerpt: "Dispositivos conectados reduzem internações em até 25%, aponta estudo.",
       image: "/conference-healthcare-panel.jpg",
       category: "Tecnologia",
-      date: "Há 1 dia"
+      date: "Há 1 dia",
+      slug: "wearables-e-monitoramento-remoto-de-pacientes-cronicos"
     },
     {
       type: "news" as CardType,
@@ -156,7 +163,8 @@ export default async function HomePage() {
       excerpt: "Segurança e interoperabilidade são os principais benefícios da tecnologia.",
       image: "/modern-building-ans.jpg",
       category: "Segurança",
-      date: "Há 2 dias"
+      date: "Há 2 dias",
+      slug: "blockchain-na-gestao-de-prontuarios-eletronicos"
     }
   ]
 
@@ -165,6 +173,7 @@ export default async function HomePage() {
       <Header />
       <main>
         <HeroSection />
+        <LatestNews />
         
         {politicaCards.length > 0 ? (
           <EditorialBlock 
@@ -206,7 +215,6 @@ export default async function HomePage() {
           />
         )}
 
-        <LatestNews />
         <Events />
         <Newsletter />
       </main>

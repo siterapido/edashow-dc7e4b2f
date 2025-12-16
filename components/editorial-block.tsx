@@ -33,19 +33,20 @@ export function EditorialCard({
   slug
 }: EditorialCardProps) {
   const cardContent = (
-    <Card className={`h-full border-none shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col ${featured ? 'bg-slate-900 text-white' : 'bg-white'}`}>
+    <Card className={`h-full border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col py-0 gap-0 group ${featured ? 'bg-slate-900 text-white border-slate-800' : 'bg-white'}`}>
       <div className="relative aspect-video overflow-hidden">
         <img 
           src={image} 
           alt={title} 
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         {type === "video" && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
             <PlayCircle className="w-12 h-12 text-white opacity-90 drop-shadow-lg" />
           </div>
         )}
-        <Badge className={`absolute top-3 left-3 ${featured ? 'bg-primary text-white border-none' : 'bg-white/90 text-slate-800 backdrop-blur-sm'}`}>
+        <Badge className={`absolute top-3 left-3 ${featured ? 'bg-primary text-white border-none' : 'bg-white/90 text-primary backdrop-blur-sm shadow-sm'}`}>
           {category}
         </Badge>
       </div>
@@ -57,7 +58,7 @@ export function EditorialCard({
           </p>
         )}
         
-        <h3 className={`font-bold leading-tight mb-2 ${featured ? 'text-2xl' : 'text-lg text-slate-900'}`}>
+        <h3 className={`font-bold leading-tight mb-2 transition-colors ${featured ? 'text-2xl text-white' : 'text-lg text-primary group-hover:text-primary/80'}`}>
           {title}
         </h3>
         
@@ -68,13 +69,16 @@ export function EditorialCard({
         )}
       </CardContent>
       
-      <CardFooter className="p-5 pt-0 flex justify-between items-center">
+      <CardFooter className="p-5 pt-0 flex justify-between items-center mt-auto">
         <span className={`text-xs ${featured ? 'text-slate-400' : 'text-slate-400'}`}>
           {date || "Há 2 horas"}
         </span>
-        <Button variant="link" className={`p-0 h-auto font-semibold ${featured ? 'text-primary' : 'text-primary hover:text-primary/80'}`}>
-          Ler mais <ArrowRight className="ml-1 w-4 h-4" />
-        </Button>
+        <div className={`flex items-center font-medium text-sm ${featured ? 'text-primary' : 'text-primary group-hover:text-primary/80'} transition-colors`}>
+          Ler mais 
+          <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </div>
       </CardFooter>
     </Card>
   );
@@ -82,7 +86,7 @@ export function EditorialCard({
   if (slug) {
     return (
       <motion.div whileHover={{ y: -5 }} className="h-full">
-        <Link href={`/posts/${slug}`} className="block h-full">
+        <Link href={`/posts/${slug}`} className="block h-full cursor-pointer">
           {cardContent}
         </Link>
       </motion.div>

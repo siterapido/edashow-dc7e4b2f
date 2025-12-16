@@ -37,11 +37,21 @@ export const metadata = {
 }
 
 export default async function EventsPage() {
+  // #region agent log
+  const logData = async (location: string, message: string, data: any) => {
+    try {
+      await fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location,message,data,timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'D'})});
+    } catch {}
+  };
+  // #endregion
   const events = await getEvents({ 
     limit: 50, 
     status: 'upcoming',
     revalidate: 60 
   })
+  // #region agent log
+  await logData('app/events/page.tsx:52', 'Events fetched in EventsPage', {eventsLength:events.length,eventsIsArray:Array.isArray(events),firstEvent:events[0]});
+  // #endregion
 
   return (
     <div className="min-h-screen bg-background">

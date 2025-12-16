@@ -66,9 +66,23 @@ export async function generateMetadata({ params }: EventPageProps) {
 }
 
 export default async function EventPage({ params }: EventPageProps) {
+  // #region agent log
+  const logData = async (location: string, message: string, data: any) => {
+    try {
+      await fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location,message,data,timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})});
+    } catch {}
+  };
+  await logData('app/events/[slug]/page.tsx:69', 'EventPage started', {slug:params.slug});
+  // #endregion
   const event = await getEventBySlug(params.slug)
+  // #region agent log
+  await logData('app/events/[slug]/page.tsx:75', 'Event fetched by slug', {slug:params.slug,eventFound:!!event,eventId:event?.id,eventTitle:event?.title});
+  // #endregion
   
   if (!event) {
+    // #region agent log
+    await logData('app/events/[slug]/page.tsx:80', 'Event not found, calling notFound()', {slug:params.slug});
+    // #endregion
     notFound()
   }
   
