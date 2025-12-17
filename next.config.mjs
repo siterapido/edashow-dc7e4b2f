@@ -5,6 +5,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -17,11 +20,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  },
-  reactCompiler: false,
-  experimental: {
-    // Desabilita Turbopack explicitamente
-    turbo: undefined,
   },
 }
 

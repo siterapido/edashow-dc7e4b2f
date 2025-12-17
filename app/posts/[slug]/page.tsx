@@ -10,83 +10,13 @@ import { ptBR } from 'date-fns/locale'
 import { LexicalRenderer } from '@/components/lexical-renderer'
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-// Gerar páginas estáticas para posts existentes
-export async function generateStaticParams() {
-  const posts = await getPosts({ limit: 100, status: 'published' })
-  
-  return posts.map((post: any) => ({
-    slug: post.slug,
-  }))
-}
-
-// Metadados da página
-export async function generateMetadata({ params }: PostPageProps) {
-  const post = await getPostBySlug(params.slug)
-  
-  if (!post) {
-    return {
-      title: 'Post não encontrado',
-    }
-  }
-  
-  return {
-    title: `${post.title} | EdaShow`,
-    description: post.excerpt || 'Leia mais no EdaShow',
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: post.featuredImage ? [getImageUrl(post.featuredImage)] : [],
-    },
-  }
-}
-
-// Dados fallback para posts de exemplo
+// Dados fallback para posts de exemplo (apenas posts essenciais usados na homepage)
 const fallbackPosts: Record<string, any> = {
-  'ans-define-novas-regras-para-portabilidade-de-carencias': {
-    title: 'ANS define novas regras para portabilidade de carências',
-    excerpt: 'Medida visa facilitar a troca de planos para beneficiários em todo o país a partir do próximo mês.',
-    category: 'news',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/regulatory-agency-logo.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'A Agência Nacional de Saúde Suplementar (ANS) publicou novas regras para facilitar a portabilidade de carências entre planos de saúde. A medida beneficia milhões de brasileiros que desejam trocar de operadora sem perder o tempo já cumprido de carência.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
   'usisaude-seguro-cresceu-em-2025-e-projeta-expansao-nacional-em-2026': {
     title: 'Usisaúde Seguro cresceu em 2025 e projeta expansão nacional em 2026 sob liderança de Ricardo Rodrigues',
     excerpt: 'A Usisaúde alcançou resultados expressivos em 2025, ampliando sua presença no mercado e consolidando...',
@@ -104,286 +34,6 @@ const fallbackPosts: Record<string, any> = {
                 mode: 'normal',
                 style: '',
                 text: 'A Usisaúde Seguro demonstrou crescimento significativo em 2025, consolidando sua posição no mercado de saúde suplementar. Sob a liderança de Ricardo Rodrigues, a empresa planeja expandir suas operações para todo o território nacional em 2026.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'ministerio-da-saude-anuncia-investimento-recorde-no-sus': {
-    title: 'Ministério da Saúde anuncia investimento recorde no SUS',
-    excerpt: 'Recursos serão destinados à digitalização e modernização de hospitais públicos.',
-    category: 'news',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/modern-healthcare-building.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'O Ministério da Saúde anunciou um investimento recorde para modernização do Sistema Único de Saúde (SUS). Os recursos serão destinados principalmente à digitalização e modernização de hospitais públicos em todo o país.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'novas-diretrizes-para-planos-de-saude-coletivos-em-2026': {
-    title: 'Novas diretrizes para planos de saúde coletivos em 2026',
-    excerpt: 'Entenda o que muda para empresas e beneficiários com a nova resolução normativa.',
-    category: 'news',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/business-man-professional.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'A ANS publicou novas diretrizes para planos de saúde coletivos que entrarão em vigor em 2026. As mudanças afetam tanto empresas quanto beneficiários, trazendo mais transparência e direitos aos usuários.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'judicializacao-da-saude-novos-precedentes-do-stj': {
-    title: 'Judicialização da saúde: novos precedentes do STJ',
-    excerpt: 'Decisões recentes trazem mais segurança jurídica para operadoras e usuários.',
-    category: 'news',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/ans-building-court.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'O Superior Tribunal de Justiça (STJ) estabeleceu novos precedentes importantes sobre judicialização da saúde. As decisões trazem mais segurança jurídica tanto para operadoras quanto para usuários de planos de saúde.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'ia-generativa-revoluciona-triagem-em-prontos-socorros': {
-    title: 'IA Generativa revoluciona triagem em prontos-socorros',
-    excerpt: 'Hospitais de SP reportam redução de 30% no tempo de espera com novo sistema.',
-    category: 'analysis',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/smartphone-health-app.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'A inteligência artificial generativa está revolucionando o atendimento em prontos-socorros. Hospitais de São Paulo reportam redução de até 30% no tempo de espera após implementação de sistemas de triagem baseados em IA.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'telemedicina-atinge-marca-de-10-milhoes-de-atendimentos': {
-    title: 'Telemedicina atinge marca de 10 milhões de atendimentos',
-    excerpt: 'Crescimento de 45% no último ano consolida modalidade no país.',
-    category: 'analysis',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/business-executive-professional.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'A telemedicina atingiu a marca histórica de 10 milhões de atendimentos no Brasil. O crescimento de 45% no último ano consolida a modalidade como parte essencial do sistema de saúde brasileiro.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'wearables-e-monitoramento-remoto-de-pacientes-cronicos': {
-    title: 'Wearables e monitoramento remoto de pacientes crônicos',
-    excerpt: 'Dispositivos conectados reduzem internações em até 25%, aponta estudo.',
-    category: 'analysis',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/conference-healthcare-panel.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'Dispositivos vestíveis (wearables) estão revolucionando o monitoramento de pacientes crônicos. Estudo recente aponta redução de até 25% nas internações hospitalares com o uso dessas tecnologias.',
-                type: 'text',
-                version: 1
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1
-      }
-    },
-    author: {
-      name: 'Redação EdaShow',
-      role: 'Equipe Editorial'
-    }
-  },
-  'blockchain-na-gestao-de-prontuarios-eletronicos': {
-    title: 'Blockchain na gestão de prontuários eletrônicos',
-    excerpt: 'Segurança e interoperabilidade são os principais benefícios da tecnologia.',
-    category: 'analysis',
-    publishedDate: new Date().toISOString(),
-    featuredImage: '/modern-building-ans.jpg',
-    content: {
-      root: {
-        children: [
-          {
-            children: [
-              {
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: 'A tecnologia blockchain está sendo implementada na gestão de prontuários eletrônicos. Segurança e interoperabilidade são os principais benefícios destacados por especialistas do setor.',
                 type: 'text',
                 version: 1
               }
@@ -686,15 +336,184 @@ const fallbackPosts: Record<string, any> = {
       name: 'Redação EdaShow',
       role: 'Equipe Editorial'
     }
+  },
+  'ans-define-novas-regras-para-portabilidade-de-carencias': {
+    title: 'ANS define novas regras para portabilidade de carências',
+    excerpt: 'Medida visa facilitar a troca de planos para beneficiários em todo o país a partir do próximo mês.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/regulatory-agency-logo.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A Agência Nacional de Saúde Suplementar (ANS) publicou novas regras para facilitar a portabilidade de carências entre planos de saúde. A medida beneficia milhões de brasileiros que desejam trocar de operadora sem perder o tempo já cumprido de carência.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'ministerio-da-saude-anuncia-investimento-recorde-no-sus': {
+    title: 'Ministério da Saúde anuncia investimento recorde no SUS',
+    excerpt: 'Recursos serão destinados à digitalização e modernização de hospitais públicos.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/modern-healthcare-building.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'O Ministério da Saúde anunciou um investimento recorde para modernização do Sistema Único de Saúde (SUS). Os recursos serão destinados principalmente à digitalização e modernização de hospitais públicos em todo o país.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  },
+  'novas-diretrizes-para-planos-de-saude-coletivos-em-2026': {
+    title: 'Novas diretrizes para planos de saúde coletivos em 2026',
+    excerpt: 'Entenda o que muda para empresas e beneficiários com a nova resolução normativa.',
+    category: 'news',
+    publishedDate: new Date().toISOString(),
+    featuredImage: '/business-man-professional.jpg',
+    content: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'A ANS publicou novas diretrizes para planos de saúde coletivos que entrarão em vigor em 2026. As mudanças afetam tanto empresas quanto beneficiários, trazendo mais transparência e direitos aos usuários.',
+                type: 'text',
+                version: 1
+              }
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            type: 'paragraph',
+            version: 1
+          }
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1
+      }
+    },
+    author: {
+      name: 'Redação EdaShow',
+      role: 'Equipe Editorial'
+    }
+  }
+}
+
+// Permitir geração dinâmica de páginas não pré-renderizadas
+export const dynamicParams = true
+
+// Gerar páginas estáticas para posts existentes
+export async function generateStaticParams() {
+  const posts = await getPosts({ limit: 100, status: 'published' })
+  
+  // Incluir slugs dos posts do CMS
+  const cmsSlugs = posts.map((post: any) => ({
+    slug: post.slug,
+  }))
+  
+  // Incluir slugs dos posts fallback
+  const fallbackSlugs = Object.keys(fallbackPosts).map((slug) => ({
+    slug,
+  }))
+  
+  // Combinar ambos
+  return [...cmsSlugs, ...fallbackSlugs]
+}
+
+// Metadados da página
+export async function generateMetadata({ params }: PostPageProps) {
+  const { slug } = await params
+  let post = await getPostBySlug(slug)
+  
+  // Se não encontrar no CMS, tenta usar dados fallback
+  if (!post && fallbackPosts[slug]) {
+    post = fallbackPosts[slug]
+  }
+  
+  if (!post) {
+    return {
+      title: 'Post não encontrado',
+    }
+  }
+  
+  return {
+    title: `${post.title} | EdaShow`,
+    description: post.excerpt || 'Leia mais no EdaShow',
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: post.featuredImage ? [getImageUrl(post.featuredImage)] : [],
+    },
   }
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  let post = await getPostBySlug(params.slug)
+  const { slug } = await params
+  let post = await getPostBySlug(slug)
   
   // Se não encontrar no CMS, tenta usar dados fallback
-  if (!post && fallbackPosts[params.slug]) {
-    post = fallbackPosts[params.slug]
+  if (!post && fallbackPosts[slug]) {
+    post = fallbackPosts[slug]
   }
   
   if (!post) {
