@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getEvents, getImageUrl } from "@/lib/payload/api"
+import { fallbackEvents } from "@/lib/fallback-data"
 import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -23,35 +24,6 @@ const eventExampleImages = [
   "/odont-award-ceremony.jpg",
 ]
 
-// Dados fallback caso o CMS não esteja disponível
-const fallbackEvents = [
-  {
-    id: 1,
-    startDate: "2026-01-23T14:00:00",
-    title: "Conec 2026 reúne mais de 200 profissionais no painel",
-    description: "Big D Ofertou! O maior evento de 2026 será de 23 a 25 de Maio",
-    location: "Motiva Eventos - São Paulo",
-    slug: "#",
-    image: "/conference-healthcare-panel.jpg",
-  },
-  {
-    id: 2,
-    startDate: "2026-04-02T09:00:00",
-    title: "WORKSHOP HM - SECURITY E CONEXÃO SAÚDE - PROJETO...",
-    location: "Poa Park Business",
-    slug: "#",
-    image: "/workshop-business-meeting.jpg",
-  },
-  {
-    id: 3,
-    startDate: "2026-04-04T19:00:00",
-    title: "Lançamento MedSênior - Recife",
-    location: "Lançamento",
-    slug: "#",
-    image: "/healthcare-launch-event.jpg",
-  },
-]
-
 // Função para garantir que eventos sempre tenham uma imagem de exemplo
 function ensureEventImage(event: any, index: number): any {
   if (!event.image) {
@@ -66,43 +38,30 @@ function ensureEventImage(event: any, index: number): any {
 }
 
 export function Events() {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>(fallbackEvents.slice(0, 3));
 
   useEffect(() => {
     const fetchData = async () => {
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:73',message:'Events fetchData started',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
       try {
+        // getEvents já retorna fallback automaticamente se o CMS não estiver disponível
         let data = await getEvents({ 
           limit: 3, 
           status: 'upcoming',
           revalidate: 60 
         });
-        // #region agent log
-        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:82',message:'getEvents returned',data:{dataLength:data?.length,dataIsArray:Array.isArray(data),dataValue:data},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
+        
+        // Se não houver dados, usa fallback
         if (!data || data.length === 0) {
-          // #region agent log
-          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:85',message:'Using fallback events - no data from API',data:{dataIsNull:data===null,dataIsUndefined:data===undefined,dataLength:data?.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-          // #endregion
-          data = fallbackEvents;
+          data = fallbackEvents.slice(0, 3);
         } else {
-          // #region agent log
-          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:88',message:'Processing CMS events with ensureEventImage',data:{eventCount:data.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
-          // #endregion
           // Garante que eventos do CMS sempre tenham imagens de exemplo
           data = data.map((event: any, index: number) => ensureEventImage(event, index));
         }
-        // #region agent log
-        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:93',message:'Setting events state',data:{finalEventCount:data.length,firstEvent:data[0]},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
+        
         setEvents(data);
       } catch (e) {
-        // #region agent log
-        fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:97',message:'Error caught in fetchData',data:{error:e instanceof Error?e.message:String(e),errorType:typeof e},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
-        setEvents(fallbackEvents);
+        // Em caso de erro inesperado, usa fallback
+        setEvents(fallbackEvents.slice(0, 3));
       }
     };
     fetchData();
