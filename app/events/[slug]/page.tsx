@@ -1,11 +1,18 @@
 import { getEvents, getImageUrl } from '@/lib/payload/api'
+import { fallbackEvents } from '@/lib/fallback-data'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { Calendar, MapPin, Clock, ArrowLeft, ExternalLink } from 'lucide-react'
+import { MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Header } from '@/components/header'
+import { EventDateCard } from '@/components/event-date-card'
+import { EventOrganizers } from '@/components/event-organizers'
+import { EventSponsors } from '@/components/event-sponsors'
+import { EventSpeakers } from '@/components/event-speakers'
 
 // Força renderização dinâmica para evitar erros de serialização durante build
 export const dynamic = 'force-dynamic'
@@ -27,13 +34,27 @@ async function getEventBySlug(slug: string) {
       { next: { revalidate: 60 } }
     )
     
-    if (!response.ok) return null
+    if (!response.ok) {
+      // Se não encontrar no CMS, tenta fallback
+      const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
+      return fallbackEvent || null
+    }
     
     const data = await response.json()
-    return data.docs?.[0] || null
+    const event = data.docs?.[0] || null
+    
+    // Se não encontrar no CMS, tenta fallback
+    if (!event) {
+      const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
+      return fallbackEvent || null
+    }
+    
+    return event
   } catch (error) {
     console.error('Error fetching event:', error)
-    return null
+    // Em caso de erro, tenta fallback
+    const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
+    return fallbackEvent || null
   }
 }
 
@@ -116,111 +137,108 @@ export default async function EventPage({ params }: EventPageProps) {
     return types[type as keyof typeof types] || type
   }
   
+  const imageUrl = event.image 
+    ? (typeof event.image === 'string' ? event.image : getImageUrl(event.image))
+    : '/conference-healthcare-panel.jpg'
+
   return (
     <div className="min-h-screen bg-background">
+      <Header />
+      
       {/* Botão Voltar */}
       <div className="container mx-auto px-4 py-6">
-        <Link href="/">
+        <Link href="/events">
           <Button variant="ghost" className="gap-2">
             <ArrowLeft className="h-4 w-4" />
-            Voltar
+            Voltar para Eventos
           </Button>
         </Link>
       </div>
 
-      <article className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <header className="mb-8">
-          {/* Status e Tipo */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusBadge.color}`}>
-              {statusBadge.label}
-            </span>
-            {event.eventType && (
-              <span className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-sm font-medium">
-                {getEventType(event.eventType)}
-              </span>
-            )}
+      {/* Hero Section com Imagem */}
+      <div className="relative w-full h-[60vh] min-h-[400px] mb-8">
+        <Image
+          src={imageUrl}
+          alt={event.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 container mx-auto px-4 pb-8">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-2 mb-4">
+              <Badge className={`${statusBadge.color} border-0 shadow-md`}>
+                {statusBadge.label}
+              </Badge>
+              {event.eventType && (
+                <Badge variant="secondary" className="bg-orange-500/90 text-white border-orange-400/50 shadow-md">
+                  {getEventType(event.eventType)}
+                </Badge>
+              )}
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+              {event.title}
+            </h1>
           </div>
+        </div>
+      </div>
 
-          {/* Título */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {event.title}
-          </h1>
+      <article className="container mx-auto px-4 pb-12 max-w-6xl">
+        {/* Card de Data Destacado */}
+        <div className="mb-8">
+          <EventDateCard 
+            startDate={event.startDate} 
+            endDate={event.endDate}
+          />
+        </div>
 
-          {/* Informações principais */}
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            {/* Data */}
-            <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-              <Calendar className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" />
-              <div>
-                <p className="font-semibold mb-1">Data e Hora</p>
-                <p className="text-sm text-muted-foreground">
-                  {format(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {format(startDate, "HH:mm", { locale: ptBR })}
-                  {endDate && ` - ${format(endDate, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`}
-                </p>
+        {/* Localização Destacada */}
+        {event.location && (
+          <div className="mb-8 p-6 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 rounded-lg border-2 border-orange-300 shadow-md">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-gradient-to-br from-orange-500 to-amber-500 rounded-lg shadow-md">
+                <MapPin className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-lg text-orange-900 mb-2">Local do Evento</h3>
+                <p className="text-orange-800 text-lg font-medium">{event.location}</p>
               </div>
             </div>
-
-            {/* Local */}
-            {event.location && (
-              <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-                <MapPin className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-semibold mb-1">Local</p>
-                  <p className="text-sm text-muted-foreground">{event.location}</p>
-                </div>
-              </div>
-            )}
           </div>
+        )}
 
-          {/* Botão de Inscrição */}
-          {event.registrationUrl && event.status === 'upcoming' && (
+        {/* Botão de Inscrição Principal */}
+        {event.registrationUrl && event.status === 'upcoming' && (
+          <div className="mb-12 text-center p-8 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 rounded-xl shadow-xl border-2 border-orange-600">
+            <h2 className="text-3xl font-bold text-white mb-3">Não perca esta oportunidade!</h2>
+            <p className="text-white/95 mb-6 text-lg font-medium">
+              Garanta sua vaga e participe deste evento incrível
+            </p>
             <a 
               href={event.registrationUrl} 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-block"
             >
-              <Button size="lg" className="gap-2">
-                Inscrever-se no Evento
-                <ExternalLink className="h-4 w-4" />
+              <Button size="lg" className="bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-bold text-lg px-8 py-6 gap-2 shadow-lg border-2 border-white/20">
+                Inscrever-se Agora
+                <ExternalLink className="h-5 w-5" />
               </Button>
             </a>
-          )}
-        </header>
-
-        {/* Imagem do Evento */}
-        {event.image && (
-          <div className="relative w-full h-[400px] md:h-[500px] mb-8 rounded-lg overflow-hidden">
-            <Image
-              src={getImageUrl(event.image)}
-              alt={event.image.alt || event.title}
-              fill
-              className="object-cover"
-              priority
-            />
-            {event.image.caption && (
-              <p className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-sm p-3">
-                {event.image.caption}
-              </p>
-            )}
           </div>
         )}
 
-        {/* Descrição */}
+        {/* Descrição do Evento */}
         {event.description && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">Sobre o Evento</h2>
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Sobre o Evento</h2>
             <div className="prose prose-lg max-w-none">
               {typeof event.description === 'string' ? (
-                <p className="text-muted-foreground leading-relaxed">{event.description}</p>
+                <p className="text-gray-700 leading-relaxed text-lg">{event.description}</p>
               ) : (
-                <div className="bg-muted p-6 rounded-lg">
-                  <p className="text-muted-foreground">
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <p className="text-gray-600">
                     A descrição completa do evento será renderizada aqui.
                     Para renderizar o conteúdo rico do Lexical, você precisará 
                     instalar e configurar o componente de renderização apropriado.
@@ -228,53 +246,43 @@ export default async function EventPage({ params }: EventPageProps) {
                 </div>
               )}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Informações Adicionais */}
-        <div className="border-t pt-8 mt-8">
-          <h3 className="text-xl font-bold mb-4">Informações Importantes</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-start gap-2">
-              <Clock className="h-4 w-4 mt-0.5 text-muted-foreground" />
-              <div>
-                <p className="font-medium">Duração</p>
-                <p className="text-muted-foreground">
-                  {endDate 
-                    ? `De ${format(startDate, 'dd/MM/yyyy')} até ${format(endDate, 'dd/MM/yyyy')}`
-                    : format(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-                  }
-                </p>
-              </div>
-            </div>
-            
-            {event.eventType && (
-              <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">Formato</p>
-                  <p className="text-muted-foreground">{getEventType(event.eventType)}</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Organizadores */}
+        <EventOrganizers 
+          organizers={event.organizers} 
+          className="mb-12"
+        />
+
+        {/* Empresas Patrocinadoras */}
+        <EventSponsors 
+          sponsors={event.sponsors} 
+          className="mb-12"
+        />
+
+        {/* Palestrantes */}
+        <EventSpeakers 
+          speakers={event.speakers} 
+          className="mb-12"
+        />
 
         {/* CTA Final */}
         {event.registrationUrl && event.status === 'upcoming' && (
-          <div className="border-t pt-8 mt-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Não perca esta oportunidade!</h3>
-            <p className="text-muted-foreground mb-6">
-              Garanta sua vaga e participe deste evento incrível.
+          <div className="mt-12 pt-12 border-t-2 border-orange-200 text-center bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-8">
+            <h3 className="text-2xl font-bold mb-4 text-orange-900">Pronto para participar?</h3>
+            <p className="text-orange-800 mb-6 text-lg font-medium">
+              Faça sua inscrição agora e garante sua vaga neste evento exclusivo.
             </p>
             <a 
               href={event.registrationUrl} 
               target="_blank" 
               rel="noopener noreferrer"
+              className="inline-block"
             >
-              <Button size="lg" className="gap-2">
-                Inscrever-se Agora
-                <ExternalLink className="h-4 w-4" />
+              <Button size="lg" className="bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 font-bold text-lg px-8 py-6 gap-2 shadow-lg border-2 border-orange-600">
+                Inscrever-se no Evento
+                <ExternalLink className="h-5 w-5" />
               </Button>
             </a>
           </div>

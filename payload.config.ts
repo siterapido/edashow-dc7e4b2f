@@ -309,6 +309,116 @@ export default buildConfig({
             { label: 'Cancelado', value: 'cancelled' },
           ],
         },
+        {
+          name: 'organizers',
+          type: 'array',
+          label: 'Organizadores',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Nome',
+            },
+            {
+              name: 'company',
+              type: 'text',
+              required: true,
+              label: 'Empresa/Organização',
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Email',
+            },
+            {
+              name: 'photo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto',
+            },
+            {
+              name: 'role',
+              type: 'text',
+              label: 'Cargo',
+            },
+          ],
+        },
+        {
+          name: 'sponsors',
+          type: 'array',
+          label: 'Empresas Patrocinadoras',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Nome da Empresa',
+            },
+            {
+              name: 'logo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Logo',
+            },
+            {
+              name: 'website',
+              type: 'text',
+              label: 'Website',
+            },
+            {
+              name: 'sponsorshipType',
+              type: 'select',
+              label: 'Tipo de Patrocínio',
+              options: [
+                { label: 'Ouro', value: 'gold' },
+                { label: 'Prata', value: 'silver' },
+                { label: 'Bronze', value: 'bronze' },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'speakers',
+          type: 'array',
+          label: 'Palestrantes',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              label: 'Nome',
+            },
+            {
+              name: 'photo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto',
+            },
+            {
+              name: 'company',
+              type: 'text',
+              required: true,
+              label: 'Empresa',
+            },
+            {
+              name: 'role',
+              type: 'text',
+              required: true,
+              label: 'Cargo',
+            },
+            {
+              name: 'bio',
+              type: 'textarea',
+              label: 'Biografia',
+            },
+            {
+              name: 'talkTitle',
+              type: 'text',
+              label: 'Tema da Palestra',
+            },
+          ],
+        },
       ],
       access: {
         read: () => true,

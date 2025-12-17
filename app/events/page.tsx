@@ -2,8 +2,9 @@ import { getEvents, getImageUrl } from '@/lib/payload/api'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
-import { Calendar, MapPin } from 'lucide-react'
+import { Calendar, MapPin, Building2, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -85,42 +86,82 @@ export default async function EventsPage() {
                 ? eventWithImage.image 
                 : getImageUrl(eventWithImage.image, 'card')
               
+              const eventTypeLabels = {
+                'in-person': 'Presencial',
+                'online': 'Online',
+                'hybrid': 'Híbrido'
+              }
+              
               return (
                 <Link href={`/events/${event.slug}`} key={event.id}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                  <Card className="overflow-hidden hover:shadow-xl transition-all h-full flex flex-col group">
                     <div className="relative">
                       <div className="relative w-full h-48">
                         <Image
                           src={imageUrl}
                           alt={event.title}
                           fill
-                          className="object-cover"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
-                      <div className="absolute top-3 left-3 bg-white text-center p-2 rounded shadow">
-                        <div className="text-2xl font-bold text-blue-600">{day}</div>
-                        <div className="text-xs uppercase">{month}</div>
+                      <div className="absolute top-3 left-3 bg-white text-center p-2 rounded-lg shadow-md border-2 border-primary/30">
+                        <div className="text-2xl font-bold text-primary">{day}</div>
+                        <div className="text-xs uppercase font-semibold text-gray-600">{month}</div>
+                      </div>
+                      <div className="absolute top-3 right-3 flex gap-2">
+                        {event.eventType && (
+                          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm">
+                            {eventTypeLabels[event.eventType as keyof typeof eventTypeLabels]}
+                          </Badge>
+                        )}
+                        {event.status === 'upcoming' && (
+                          <Badge className="bg-green-500 text-white">
+                            Próximo
+                          </Badge>
+                        )}
                       </div>
                     </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-bold text-base mb-3 line-clamp-2">
+                    <CardContent className="p-5 flex-1 flex flex-col">
+                      <h3 className="font-bold text-lg mb-3 line-clamp-2 group-hover:text-primary transition-colors">
                         {event.title}
                       </h3>
-                      <div className="space-y-2 text-xs text-gray-600">
+                      
+                      {/* Organizadores e Patrocinadores */}
+                      <div className="space-y-2 mb-4">
+                        {event.organizers && event.organizers.length > 0 && (
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Users className="w-3.5 h-3.5" />
+                            <span className="truncate">
+                              {event.organizers.length} organizador{event.organizers.length > 1 ? 'es' : ''}
+                            </span>
+                          </div>
+                        )}
+                        {event.sponsors && event.sponsors.length > 0 && (
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Building2 className="w-3.5 h-3.5" />
+                            <span className="truncate">
+                              {event.sponsors.length} patrocinador{event.sponsors.length > 1 ? 'es' : ''}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-2 text-xs text-gray-600 mb-4 flex-1">
                         <div className="flex items-start gap-2">
-                          <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
                           <span>
                             {format(eventDate, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
                           </span>
                         </div>
                         {event.location && (
                           <div className="flex items-start gap-2">
-                            <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <span>{event.location}</span>
+                            <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
+                            <span className="line-clamp-2">{event.location}</span>
                           </div>
                         )}
                       </div>
-                      <Button variant="outline" className="w-full mt-4 text-sm bg-transparent">
+                      
+                      <Button variant="outline" className="w-full text-sm bg-primary/5 hover:bg-primary hover:text-white border-primary/20 transition-colors">
                         Ver Detalhes
                       </Button>
                     </CardContent>

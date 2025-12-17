@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Mail, ArrowRight, ExternalLink } from "lucide-react";
 import { getImageUrl } from "@/lib/payload/api";
 import { useState } from "react";
+import { PartnerLogo } from "@/components/partner-logo";
 
 interface Author {
   name: string;
@@ -61,7 +62,7 @@ export function PostSidebar({ author }: PostSidebarProps) {
     <aside className="space-y-6">
       {/* Widget de Autor */}
       {author && (
-        <Card className="border-slate-200">
+        <Card className="border border-slate-200">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-bold text-slate-900">
               Sobre o Autor
@@ -128,9 +129,9 @@ export function PostSidebar({ author }: PostSidebarProps) {
       )}
 
       {/* Espaço Publicitário - Retângulo Médio */}
-      <Card className="border-slate-200 bg-slate-50">
+      <Card className="border border-slate-200 bg-slate-50">
         <CardContent className="p-0">
-          <div className="w-full h-[250px] bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-300">
+          <div className="w-full h-[250px] bg-slate-50 flex items-center justify-center border border-dashed border-slate-300">
             <div className="text-center p-4">
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
                 Espaço Publicitário
@@ -142,28 +143,29 @@ export function PostSidebar({ author }: PostSidebarProps) {
       </Card>
 
       {/* Widget de Parceiros */}
-      <Card className="border-slate-200">
+      <Card className="border border-slate-200">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg font-bold text-slate-900">
             Nossos Parceiros
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {mockPartners.map((partner, index) => (
               <a
                 key={index}
                 href={partner.url}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors group"
+                className="flex flex-col items-center gap-2 p-3 border border-slate-200 bg-white hover:border-primary transition-colors group"
               >
-                <div className="w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  <img
+                <div className="w-16 h-16 bg-white border border-slate-200 flex items-center justify-center overflow-hidden">
+                  <PartnerLogo
                     src={partner.logo}
                     alt={partner.name}
-                    className="w-full h-full object-contain p-1"
+                    name={partner.name}
+                    size={64}
                   />
                 </div>
-                <span className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors">
+                <span className="text-xs font-medium text-slate-700 group-hover:text-primary transition-colors text-center">
                   {partner.name}
                 </span>
               </a>
@@ -173,7 +175,7 @@ export function PostSidebar({ author }: PostSidebarProps) {
       </Card>
 
       {/* Newsletter Widget */}
-      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-orange-50">
+      <Card className="border border-slate-200 bg-white">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-2 mb-2">
             <Mail className="w-5 h-5 text-primary" />
@@ -218,9 +220,9 @@ export function PostSidebar({ author }: PostSidebarProps) {
       </Card>
 
       {/* Espaço Publicitário - Vertical */}
-      <Card className="border-slate-200 bg-slate-50">
+      <Card className="border border-slate-200 bg-slate-50">
         <CardContent className="p-0">
-          <div className="w-full h-[600px] bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-300">
+          <div className="w-full h-[600px] bg-slate-50 flex items-center justify-center border border-dashed border-slate-300">
             <div className="text-center p-4">
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
                 Espaço Publicitário

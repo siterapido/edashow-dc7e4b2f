@@ -11,6 +11,10 @@ import { ptBR } from 'date-fns/locale'
 import { LexicalRenderer } from '@/components/lexical-renderer'
 import { PostSidebar } from '@/components/post-sidebar'
 import { AdBanner } from '@/components/ad-banner'
+import { PostImageGallery } from '@/components/post-image-gallery'
+import { RelatedPosts } from '@/components/related-posts'
+import { SocialShare } from '@/components/social-share'
+import { Header } from '@/components/header'
 
 // Força renderização dinâmica para evitar erros de serialização durante build
 export const dynamic = 'force-dynamic'
@@ -65,6 +69,8 @@ export default async function PostPage({ params }: PostPageProps) {
   
   return (
     <div className="min-h-screen bg-background">
+      <Header />
+      
       {/* Botão Voltar */}
       <div className="container mx-auto px-4 py-6">
         <Link href="/">
@@ -165,6 +171,13 @@ export default async function PostPage({ params }: PostPageProps) {
               <AdBanner width={728} height={90} label="Publicidade" />
             </div>
 
+            {/* Galeria de Imagens */}
+            {(post as any).gallery && (post as any).gallery.length > 0 ? (
+              <PostImageGallery images={(post as any).gallery} />
+            ) : (
+              <PostImageGallery images={[]} fallbackImage="/placeholder.jpg" />
+            )}
+
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
               <div className="mb-8 pt-8 border-t border-slate-200">
@@ -185,20 +198,39 @@ export default async function PostPage({ params }: PostPageProps) {
               </div>
             )}
 
+            {/* Compartilhamento Social */}
+            <SocialShare
+              url={`/posts/${slug}`}
+              title={post.title}
+              description={post.excerpt}
+            />
+
             {/* Informações do Autor (expandido) - Mantido no final do conteúdo */}
             {post.author && post.author.bio && (
               <div className="border-t border-slate-200 pt-8 mt-8">
                 <h3 className="text-2xl font-bold mb-6 text-slate-900">Sobre o Autor</h3>
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
-                  <Avatar className="h-24 w-24 flex-shrink-0">
-                    {post.author.photo && (
+                  <Avatar className="h-24 w-24 shrink-0">
+                    {post.author.photo ? (
                       <AvatarImage 
                         src={getImageUrl(post.author.photo, 'thumbnail')} 
                         alt={post.author.name} 
                       />
+                    ) : (
+                      <AvatarImage 
+                        src="/logo-dark.png" 
+                        alt="EDA Show Logo" 
+                        className="object-contain p-2 bg-white"
+                      />
                     )}
-                    <AvatarFallback className="text-2xl bg-primary/10 text-primary">
-                      {post.author.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                    <AvatarFallback className="bg-white">
+                      <Image
+                        src="/logo-dark.png"
+                        alt="EDA Show Logo"
+                        width={80}
+                        height={80}
+                        className="object-contain p-2"
+                      />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
@@ -253,6 +285,11 @@ export default async function PostPage({ params }: PostPageProps) {
               <PostSidebar author={post.author} />
             </div>
           </aside>
+        </div>
+
+        {/* Posts Relacionados */}
+        <div className="max-w-4xl mx-auto">
+          <RelatedPosts currentSlug={slug} />
         </div>
       </div>
     </div>

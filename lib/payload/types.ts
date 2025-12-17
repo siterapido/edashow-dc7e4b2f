@@ -99,6 +99,30 @@ export interface Event {
   eventType?: 'in-person' | 'online' | 'hybrid'
   registrationUrl?: string
   status: 'upcoming' | 'ongoing' | 'finished' | 'cancelled'
+  organizers?: Array<{
+    name: string
+    company: string
+    email?: string
+    photo?: Media | string
+    role?: string
+    id?: string
+  }>
+  sponsors?: Array<{
+    name: string
+    logo?: Media | string
+    website?: string
+    sponsorshipType?: 'gold' | 'silver' | 'bronze'
+    id?: string
+  }>
+  speakers?: Array<{
+    name: string
+    photo?: Media | string
+    company: string
+    role: string
+    bio?: string
+    talkTitle?: string
+    id?: string
+  }>
   createdAt: string
   updatedAt: string
 }
