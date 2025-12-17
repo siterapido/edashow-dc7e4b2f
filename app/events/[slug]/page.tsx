@@ -7,7 +7,11 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-interface EventPageProps {
+// Força renderização dinâmica para evitar erros de serialização durante build
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
+interface EventPageProps{
   params: {
     slug: string
   }

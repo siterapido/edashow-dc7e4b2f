@@ -9,6 +9,10 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { LexicalRenderer } from '@/components/lexical-renderer'
 
+// Força renderização dinâmica para evitar erros de serialização durante build
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 interface PostPageProps {
   params: Promise<{
     slug: string

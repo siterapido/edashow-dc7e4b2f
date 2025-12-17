@@ -7,6 +7,10 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 
+// Força renderização dinâmica para evitar erros de serialização durante build
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 interface ColumnistPageProps {
   params: {
     slug: string
