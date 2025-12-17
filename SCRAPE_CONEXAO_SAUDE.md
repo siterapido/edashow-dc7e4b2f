@@ -238,3 +238,4 @@ Para problemas ou dúvidas:
 ---
 
 **Última atualização:** Dezembro 2025
+

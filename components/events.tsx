@@ -68,7 +68,7 @@ export function Events() {
   }, []);
 
   return (
-    <section className="w-full bg-gradient-to-r from-orange-500 to-amber-500 py-16">
+    <section className="w-full bg-gradient-to-r from-orange-500 to-amber-500 py-12 md:py-16">
       <motion.div 
         variants={container}
         initial="hidden"
@@ -76,11 +76,11 @@ export function Events() {
         viewport={{ once: true, margin: "-50px" }}
         className="container mx-auto px-4"
       >
-        <motion.h2 variants={fadeIn("up")} className="text-3xl font-bold text-center mb-12 text-white">
+        <motion.h2 variants={fadeIn("up")} className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 text-white">
           Próximos eventos
         </motion.h2>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
           {events.map((event: any, index: number) => {
             // #region agent log
             fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:108',message:'Rendering event card',data:{eventId:event.id,eventTitle:event.title,eventSlug:event.slug,hasImage:!!event.image,imageType:typeof event.image,index},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
@@ -113,7 +113,7 @@ export function Events() {
                     {/* Borda infinita apenas ao redor da imagem */}
                     <div className="relative p-[3px] rounded-t-xl overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-conic animate-[spin_3s_linear_infinite] opacity-80"></div>
-                      <div className="relative w-full h-40 overflow-hidden rounded-t-xl bg-white">
+                      <div className="relative w-full h-48 md:h-52 overflow-hidden rounded-t-xl bg-white">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.6 }}
@@ -132,8 +132,8 @@ export function Events() {
                         <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider leading-none">{month}</div>
                       </div>
                     </div>
-                    <CardContent className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover/card:text-orange-600 transition-colors text-gray-900">{event.title}</h3>
+                    <CardContent className="p-4 md:p-5 flex-1 flex flex-col">
+                      <h3 className="font-bold text-base md:text-lg mb-2 line-clamp-2 group-hover/card:text-orange-600 transition-colors text-gray-900">{event.title}</h3>
                       
                       {event.description && (
                         <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-1 leading-relaxed">
@@ -148,7 +148,7 @@ export function Events() {
                           <div className="p-1.5 rounded-full bg-orange-50 text-orange-500">
                             <Calendar className="w-3.5 h-3.5" />
                           </div>
-                          <span className="font-medium">
+                          <span className="font-medium text-sm">
                             {format(eventDate, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
                             {event.endDate && ` - ${format(new Date(event.endDate), 'dd/MM/yyyy', { locale: ptBR })}`}
                           </span>
@@ -158,13 +158,13 @@ export function Events() {
                             <div className="p-1.5 rounded-full bg-orange-50 text-orange-500">
                               <MapPin className="w-3.5 h-3.5" />
                             </div>
-                            <span className="font-medium truncate">{event.location}</span>
+                            <span className="font-medium text-sm truncate">{event.location}</span>
                           </div>
                         )}
                       </div>
 
                       <Button 
-                        className="w-full mt-5 text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition-all duration-300 uppercase tracking-wide"
+                        className="w-full mt-5 h-10 md:h-auto text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition-all duration-300 uppercase tracking-wide min-h-[44px]"
                         onClick={(e) => {
                           // #region agent log
                           fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:184',message:'Button clicked',data:{hasRegistrationUrl:!!event.registrationUrl,registrationUrl:event.registrationUrl,eventSlug:event.slug},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});

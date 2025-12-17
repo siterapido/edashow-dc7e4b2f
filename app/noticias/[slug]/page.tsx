@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft, Calendar, Clock, Facebook, Linkedin, Share2, Twitter } from "lucide-react"
 import Link from "next/link"
-import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
 export default function ArticlePage({ params }: { params: { slug: string } }) {
@@ -48,8 +47,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-primary/20">
-      <Header />
-      
       <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Breadcrumb / Back Navigation */}
         <div className="mb-8">
@@ -169,4 +166,5 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
     </div>
   )
 }
+
 

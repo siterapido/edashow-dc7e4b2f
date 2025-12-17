@@ -78,16 +78,16 @@ export function Header() {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className={cn(
         "sticky top-0 z-50 transition-all duration-300 border-b",
         "bg-primary text-primary-foreground border-primary-foreground/10 shadow-md"
       )}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="flex items-center justify-between h-14 md:h-16 lg:h-20">
           {/* Logo */}
           <motion.div
             className="group"
@@ -96,7 +96,7 @@ export function Header() {
           >
             <Logo
               containerClassName="flex items-center gap-2 group cursor-pointer"
-              imageClassName="h-10 w-auto md:h-12"
+              imageClassName="h-8 w-auto md:h-10 lg:h-12"
               priority
             />
           </motion.div>
@@ -147,7 +147,7 @@ export function Header() {
              <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:bg-white/20 rounded-full hidden sm:flex"
+              className="text-white hover:bg-white/20 rounded-full hidden sm:flex min-w-[44px] min-h-[44px]"
               onClick={requestNotificationPermission}
               title={
                 notificationPermission === "granted" 
@@ -163,14 +163,14 @@ export function Header() {
               )} />
             </Button>
             
-             <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-full md:hidden">
+             <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 rounded-full md:hidden min-w-[44px] min-h-[44px]">
               <Search className="w-5 h-5" />
             </Button>
 
             <Button 
               variant="ghost" 
               size="icon" 
-              className="lg:hidden text-white hover:bg-white/20"
+              className="lg:hidden text-white hover:bg-white/20 min-w-[44px] min-h-[44px]"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <Menu className="w-6 h-6" />
@@ -188,8 +188,8 @@ export function Header() {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-white text-foreground border-t"
           >
-            <nav className="flex flex-col p-4 gap-4">
-              <div className="flex justify-center">
+            <nav className="flex flex-col p-4 gap-2">
+              <div className="flex justify-center mb-2">
                 <Logo
                   containerClassName="justify-center"
                   imageClassName="h-8 w-auto drop-shadow-none"
@@ -199,7 +199,8 @@ export function Header() {
                 <a 
                   key={item.label} 
                   href={item.href} 
-                  className="text-lg font-medium hover:text-primary transition-colors py-2 border-b border-muted last:border-0"
+                  className="text-base md:text-lg font-medium hover:text-primary transition-colors py-3 px-2 border-b border-muted last:border-0 min-h-[44px] flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
                 </a>

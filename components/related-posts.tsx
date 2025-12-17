@@ -97,3 +97,4 @@ export function RelatedPosts({
     </section>
   );
 }
+

@@ -23,13 +23,13 @@ export function Newsletter() {
   }
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 md:py-20 bg-white">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden bg-[#1A1A1A] text-white p-8 md:p-16"
+          className="relative rounded-3xl overflow-hidden bg-[#1A1A1A] text-white p-6 md:p-8 lg:p-16"
         >
           {/* Background Pattern */}
           <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
@@ -38,16 +38,16 @@ export function Newsletter() {
             </svg>
           </div>
           
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
-            <div className="max-w-xl text-center lg:text-left">
-              <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl mb-6 backdrop-blur-sm">
-                <Mail className="w-8 h-8 text-[#FF6F00]" />
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12">
+            <div className="max-w-xl text-center lg:text-left w-full lg:w-auto">
+              <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl mb-4 md:mb-6 backdrop-blur-sm">
+                <Mail className="w-6 h-6 md:w-8 md:h-8 text-[#FF6F00]" />
               </div>
               
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 tracking-tight">
                 Fique à frente no setor de saúde
               </h2>
-              <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-400 mb-6 md:mb-8 leading-relaxed">
                 Junte-se a mais de 50.000 profissionais e receba análises exclusivas, 
                 tendências de mercado e as principais notícias regulatórias diretamente no seu e-mail.
               </p>
@@ -101,7 +101,7 @@ export function Newsletter() {
                         placeholder="nome@empresa.com.br" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-white/10 border-white/10 text-white placeholder:text-gray-500 h-12 pl-4 focus-visible:ring-[#FF6F00] focus-visible:border-[#FF6F00]"
+                        className="bg-white/10 border-white/10 text-white placeholder:text-gray-500 h-11 md:h-12 pl-4 focus-visible:ring-[#FF6F00] focus-visible:border-[#FF6F00] min-h-[44px]"
                         required
                       />
                     </div>
@@ -110,7 +110,7 @@ export function Newsletter() {
                   <Button 
                     type="submit" 
                     disabled={status === "loading"}
-                    className="bg-[#FF6F00] text-white hover:bg-[#E66300] font-bold h-12 text-base shadow-lg shadow-orange-900/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    className="bg-[#FF6F00] text-white hover:bg-[#E66300] font-bold h-11 md:h-12 text-sm md:text-base shadow-lg shadow-orange-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] min-h-[44px]"
                   >
                     {status === "loading" ? "Cadastrando..." : "INSCREVER-SE AGORA"}
                     {status !== "loading" && <ArrowRight className="ml-2 w-5 h-5" />}

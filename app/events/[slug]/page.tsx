@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Header } from '@/components/header'
 import { EventDateCard } from '@/components/event-date-card'
 import { EventOrganizers } from '@/components/event-organizers'
 import { EventSponsors } from '@/components/event-sponsors'
@@ -143,8 +142,6 @@ export default async function EventPage({ params }: EventPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      
       {/* Botão Voltar */}
       <div className="container mx-auto px-4 py-6">
         <Link href="/events">
@@ -291,4 +288,5 @@ export default async function EventPage({ params }: EventPageProps) {
     </div>
   )
 }
+
 

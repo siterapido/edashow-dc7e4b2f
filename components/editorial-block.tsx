@@ -51,7 +51,7 @@ export function EditorialCard({
         </Badge>
       </div>
       
-      <CardContent className={`flex-1 p-5 ${featured ? 'text-white' : ''}`}>
+      <CardContent className={`flex-1 p-4 md:p-5 ${featured ? 'text-white' : ''}`}>
         {type === "opinion" && author && (
           <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">
             Opinião / {author}
@@ -69,7 +69,7 @@ export function EditorialCard({
         )}
       </CardContent>
       
-      <CardFooter className="p-5 pt-0 flex justify-between items-center mt-auto">
+      <CardFooter className="p-4 md:p-5 pt-0 flex justify-between items-center mt-auto">
         <span className={`text-xs ${featured ? 'text-slate-400' : 'text-slate-400'}`}>
           {date || "Há 2 horas"}
         </span>
@@ -110,12 +110,12 @@ interface EditorialBlockProps {
 
 export function EditorialBlock({ title, subtitle, ctaText = "Ver mais", ctaLink = "#", cards }: EditorialBlockProps) {
   return (
-    <section className="py-12 border-b border-slate-100 last:border-0">
+    <section className="py-8 md:py-12 border-b border-slate-100 last:border-0">
       <div className="container mx-auto px-4">
-        <div className="flex items-end justify-between mb-8">
+        <div className="flex items-end justify-between mb-6 md:mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">{title}</h2>
-            {subtitle && <p className="text-slate-500 mt-1">{subtitle}</p>}
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{title}</h2>
+            {subtitle && <p className="text-sm md:text-base text-slate-500 mt-1">{subtitle}</p>}
           </div>
           <Link href={ctaLink}>
             <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/5 hidden sm:flex">
@@ -124,15 +124,15 @@ export function EditorialBlock({ title, subtitle, ctaText = "Ver mais", ctaLink 
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {cards.map((card, index) => (
             <EditorialCard key={index} {...card} />
           ))}
         </div>
         
-        <div className="mt-8 text-center sm:hidden">
+        <div className="mt-6 md:mt-8 text-center sm:hidden">
           <Link href={ctaLink}>
-            <Button variant="outline" className="w-full border-primary text-primary">
+            <Button variant="outline" className="w-full border-primary text-primary min-h-[44px]">
               {ctaText}
             </Button>
           </Link>

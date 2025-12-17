@@ -91,3 +91,4 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
     </section>
   )
 }
+

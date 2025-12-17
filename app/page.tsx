@@ -1,4 +1,3 @@
-import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { EditorialBlock, CardType } from "@/components/editorial-block"
 import { Footer } from "@/components/footer"
@@ -170,7 +169,6 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       <main>
         <HeroSection />
         <LatestNews />

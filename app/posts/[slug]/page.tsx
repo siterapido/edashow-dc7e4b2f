@@ -14,7 +14,6 @@ import { AdBanner } from '@/components/ad-banner'
 import { PostImageGallery } from '@/components/post-image-gallery'
 import { RelatedPosts } from '@/components/related-posts'
 import { SocialShare } from '@/components/social-share'
-import { Header } from '@/components/header'
 
 // Força renderização dinâmica para evitar erros de serialização durante build
 export const dynamic = 'force-dynamic'
@@ -69,8 +68,6 @@ export default async function PostPage({ params }: PostPageProps) {
   
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      
       {/* Botão Voltar */}
       <div className="container mx-auto px-4 py-6">
         <Link href="/">

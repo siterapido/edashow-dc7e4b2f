@@ -360,3 +360,4 @@ export function getImageUrl(media: any, size?: string): string {
   return '/placeholder.jpg'
 }
 
+

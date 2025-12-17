@@ -138,3 +138,4 @@ export function EventSponsors({ sponsors, className }: EventSponsorsProps) {
     </section>
   )
 }
+

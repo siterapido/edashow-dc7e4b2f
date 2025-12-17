@@ -104,3 +104,4 @@ Este documento consolida os princípios de design, padrões de UI e diretrizes d
 *   CTAs grandes (área de toque > 44px).
 *   Navegação simplificada (Hambúrguer).
 *   Scroll natural e fluido.
+

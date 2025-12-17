@@ -335,3 +335,4 @@ chmod 755 public/uploads
 
 O PayloadCMS está totalmente configurado e pronto para uso. Você tem um CMS completo com autenticação, API REST, painel admin e tipos TypeScript.
 
+

@@ -178,3 +178,4 @@ git push origin main
 ```
 
 O Vercel vai automaticamente fazer o redeploy! ✨
+

@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 export default async function NoticiasPage() {
@@ -16,7 +15,6 @@ export default async function NoticiasPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <div className="container mx-auto px-4 py-12">
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Notícias</h1>
@@ -96,3 +94,4 @@ export default async function NoticiasPage() {
     </div>
   )
 }
+

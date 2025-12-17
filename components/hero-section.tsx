@@ -142,29 +142,29 @@ export function HeroSection() {
 
   return (
     <section 
-      className="relative bg-[#0f172a] text-white overflow-hidden min-h-[600px] lg:min-h-[700px]"
+      className="relative bg-[#0f172a] text-white overflow-hidden min-h-[500px] sm:min-h-[550px] lg:min-h-[700px]"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40"
+        className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] flex items-center justify-center"
         aria-label="Slide anterior"
       >
-        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronLeft className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40"
+        className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] flex items-center justify-center"
         aria-label="Próximo slide"
       >
-        <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronRight className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+      <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -179,7 +179,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative w-full h-full min-h-[600px] lg:min-h-[700px]">
+      <div className="relative w-full h-full min-h-[500px] sm:min-h-[550px] lg:min-h-[700px]">
         <AnimatePresence initial={isInitialMount} custom={direction}>
           <motion.div
             key={currentSlide}
@@ -208,7 +208,7 @@ export function HeroSection() {
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20 relative z-10 h-full">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-14 lg:py-20 relative z-10 h-full">
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center h-full">
                 
                 {/* Main Content */}
@@ -217,7 +217,7 @@ export function HeroSection() {
                   initial="hidden"
                   animate="show"
                   variants={fadeIn("right", 0.3)}
-                  className="space-y-4 sm:space-y-5 lg:space-y-6"
+                  className="space-y-3 sm:space-y-4 lg:space-y-6"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                     <Badge className="bg-primary text-white hover:bg-primary/90 border-none px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider">
@@ -229,7 +229,7 @@ export function HeroSection() {
                     </span>
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
                     {currentSlideData.title}
                   </h1>
 
@@ -237,12 +237,12 @@ export function HeroSection() {
                     {currentSlideData.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-3 sm:gap-4 pt-2 sm:pt-4">
-                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base shadow-lg shadow-primary/20">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-2 sm:pt-4">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-6 sm:px-8 h-10 sm:h-11 md:h-12 text-sm sm:text-base shadow-lg shadow-primary/20 min-h-[44px]">
                       Ler matéria completa
                       <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
-                    <Button variant="outline" size="lg" className="border-slate-600 text-white hover:bg-slate-800 hover:text-white rounded-full px-5 sm:px-6 h-11 sm:h-12 text-sm sm:text-base">
+                    <Button variant="outline" size="lg" className="border-slate-600 text-white hover:bg-slate-800 hover:text-white rounded-full px-5 sm:px-6 h-10 sm:h-11 md:h-12 text-sm sm:text-base min-h-[44px]">
                       <Share2 className="mr-2 w-4 h-4" />
                       Compartilhar
                     </Button>
