@@ -188,7 +188,7 @@ export default function TrabalheConoscoPage() {
                   <Briefcase className="w-6 h-6 text-primary" />
                   <CardTitle>Plano de Saúde</CardTitle>
                 </div>
-              </CardContent>
+              </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
                   Plano de saúde empresarial com cobertura completa para você e seus 
