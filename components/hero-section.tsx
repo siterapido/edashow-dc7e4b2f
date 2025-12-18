@@ -5,10 +5,13 @@ import { ArrowRight, Clock, Share2, ChevronLeft, ChevronRight } from "lucide-rea
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface SlideData {
-  id: number;
+  id: string;
   badge: string;
   time: string;
   title: string;
@@ -18,23 +21,44 @@ interface SlideData {
   credit: string;
   statLabel: string;
   statValue: string;
+  slug?: string;
 }
 
-const slides: SlideData[] = [
+interface Post {
+  id: string;
+  title: string;
+  excerpt?: string;
+  featuredImage?: any;
+  publishedDate?: string;
+  category?: string;
+  featured?: boolean;
+  slug?: string;
+  author?: {
+    name?: string;
+  };
+}
+
+interface HeroSectionProps {
+  posts?: Post[];
+}
+
+// Slides de fallback caso não haja posts
+const fallbackSlides: SlideData[] = [
   {
-    id: 1,
-    badge: "Destaque do Dia",
+    id: "fallback-1",
+    badge: "Destaque",
     time: "Há 2 horas",
     title: "Setor de saúde suplementar projeta expansão nacional para 2026",
     description: "Novas tecnologias e regulação favorável impulsionam crescimento recorde no último trimestre, segundo relatório da ANS.",
     image: "/modern-healthcare-building.jpg",
     imageAlt: "Saúde Suplementar",
-    credit: "Foto: Divulgação / ANS",
+    credit: "Foto: Divulgação",
     statLabel: "Em Alta",
-    statValue: "+15% de crescimento no setor este ano"
+    statValue: "+15% de crescimento no setor este ano",
+    slug: undefined
   },
   {
-    id: 2,
+    id: "fallback-2",
     badge: "Tecnologia",
     time: "Há 5 horas",
     title: "Inteligência Artificial revoluciona diagnóstico médico",
@@ -43,10 +67,11 @@ const slides: SlideData[] = [
     imageAlt: "Tecnologia em Saúde",
     credit: "Foto: Divulgação",
     statLabel: "Tendência",
-    statValue: "70% redução no tempo de diagnóstico"
+    statValue: "70% redução no tempo de diagnóstico",
+    slug: undefined
   },
   {
-    id: 3,
+    id: "fallback-3",
     badge: "Regulação",
     time: "Há 1 dia",
     title: "ANS anuncia novas diretrizes para operadoras de saúde",
@@ -55,10 +80,11 @@ const slides: SlideData[] = [
     imageAlt: "ANS",
     credit: "Foto: Divulgação / ANS",
     statLabel: "Novidade",
-    statValue: "Novas diretrizes em vigor"
+    statValue: "Novas diretrizes em vigor",
+    slug: undefined
   },
   {
-    id: 4,
+    id: "fallback-4",
     badge: "Eventos",
     time: "Há 2 dias",
     title: "Maior evento de saúde suplementar do país acontece em São Paulo",
@@ -67,11 +93,76 @@ const slides: SlideData[] = [
     imageAlt: "Evento de Saúde",
     credit: "Foto: Divulgação",
     statLabel: "Destaque",
-    statValue: "5.000+ participantes esperados"
+    statValue: "5.000+ participantes esperados",
+    slug: undefined
   }
 ];
 
-export function HeroSection() {
+function getImageUrl(media: any): string {
+  if (!media) return '/placeholder.jpg';
+  
+  if (typeof media === 'string') {
+    if (media.startsWith('/') || media.startsWith('http')) {
+      return media;
+    }
+    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
+    return `${API_URL}/api/media/${media}`;
+  }
+
+  if (media.url) {
+    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
+    return `${API_URL}${media.url}`;
+  }
+
+  return '/placeholder.jpg';
+}
+
+function getCategoryBadge(category?: string): string {
+  const categoryMap: Record<string, string> = {
+    news: 'Notícias',
+    analysis: 'Análise',
+    interviews: 'Entrevista',
+    opinion: 'Opinião',
+  };
+  return categoryMap[category || 'news'] || 'Notícias';
+}
+
+export function HeroSection({ posts = [] }: HeroSectionProps) {
+  // Converter posts para slides
+  const slides = useMemo(() => {
+    if (posts.length === 0) {
+      return fallbackSlides;
+    }
+
+    // Priorizar posts em destaque, depois os mais recentes
+    const sortedPosts = [...posts]
+      .sort((a, b) => {
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        return 0;
+      })
+      .slice(0, 4); // Limitar a 4 slides
+
+    return sortedPosts.map((post, index) => {
+      const publishedDate = post.publishedDate 
+        ? formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true, locale: ptBR })
+        : 'Recente';
+
+      return {
+        id: post.id || `post-${index}`,
+        badge: getCategoryBadge(post.category),
+        time: publishedDate,
+        title: post.title || 'Sem título',
+        description: post.excerpt || 'Leia a matéria completa para saber mais.',
+        image: getImageUrl(post.featuredImage),
+        imageAlt: post.title || 'Imagem do post',
+        credit: post.author?.name ? `Foto: ${post.author.name}` : 'Foto: Divulgação',
+        statLabel: post.featured ? 'Destaque' : 'Novo',
+        statValue: post.category === 'interviews' ? 'Entrevista exclusiva' : 'Matéria em destaque',
+        slug: post.slug
+      };
+    });
+  }, [posts]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -128,7 +219,7 @@ export function HeroSection() {
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying || isInitialMount) return;
+    if (!isAutoPlaying || isInitialMount || slides.length === 0) return;
     
     const interval = setInterval(() => {
       setDirection(1);
@@ -136,31 +227,42 @@ export function HeroSection() {
     }, 6000); // Muda de slide a cada 6 segundos
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, isInitialMount]);
+  }, [isAutoPlaying, isInitialMount, slides.length]);
+
+  // Garantir que currentSlide não exceda o tamanho do array
+  useEffect(() => {
+    if (slides.length > 0 && currentSlide >= slides.length) {
+      setCurrentSlide(0);
+    }
+  }, [slides.length, currentSlide]);
+
+  if (slides.length === 0) {
+    return null;
+  }
 
   const currentSlideData = slides[currentSlide];
 
   return (
-    <section 
-      className="relative bg-[#0f172a] text-white overflow-hidden min-h-[500px] sm:min-h-[550px] lg:min-h-[700px]"
+    <section
+      className="relative bg-[#0f172a] text-white overflow-hidden h-screen"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] flex items-center justify-center"
+        className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
         aria-label="Slide anterior"
       >
-        <ChevronLeft className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] flex items-center justify-center"
+        className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
         aria-label="Próximo slide"
       >
-        <ChevronRight className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
       {/* Slide Indicators */}
@@ -179,7 +281,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative w-full h-full min-h-[500px] sm:min-h-[550px] lg:min-h-[700px]">
+      <div className="relative w-full h-full">
         <AnimatePresence initial={isInitialMount} custom={direction}>
           <motion.div
             key={currentSlide}
@@ -208,8 +310,8 @@ export function HeroSection() {
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-14 lg:py-20 relative z-10 h-full">
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center h-full">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 relative z-10 h-full">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center h-full min-h-0">
                 
                 {/* Main Content */}
                 <motion.div 
@@ -237,15 +339,22 @@ export function HeroSection() {
                     {currentSlideData.description}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-2 sm:pt-4">
-                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-6 sm:px-8 h-10 sm:h-11 md:h-12 text-sm sm:text-base shadow-lg shadow-primary/20 min-h-[44px]">
-                      Ler matéria completa
-                      <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                    </Button>
-                    <Button variant="outline" size="lg" className="border-slate-600 text-chart-3 hover:bg-slate-800 hover:text-white rounded-full px-5 sm:px-6 h-10 sm:h-11 md:h-12 text-sm sm:text-base min-h-[44px]">
-                      <Share2 className="mr-2 w-4 h-4" />
-                      Compartilhar
-                    </Button>
+                  <div className="flex flex-col items-center gap-3 pt-2 sm:pt-4">
+                    <div className="flex justify-center">
+                      {currentSlideData.slug ? (
+                        <Button asChild size="default" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-4 sm:px-6 h-8 sm:h-9 text-xs sm:text-sm shadow-lg shadow-primary/20 min-h-[36px]">
+                          <Link href={`/posts/${currentSlideData.slug}`}>
+                            Conteúdo
+                            <ArrowRight className="ml-2 w-3 h-3 sm:w-4 sm:h-4" />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button size="default" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-4 sm:px-6 h-8 sm:h-9 text-xs sm:text-sm shadow-lg shadow-primary/20 min-h-[36px]">
+                          Conteúdo
+                          <ArrowRight className="ml-2 w-3 h-3 sm:w-4 sm:h-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
 

@@ -56,6 +56,19 @@ export default async function HomePage() {
     revalidate: 60 
   })
 
+  // Buscar posts em destaque para o Hero Section
+  const featuredPosts = await getPosts({ 
+    limit: 4, 
+    status: 'published',
+    featured: true,
+    revalidate: 60 
+  })
+
+  // Se não houver posts em destaque, usar os mais recentes
+  const heroPosts = featuredPosts.length > 0 
+    ? featuredPosts 
+    : allPosts.slice(0, 4)
+
   // Separar posts por categoria
   const politicaPosts = allPosts
     .filter((post: any) => 
@@ -170,7 +183,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <main>
-        <HeroSection />
+        <HeroSection posts={heroPosts} />
         <LatestNews />
         
         {politicaCards.length > 0 ? (

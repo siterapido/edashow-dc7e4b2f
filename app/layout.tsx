@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@/components/header"
 import "./globals.css"
@@ -32,6 +33,7 @@ export default function RootLayout({
           <Header />
           {children}
         </ThemeProvider>
+        <Toaster position="top-right" richColors />
         <Analytics />
       </body>
     </html>

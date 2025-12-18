@@ -1,9 +1,10 @@
 import { buildConfig } from 'payload'
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import sharp from 'sharp'
+import { beforeChange, afterChange, beforeValidate } from './payload/hooks/posts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -12,9 +13,11 @@ export default buildConfig({
   // Secret para criptografia JWT
   secret: process.env.PAYLOAD_SECRET || 'your-secret-key-here',
   
-  // Configuração do banco de dados MongoDB
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URI || 'mongodb://localhost:27017/edashow',
+  // Configuração do banco de dados PostgreSQL (Neon)
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URI,
+    },
   }),
 
   // Collections - tipos de conteúdo
@@ -48,7 +51,19 @@ export default buildConfig({
       slug: 'posts',
       admin: {
         useAsTitle: 'title',
-        defaultColumns: ['title', 'category', 'status', 'publishedDate'],
+        defaultColumns: ['title', 'category', 'status', 'publishedDate', 'author'],
+        description: 'Gerencie seus posts, artigos e notícias. Use o editor para criar conteúdo rico e agende publicações para o futuro.',
+        preview: (doc) => {
+          if (doc?.slug) {
+            return `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/posts/${doc.slug}`
+          }
+          return null
+        },
+      },
+      hooks: {
+        beforeChange: [beforeChange],
+        afterChange: [afterChange],
+        beforeValidate: [beforeValidate],
       },
       fields: [
         {
@@ -56,15 +71,29 @@ export default buildConfig({
           type: 'text',
           required: true,
           label: 'Título',
+          admin: {
+            placeholder: 'Digite o título do post...',
+            description: 'Título deve ter entre 10-100 caracteres para melhor SEO',
+          },
+          validate: (value: string) => {
+            if (!value || value.trim().length < 10) {
+              return 'Título deve ter pelo menos 10 caracteres'
+            }
+            if (value.length > 100) {
+              return 'Título deve ter no máximo 100 caracteres'
+            }
+            return true
+          },
         },
         {
           name: 'slug',
           type: 'text',
-          required: true,
+          required: false,
           unique: true,
           label: 'Slug',
           admin: {
-            description: 'URL amigável para o post',
+            description: 'Gerado automaticamente a partir do título. Você pode editá-lo se necessário.',
+            placeholder: 'sera-gerado-automaticamente',
           },
         },
         {
@@ -72,7 +101,19 @@ export default buildConfig({
           type: 'textarea',
           label: 'Resumo',
           admin: {
-            description: 'Breve descrição do post',
+            placeholder: 'Resumo do post (será gerado automaticamente se vazio)',
+            description: 'Ideal: 50-300 caracteres. Será gerado automaticamente a partir do conteúdo se não preenchido.',
+          },
+          validate: (value: string) => {
+            if (value && value.length > 0) {
+              if (value.length < 50) {
+                return 'Excerpt deve ter pelo menos 50 caracteres'
+              }
+              if (value.length > 300) {
+                return 'Excerpt deve ter no máximo 300 caracteres'
+              }
+            }
+            return true
           },
         },
         {
@@ -80,6 +121,9 @@ export default buildConfig({
           type: 'richText',
           required: true,
           label: 'Conteúdo',
+          admin: {
+            description: 'Use o editor para formatar seu conteúdo. Suporte a texto rico, imagens e muito mais.',
+          },
         },
         {
           name: 'featuredImage',
@@ -122,10 +166,22 @@ export default buildConfig({
           required: true,
           defaultValue: 'draft',
           label: 'Status',
+          admin: {
+            description: 'Rascunho: ainda não publicado | Publicado: visível no site | Arquivado: removido do site',
+          },
           options: [
-            { label: 'Rascunho', value: 'draft' },
-            { label: 'Publicado', value: 'published' },
-            { label: 'Arquivado', value: 'archived' },
+            { 
+              label: 'Rascunho', 
+              value: 'draft',
+            },
+            { 
+              label: 'Publicado', 
+              value: 'published',
+            },
+            { 
+              label: 'Arquivado', 
+              value: 'archived',
+            },
           ],
         },
         {
@@ -136,6 +192,17 @@ export default buildConfig({
             date: {
               pickerAppearance: 'dayAndTime',
             },
+            description: 'Deixe em branco para publicar imediatamente, ou escolha uma data futura para agendar a publicação automaticamente.',
+          },
+          validate: (value: string, { data }: { data: { status?: string } }) => {
+            if (data.status === 'published' && value) {
+              const publishedDate = new Date(value)
+              const now = new Date()
+              if (publishedDate > now) {
+                return 'Posts publicados não podem ter data futura. Use status "Rascunho" para agendar.'
+              }
+            }
+            return true
           },
         },
         {

@@ -136,3 +136,6 @@ echo "📋 Resumo da integração: INTEGRACAO_PAYLOAD.md"
 echo ""
 
 
+
+
+

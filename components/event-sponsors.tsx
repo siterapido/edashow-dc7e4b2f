@@ -139,3 +139,6 @@ export function EventSponsors({ sponsors, className }: EventSponsorsProps) {
   )
 }
 
+
+
+

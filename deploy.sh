@@ -77,3 +77,6 @@ fi
 echo ""
 echo -e "${GREEN}✨ Script finalizado!${NC}"
 
+
+
+

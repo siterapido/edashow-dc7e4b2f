@@ -1,17 +1,20 @@
 "use client";
 
-import { Search, Menu, Bell } from "lucide-react";
+import { Search, Menu, Bell, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
+import { CategoryMegaMenu } from "@/components/category-mega-menu";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +29,13 @@ export function Header() {
     if ("Notification" in window) {
       setNotificationPermission(Notification.permission);
     }
+
+    // Cleanup timeout ao desmontar
+    return () => {
+      if (dropdownTimeoutRef.current) {
+        clearTimeout(dropdownTimeoutRef.current);
+      }
+    };
   }, []);
 
   const requestNotificationPermission = async () => {
@@ -69,11 +79,20 @@ export function Header() {
   };
 
   const menuItems = [
-    { label: "Para Você", href: "#" },
-    { label: "Empresas", href: "#" },
-    { label: "Notícias", href: "#" },
-    { label: "Eventos", href: "#" },
-    { label: "Colunas", href: "#" },
+    { label: "Sobre Nós", href: "/sobre" },
+    {
+      label: "Conteúdo",
+      href: "#",
+      hasDropdown: true,
+      dropdownItems: [
+        { label: "Notícias", href: "/noticias", description: "Últimas notícias do setor" },
+        { label: "Análises", href: "/analises", description: "Análises profundas e estudos" },
+        { label: "Entrevistas", href: "/entrevistas", description: "Conversas exclusivas" },
+        { label: "Opinião", href: "/opiniao", description: "Artigos e editoriais" },
+        { label: "Colunas", href: "#", description: "Colunistas especializados" },
+      ]
+    },
+    { label: "Eventos", href: "/events" },
   ];
 
   return (
@@ -104,25 +123,105 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-white/90">
             {menuItems.map((item, i) => (
-              <motion.a
+              <div
                 key={item.label}
-                href={item.href}
-                className="relative hover:text-white transition-colors py-2"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 + 0.2 }}
-                whileHover="hover"
+                className="relative"
+                onMouseEnter={() => {
+                  if (item.hasDropdown) {
+                    // Limpar timeout anterior se existir
+                    if (dropdownTimeoutRef.current) {
+                      clearTimeout(dropdownTimeoutRef.current);
+                      dropdownTimeoutRef.current = null;
+                    }
+                    setActiveDropdown(item.label);
+                  }
+                }}
+                onMouseLeave={() => {
+                  // Delay de 200ms antes de fechar para permitir movimento do mouse
+                  if (item.hasDropdown) {
+                    dropdownTimeoutRef.current = setTimeout(() => {
+                      setActiveDropdown(null);
+                    }, 200);
+                  }
+                }}
               >
-                {item.label}
-                <motion.span
-                  className="absolute bottom-0 left-0 w-full h-0.5 bg-white"
-                  initial={{ scaleX: 0 }}
-                  variants={{
-                    hover: { scaleX: 1 }
+                <motion.a
+                  href={item.href}
+                  className={cn(
+                    "relative hover:text-white transition-colors py-2 flex items-center gap-1",
+                    item.hasDropdown && "cursor-pointer"
+                  )}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 + 0.2 }}
+                  whileHover="hover"
+                  onClick={(e) => {
+                    if (item.hasDropdown) {
+                      e.preventDefault();
+                      setActiveDropdown(activeDropdown === item.label ? null : item.label);
+                    }
                   }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                />
-              </motion.a>
+                >
+                  {item.label}
+                  {item.hasDropdown && (
+                    <ChevronDown className={cn(
+                      "w-4 h-4 transition-transform duration-200",
+                      activeDropdown === item.label && "rotate-180"
+                    )} />
+                  )}
+                  <motion.span
+                    className="absolute bottom-0 left-0 w-full h-0.5 bg-white"
+                    initial={{ scaleX: 0 }}
+                    variants={{
+                      hover: { scaleX: 1 }
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  />
+                </motion.a>
+
+                {/* Mega Menu para Conteúdo */}
+                {item.hasDropdown && item.label === "Conteúdo" && activeDropdown === item.label && (
+                  <div
+                    onMouseEnter={() => {
+                      // Limpar timeout quando mouse entra no menu
+                      if (dropdownTimeoutRef.current) {
+                        clearTimeout(dropdownTimeoutRef.current);
+                        dropdownTimeoutRef.current = null;
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setActiveDropdown(null);
+                    }}
+                  >
+                    <AnimatePresence>
+                      <CategoryMegaMenu />
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {/* Dropdown simples para outros itens */}
+                {item.hasDropdown && item.label !== "Conteúdo" && item.dropdownItems && activeDropdown === item.label && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+                  >
+                    {item.dropdownItems.map((dropdownItem, dropdownIndex) => (
+                      <a
+                        key={dropdownItem.label}
+                        href={dropdownItem.href}
+                        className="block px-4 py-3 hover:bg-gray-50 transition-colors"
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        <div className="font-medium text-gray-900">{dropdownItem.label}</div>
+                        <div className="text-sm text-gray-500">{dropdownItem.description}</div>
+                      </a>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -189,22 +288,59 @@ export function Header() {
             className="lg:hidden bg-white text-foreground border-t"
           >
             <nav className="flex flex-col p-4 gap-2">
-              <div className="flex justify-center mb-2">
+              <div className="flex justify-center mb-4">
                 <Logo
                   containerClassName="justify-center"
                   imageClassName="h-8 w-auto drop-shadow-none"
                 />
               </div>
-               {menuItems.map((item) => (
-                <a 
-                  key={item.label} 
-                  href={item.href} 
-                  className="text-base md:text-lg font-medium hover:text-primary transition-colors py-3 px-2 border-b border-muted last:border-0 min-h-[44px] flex items-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-               ))}
+
+              {/* Menu Items */}
+              {menuItems.map((item) => (
+                <div key={item.label}>
+                  <a
+                    href={item.href}
+                    className="text-base md:text-lg font-medium hover:text-primary transition-colors py-3 px-2 border-b border-muted min-h-[44px] flex items-center justify-between"
+                    onClick={() => {
+                      if (item.hasDropdown) {
+                        setActiveDropdown(activeDropdown === item.label ? null : item.label);
+                      } else {
+                        setIsMobileMenuOpen(false);
+                      }
+                    }}
+                  >
+                    {item.label}
+                    {item.hasDropdown && (
+                      <ChevronDown className={cn(
+                        "w-4 h-4 transition-transform duration-200",
+                        activeDropdown === item.label && "rotate-180"
+                      )} />
+                    )}
+                  </a>
+
+                  {/* Mobile Dropdown */}
+                  {item.hasDropdown && item.dropdownItems && activeDropdown === item.label && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="ml-4 border-l-2 border-primary/20"
+                    >
+                      {item.dropdownItems.map((dropdownItem) => (
+                        <a
+                          key={dropdownItem.label}
+                          href={dropdownItem.href}
+                          className="block py-2 px-4 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <div className="font-medium">{dropdownItem.label}</div>
+                          <div className="text-xs text-gray-500 mt-1">{dropdownItem.description}</div>
+                        </a>
+                      ))}
+                    </motion.div>
+                  )}
+                </div>
+              ))}
             </nav>
           </motion.div>
         )}

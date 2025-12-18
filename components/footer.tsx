@@ -9,50 +9,34 @@ export function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
-          
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
+
           {/* Brand & About */}
           <div className="space-y-4 md:space-y-6">
             <Logo imageClassName="h-10 md:h-12 w-auto drop-shadow-none" variant="dark" />
             <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-              O principal portal de notícias e insights sobre saúde suplementar, conectando líderes e transformando o setor através da informação.
+              O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas e profissionais do mercado de saúde suplementar, conectando marcas, corretores e soluções de forma clara, estratégica e humana, em todo o Brasil.
             </p>
             <div className="flex gap-3 md:gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+              <a href="https://www.instagram.com/edsonedashow" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+              <a href="https://www.youtube.com/@edsonedashow" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
-          </div>
-
-          {/* Editorial */}
-          <div>
-            <h4 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6">Editorial</h4>
-            <ul className="space-y-2 md:space-y-3">
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Política e Regulação</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Economia e Mercado</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Tecnologia e Inovação</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Gestão Hospitalar</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Operadoras</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Carreira e Liderança</a></li>
-            </ul>
           </div>
 
           {/* Institutional */}
           <div>
             <h4 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6">Institucional</h4>
             <ul className="space-y-2 md:space-y-3">
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Sobre o EDA Show</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Anuncie Conosco</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Media Kit</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Política de Privacidade</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Termos de Uso</a></li>
-              <li><a href="#" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Trabalhe Conosco</a></li>
+              <li><a href="/sobre" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Sobre o EDA Show</a></li>
+              <li><a href="/anuncie" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Anuncie Conosco</a></li>
+              <li><a href="/media-kit" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Media Kit</a></li>
+              <li><a href="/privacidade" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Política de Privacidade</a></li>
+              <li><a href="/termos" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Termos de Uso</a></li>
+              <li><a href="/trabalhe-conosco" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Trabalhe Conosco</a></li>
             </ul>
           </div>
 
@@ -72,12 +56,12 @@ export function Footer() {
             
             <div className="pt-4 md:pt-6 border-t border-slate-800 space-y-2 md:space-y-3">
               <div className="flex items-center gap-2 md:gap-3 text-sm">
-                <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="break-all">contato@edashow.com.br</span>
+                <Mail className="w-4 h-4 text-primary shrink-0" />
+                <a href="mailto:adm.edashow@gmail.com" className="break-all hover:text-primary transition-colors">adm.edashow@gmail.com</a>
               </div>
               <div className="flex items-center gap-2 md:gap-3 text-sm">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>São Paulo, SP - Brasil</span>
+                <MapPin className="w-4 h-4 text-primary shrink-0" />
+                <span>Atuação Nacional - Brasil</span>
               </div>
             </div>
           </div>
