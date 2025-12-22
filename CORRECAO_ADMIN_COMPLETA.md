@@ -218,3 +218,4 @@ Todos os componentes padrão do Payload estão carregando corretamente, incluind
 
 Você agora pode usar o painel admin normalmente para gerenciar todo o conteúdo do site.
 
+

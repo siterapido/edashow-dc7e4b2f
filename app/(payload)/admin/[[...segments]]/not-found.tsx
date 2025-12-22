@@ -63,3 +63,4 @@ const NotFound = async ({ params, searchParams }: Args) => {
 
 export default NotFound
 
+

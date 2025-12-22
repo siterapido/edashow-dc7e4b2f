@@ -36,3 +36,4 @@ export function SponsorsGrid({ sponsors }: SponsorsGridProps) {
 
 
 
+

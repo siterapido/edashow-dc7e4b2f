@@ -54,15 +54,15 @@ export function SponsorCarousel({ sponsors = [] }: SponsorCarouselProps) {
                         return (
                             <div
                                 key={`${sponsor.id}-${index}`}
-                                className="mx-12 flex items-center justify-center transition-all duration-500 opacity-80 hover:opacity-100 transform hover:scale-105"
-                                style={{ minWidth: "160px" }}
+                                className="mx-10 flex items-center justify-center transition-all duration-300 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110"
+                                style={{ minWidth: "180px" }}
                             >
-                                <div className="relative h-16 w-36">
+                                <div className="relative h-12 w-40 flex items-center justify-center">
                                     <Image
                                         src={imageUrl}
                                         alt={sponsor.name}
                                         fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        sizes="160px"
                                         className="object-contain"
                                     />
                                 </div>

@@ -135,3 +135,4 @@ Após a execução, você pode verificar os posts criados:
 - `lib/fallback-data.ts` - Dados fallback originais
 - `lib/payload/client.ts` - Cliente PayloadCMS para operações administrativas
 
+

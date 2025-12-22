@@ -1445,6 +1445,7 @@ const config = buildConfig({
       titleSuffix: '- EdaShow CMS',
     },
     css: path.resolve(dirname, 'lib/payload/admin.css'),
+    theme: 'light',
   },
 
   // Configuração de internacionalização (i18n)
