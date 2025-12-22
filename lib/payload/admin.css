@@ -1,0 +1,51 @@
+/* Estilos para uma interface de escrita estilo Medium no Payload CMS */
+
+/* Título grande e impactante */
+.title-field input {
+  font-size: 3rem !important;
+  font-weight: 800 !important;
+  border: none !important;
+  border-bottom: 1px solid transparent !important;
+  background: transparent !important;
+  padding: 20px 0 !important;
+  transition: all 0.2s ease !important;
+  line-height: 1.2 !important;
+}
+
+.title-field input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom-color: var(--theme-elevation-200) !important;
+}
+
+.title-field label {
+  display: none !important; /* Esconder label para parecer mais com uma página em branco */
+}
+
+/* Limpeza do editor Lexical */
+.lexical-editor {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.lexical-editor__editor-container {
+  border: none !important;
+}
+
+/* Ajustes gerais de espaçamento na aba de conteúdo */
+.tabs-field__content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+/* Esconder o toolbar fixo se estiver usando o flutuante (opcional, mas pro Medium é melhor) */
+/* .lexical-toolbar {
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
+}
+
+.lexical-toolbar:hover {
+  opacity: 1;
+} */

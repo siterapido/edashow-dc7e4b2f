@@ -18,6 +18,12 @@ export interface LoginFormData {
   password: string
 }
 
+export interface SignupFormData {
+  fullName: string
+  email: string
+  password: string
+}
+
 export interface AuthResponse {
   user?: any
   token?: string
@@ -72,11 +78,11 @@ export async function login(formData: LoginFormData): Promise<AuthResponse | Aut
       throw error
     }
     console.error('Erro no login:', error)
-    
+
     // Tratar erros específicos do Payload
-    if (error.message?.includes('Invalid credentials') || 
-        error.message?.includes('Unauthorized') ||
-        error.message?.includes('not found')) {
+    if (error.message?.includes('Invalid credentials') ||
+      error.message?.includes('Unauthorized') ||
+      error.message?.includes('not found')) {
       return {
         message: 'Credenciais inválidas',
         errors: [{ message: 'Email ou senha incorretos' }],
@@ -91,15 +97,88 @@ export async function login(formData: LoginFormData): Promise<AuthResponse | Aut
 }
 
 /**
+ * Server Action para criar novo usuário no Payload CMS
+ */
+export async function signup(formData: SignupFormData): Promise<AuthResponse | AuthError> {
+  try {
+    const payload = await getPayload({ config })
+
+    // Criar novo usuário
+    const user = await payload.create({
+      collection: 'users',
+      data: {
+        email: formData.email,
+        password: formData.password,
+        name: formData.fullName,
+        role: 'user', // Role padrão para novos usuários
+      },
+    })
+
+    if (!user) {
+      return {
+        message: 'Erro ao criar usuário',
+        errors: [{ message: 'Não foi possível criar a conta' }],
+      }
+    }
+
+    // Fazer login automático após registro
+    const { token, exp } = await payload.login({
+      collection: 'users',
+      data: {
+        email: formData.email,
+        password: formData.password,
+      },
+    })
+
+    if (!token) {
+      return {
+        message: 'Usuário criado, mas erro ao fazer login',
+        errors: [{ message: 'Por favor, faça login manualmente' }],
+      }
+    }
+
+    // Definir cookie de sessão
+    const cookieStore = await cookies()
+    cookieStore.set('payload-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      expires: exp ? new Date(exp * 1000) : undefined,
+    })
+
+    return { user, token }
+  } catch (error: any) {
+    if (error.digest?.includes('NEXT_REDIRECT')) {
+      throw error
+    }
+    console.error('Erro no signup:', error)
+
+    // Tratar erros específicos
+    if (error.message?.includes('duplicate') || error.message?.includes('already exists')) {
+      return {
+        message: 'Este email já está cadastrado',
+        errors: [{ message: 'Por favor, use outro email ou faça login' }],
+      }
+    }
+
+    return {
+      message: error.message || 'Erro ao criar conta',
+      errors: [{ message: error.message || 'Erro desconhecido' }],
+    }
+  }
+}
+
+/**
  * Server Action para fazer logout
  */
 export async function logout(): Promise<void> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
 
     // Remover cookie de sessão do Payload
     cookieStore.delete('payload-token')
-    
+
     // O Payload CMS gerencia logout automaticamente quando o cookie é removido
   } catch (error: any) {
     if (error.digest?.includes('NEXT_REDIRECT')) {
@@ -107,7 +186,7 @@ export async function logout(): Promise<void> {
     }
     console.error('Erro no logout:', error)
   }
-  
+
   redirect('/login')
 }
 
@@ -123,13 +202,13 @@ export async function getCurrentUser() {
     const cookieHeader = cookieStore.getAll()
       .map(cookie => `${cookie.name}=${cookie.value}`)
       .join('; ')
-    
-    const { user } = await payload.auth({ 
-      headers: { 
-        cookie: cookieHeader 
-      } as any 
+
+    const { user } = await payload.auth({
+      headers: {
+        cookie: cookieHeader
+      } as any
     })
-    
+
     if (!user) return null
 
     return {
@@ -159,3 +238,4 @@ export async function isAuthenticated(): Promise<boolean> {
   const user = await getCurrentUser()
   return !!user
 }
+

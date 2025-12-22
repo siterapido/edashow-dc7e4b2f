@@ -277,3 +277,4 @@ Agora você precisa:
 ---
 
 **📖 Próximo passo: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
+

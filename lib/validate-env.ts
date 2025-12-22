@@ -183,3 +183,4 @@ export const env = {
   SUPABASE_ACCESS_KEY_ID: process.env.SUPABASE_ACCESS_KEY_ID || '',
   SUPABASE_SECRET_ACCESS_KEY: process.env.SUPABASE_SECRET_ACCESS_KEY || '',
 } as const
+

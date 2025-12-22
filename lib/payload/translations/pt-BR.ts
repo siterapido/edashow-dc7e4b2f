@@ -553,3 +553,4 @@ export const ptBRTranslations = {
     'invalid-cloud-stt': 'Cloud STT inválido',
   },
 }
+

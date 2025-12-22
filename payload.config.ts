@@ -1,12 +1,25 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  lexicalEditor,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  LinkFeature,
+  HeadingFeature,
+  IndentFeature,
+  UnorderedListFeature,
+  OrderedListFeature,
+  UploadFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+} from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import sharp from 'sharp'
 import { ptBRTranslations } from './lib/payload/translations/pt-BR'
-// import { beforeChange, afterChange, beforeValidate } from './payload/hooks/posts'
+import { beforeChange, afterChange, beforeValidate } from './payload/hooks/posts'
 
 // Importar componentes customizados do admin
 // Nota: Em Payload 3.0, componentes customizados são registrados via path ou componente importado
@@ -220,77 +233,85 @@ const config = buildConfig({
       labels: {
         plural: 'Posts',
       },
-      // hooks: {
-      //   beforeChange: [beforeChange],
-      //   afterChange: [afterChange],
-      //   beforeValidate: [beforeValidate],
-      // },
+      hooks: {
+        beforeChange: [beforeChange],
+        afterChange: [afterChange],
+        beforeValidate: [beforeValidate],
+      },
       fields: [
         {
-          name: 'title',
-          type: 'text',
-          required: true,
-          label: 'Título',
-          admin: {
-            placeholder: 'Digite o título do post...',
-            description: 'Título deve ter entre 10-200 caracteres para melhor SEO',
-          },
-          validate: (value: any) => {
-            if (typeof value !== 'string') return true
-            if (!value || value.trim().length < 10) {
-              return 'Título deve ter pelo menos 10 caracteres'
-            }
-            if (value.length > 200) {
-              return 'Título deve ter no máximo 200 caracteres'
-            }
-            return true
-          },
-        },
-        {
-          name: 'slug',
-          type: 'text',
-          required: false,
-          unique: true,
-          label: 'Slug',
-          admin: {
-            description: 'Gerado automaticamente a partir do título. Você pode editá-lo se necessário.',
-            placeholder: 'sera-gerado-automaticamente',
-          },
-        },
-        {
-          name: 'excerpt',
-          type: 'textarea',
-          label: 'Resumo',
-          admin: {
-            placeholder: 'Resumo do post (será gerado automaticamente se vazio)',
-            description: 'Ideal: 50-300 caracteres. Será gerado automaticamente a partir do conteúdo se não preenchido.',
-          },
-          validate: (value: any) => {
-            if (value && typeof value === 'string' && value.length > 0) {
-              if (value.length < 50) {
-                return 'Excerpt deve ter pelo menos 50 caracteres'
-              }
-              if (value.length > 300) {
-                return 'Excerpt deve ter no máximo 300 caracteres'
-              }
-            }
-            return true
-          },
-        },
-        {
-          name: 'content',
-          type: 'richText',
-          required: true,
-          label: 'Conteúdo',
-          admin: {
-            description: 'Use o editor para formatar seu conteúdo. Suporte a texto rico, imagens e muito mais.',
-          },
-        },
-        {
-          name: 'featuredImage',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Imagem Destacada',
+          type: 'tabs',
+          tabs: [
+            {
+              label: 'Conteúdo',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  label: 'Título',
+                  admin: {
+                    placeholder: 'Digite o título do post...',
+                    description: 'Título deve ter entre 10-200 caracteres para melhor SEO',
+                    className: 'title-field',
+                  },
+                },
+                {
+                  name: 'content',
+                  type: 'richText',
+                  required: true,
+                  label: 'Conteúdo',
+                  admin: {
+                    description: 'Use o editor para formatar seu conteúdo. Suporte a texto rico, imagens e muito mais.',
+                  },
+                },
+              ],
+            },
+            {
+              label: 'Mídia',
+              fields: [
+                {
+                  name: 'featuredImage',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Imagem Destacada',
+                },
+              ],
+            },
+            {
+              label: 'SEO & Configurações',
+              fields: [
+                {
+                  name: 'slug',
+                  type: 'text',
+                  required: false,
+                  unique: true,
+                  label: 'Slug',
+                  admin: {
+                    description: 'Gerado automaticamente a partir do título. Você pode editá-lo se necessário.',
+                    placeholder: 'sera-gerado-automaticamente',
+                  },
+                },
+                {
+                  name: 'excerpt',
+                  type: 'textarea',
+                  label: 'Resumo',
+                  admin: {
+                    placeholder: 'Resumo do post (será gerado automaticamente se vazio)',
+                    description: 'Ideal: 50-300 caracteres. Será gerado automaticamente a partir do conteúdo se não preenchido.',
+                  },
+                },
+                {
+                  name: 'sourceUrl',
+                  type: 'text',
+                  label: 'URL de Origem',
+                  admin: {
+                    description: 'URL original do conteúdo importado',
+                  },
+                },
+              ],
+            },
+          ],
         },
         {
           name: 'category',
@@ -299,25 +320,9 @@ const config = buildConfig({
           required: true,
           label: 'Categoria',
           admin: {
+            position: 'sidebar',
             description: 'Selecione a categoria deste post',
           },
-        },
-        {
-          name: 'tags',
-          type: 'array',
-          label: 'Tags',
-          fields: [
-            {
-              name: 'tag',
-              type: 'text',
-            },
-          ],
-        },
-        {
-          name: 'author',
-          type: 'relationship',
-          relationTo: 'columnists',
-          label: 'Autor',
         },
         {
           name: 'status',
@@ -326,6 +331,7 @@ const config = buildConfig({
           defaultValue: 'draft',
           label: 'Status',
           admin: {
+            position: 'sidebar',
             description: 'Rascunho: ainda não publicado | Publicado: visível no site | Arquivado: removido do site',
           },
           options: [
@@ -348,46 +354,54 @@ const config = buildConfig({
           type: 'date',
           label: 'Data de Publicação',
           admin: {
+            position: 'sidebar',
             date: {
               pickerAppearance: 'dayAndTime',
             },
             description: 'Deixe em branco para publicar imediatamente, ou escolha uma data futura para agendar a publicação automaticamente.',
           },
-          validate: (value: any, { data }: any) => {
-            if (data?.status === 'published' && value) {
-              const publishedDate = new Date(value)
-              const now = new Date()
-              if (publishedDate > now) {
-                return 'Posts publicados não podem ter data futura. Use status "Rascunho" para agendar.'
-              }
-            }
-            return true
+        },
+        {
+          name: 'author',
+          type: 'relationship',
+          relationTo: 'columnists',
+          label: 'Autor',
+          admin: {
+            position: 'sidebar',
           },
+        },
+        {
+          name: 'tags',
+          type: 'array',
+          label: 'Tags',
+          admin: {
+            position: 'sidebar',
+          },
+          fields: [
+            {
+              name: 'tag',
+              type: 'text',
+            },
+          ],
         },
         {
           name: 'featured',
           type: 'checkbox',
           label: 'Destaque',
           defaultValue: false,
-        },
-        // Temporariamente desabilitado para evitar erros de build
-        // {
-        //   name: 'postTools',
-        //   type: 'ui',
-        //   label: 'Ferramentas de Postagem',
-        //   admin: {
-        //     position: 'sidebar',
-        //     components: {
-        //       Field: '/components/admin/posts/PostTools.tsx',
-        //     },
-        //   },
-        // },
-        {
-          name: 'sourceUrl',
-          type: 'text',
-          label: 'URL de Origem',
           admin: {
-            description: 'URL original do conteúdo importado',
+            position: 'sidebar',
+          },
+        },
+        {
+          name: 'postTools',
+          type: 'ui',
+          label: 'Ferramentas de Postagem',
+          admin: {
+            position: 'sidebar',
+            components: {
+              Field: '/components/admin/posts/PostTools.tsx',
+            },
           },
         },
       ],
@@ -1430,6 +1444,7 @@ const config = buildConfig({
     meta: {
       titleSuffix: '- EdaShow CMS',
     },
+    css: path.resolve(dirname, 'lib/payload/admin.css'),
   },
 
   // Configuração de internacionalização (i18n)
@@ -1438,7 +1453,37 @@ const config = buildConfig({
   },
 
   // Editor de texto rico
-  editor: lexicalEditor({}),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      HeadingFeature({ enabledHeadingTypes: ['h1', 'h2', 'h3'] }),
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      LinkFeature({}),
+      UnorderedListFeature(),
+      OrderedListFeature(),
+      IndentFeature(),
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [
+              {
+                name: 'caption',
+                type: 'richText',
+                label: 'Legenda',
+                editor: lexicalEditor({
+                  features: ({ defaultFeatures }) => [...defaultFeatures],
+                }),
+              },
+            ],
+          },
+        },
+      }),
+      FixedToolbarFeature(),
+      InlineToolbarFeature(),
+    ],
+  }),
 
   // TypeScript
   typescript: {

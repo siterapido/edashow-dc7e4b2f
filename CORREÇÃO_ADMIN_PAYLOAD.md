@@ -158,3 +158,4 @@ Se após todas essas correções o problema persistir:
 **Data da Correção**: 22 de dezembro de 2025
 **Versão do Payload**: 3.69.0
 **Versão do Next.js**: 15.5.9
+
