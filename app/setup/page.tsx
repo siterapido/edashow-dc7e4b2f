@@ -32,7 +32,7 @@ export default function SetupPage() {
           if (data.hasAdmin) {
             // Redirecionar para login após 3 segundos
             setTimeout(() => {
-              router.push('/login')
+              router.push('/admin/login')
             }, 3000)
           }
         }
@@ -42,7 +42,7 @@ export default function SetupPage() {
         setIsChecking(false)
       }
     }
-    
+
     checkAdmin()
   }, [router])
 
@@ -61,7 +61,7 @@ export default function SetupPage() {
         setSuccess(true)
         // Redirecionar para login após 2 segundos
         setTimeout(() => {
-          router.push('/login')
+          router.push('/admin/login')
         }, 2000)
       } else {
         setErrors(result)
@@ -97,7 +97,7 @@ export default function SetupPage() {
               <p className="text-gray-600">
                 Já existe um administrador no sistema. Você será redirecionado para a página de login...
               </p>
-              <Link href="/login">
+              <Link href="/admin/login">
                 <Button className="w-full">Ir para Login</Button>
               </Link>
             </div>
@@ -267,6 +267,8 @@ export default function SetupPage() {
     </div>
   )
 }
+
+
 
 
 

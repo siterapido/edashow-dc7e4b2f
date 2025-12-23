@@ -272,7 +272,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 className="text-white hover:bg-white/20 rounded-full"
                 asChild
               >
-                <a href="/login" title="Área Administrativa">
+                <a href="/admin" title="Área Administrativa">
                   <User className="w-5 h-5" />
                 </a>
               </Button>

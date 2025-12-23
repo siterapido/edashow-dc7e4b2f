@@ -49,7 +49,7 @@ export default function RegisterPage() {
               Enviamos um e-mail de confirmação para você. Por favor, verifique sua caixa de entrada para ativar sua conta.
             </CardDescription>
             <Button asChild className="w-full">
-              <Link href="/login">Ir para Login</Link>
+              <Link href="/admin/login">Ir para Login</Link>
             </Button>
           </Card>
         </div>
@@ -189,7 +189,7 @@ export default function RegisterPage() {
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Já tem uma conta?{' '}
-                  <Link href="/login" className="text-primary hover:underline font-medium">
+                  <Link href="/admin/login" className="text-primary hover:underline font-medium">
                     Fazer login
                   </Link>
                 </p>
@@ -206,6 +206,8 @@ export default function RegisterPage() {
     </div>
   )
 }
+
+
 
 
 

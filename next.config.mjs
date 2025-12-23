@@ -5,11 +5,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  
+
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
+
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -25,4 +25,15 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+export default withPayload({
+  ...nextConfig,
+  async redirects() {
+    return [
+      {
+        source: '/login',
+        destination: '/admin/login',
+        permanent: true,
+      },
+    ]
+  },
+})
