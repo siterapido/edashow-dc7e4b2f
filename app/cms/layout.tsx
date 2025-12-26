@@ -41,7 +41,21 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<any>(null)
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false) // Start closed for mobile, will adjust in useEffect
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            if (window.innerWidth < 1024) {
+                setIsSidebarOpen(false)
+            } else {
+                setIsSidebarOpen(true)
+            }
+        }
+
+        checkScreenSize()
+        window.addEventListener('resize', checkScreenSize)
+        return () => window.removeEventListener('resize', checkScreenSize)
+    }, [])
 
     // Skip auth check for login page
     const isLoginPage = pathname === '/cms/login'
@@ -77,12 +91,23 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
     if (isLoginPage) return <>{children}</>
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 flex">
+        <div className="h-screen bg-gray-50 text-gray-900 flex overflow-hidden">
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar Desktop */}
             <aside
                 className={cn(
-                    "bg-white border-r border-gray-200 transition-all duration-300 flex flex-col z-50 shadow-sm",
-                    isSidebarOpen ? "w-64" : "w-20"
+                    "bg-white border-r border-gray-200 transition-all duration-300 flex flex-col z-50 shadow-md h-full shrink-0",
+                    "fixed lg:relative inset-y-0 left-0",
+                    isSidebarOpen
+                        ? "w-64 translate-x-0"
+                        : "w-20 -translate-x-full lg:translate-x-0"
                 )}
             >
                 {/* Logo Area */}
@@ -96,7 +121,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Navigation Items */}
-                <nav className="flex-1 py-6 px-3 space-y-1">
+                <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto custom-scrollbar">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href
                         const Icon = item.icon
@@ -131,7 +156,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0">
+            <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
                 {/* Header/TopBar */}
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
                     <div className="flex items-center gap-4">
@@ -172,6 +197,6 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 </main>
             </div>
-        </div>
+        </div >
     )
 }
