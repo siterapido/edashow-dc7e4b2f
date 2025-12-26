@@ -18,6 +18,7 @@ import {
     Link as LinkIcon,
     Heading1,
     Heading2,
+    Heading3,
     Quote,
     ImageIcon,
     Minus,
@@ -25,7 +26,9 @@ import {
     ListOrdered,
     Undo,
     Redo,
-    Type
+    Type,
+    Code,
+    Strikethrough
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { uploadMedia } from '@/lib/actions/cms-media'
@@ -49,13 +52,13 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             Underline,
             Image.configure({
                 HTMLAttributes: {
-                    class: 'rounded-lg max-w-full mx-auto my-6'
+                    class: 'rounded-lg max-w-full mx-auto my-6 shadow-sm'
                 }
             }),
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
-                    class: 'text-orange-600 underline hover:text-orange-500 transition-colors'
+                    class: 'text-orange-600 underline hover:text-orange-500 transition-colors cursor-pointer'
                 }
             }),
             Placeholder.configure({
@@ -69,7 +72,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none min-h-[300px] outline-none px-4 py-6 md:px-0 text-gray-800 prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-blockquote:border-orange-500 prose-blockquote:text-gray-500',
+                class: 'prose prose-lg max-w-none min-h-[300px] outline-none px-4 py-6 md:px-8 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {
@@ -161,7 +164,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
     const wordCount = editor.storage.characterCount.words()
 
     return (
-        <div className="relative">
+        <div className="relative group">
             {/* Hidden file input */}
             <input
                 ref={fileInputRef}
@@ -171,42 +174,49 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                 className="hidden"
             />
 
+            {/* Desktop Sticky Toolbar */}
+            <DesktopToolbar
+                editor={editor}
+                onImageUpload={triggerImageUpload}
+                onLink={setLink}
+            />
+
             {/* Bubble Menu - appears on text selection */}
             <BubbleMenu
                 editor={editor}
-                className="bg-white border border-gray-200 rounded-lg shadow-xl flex items-center gap-0.5 p-1 overflow-hidden"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl flex items-center gap-0.5 p-1 overflow-hidden"
             >
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     isActive={editor.isActive('bold')}
-                    title="Negrito"
+                    title="Negrito (Cmd+B)"
                 >
                     <Bold className="w-4 h-4" />
                 </BubbleButton>
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleItalic().run()}
                     isActive={editor.isActive('italic')}
-                    title="Itálico"
+                    title="Itálico (Cmd+I)"
                 >
                     <Italic className="w-4 h-4" />
                 </BubbleButton>
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
                     isActive={editor.isActive('underline')}
-                    title="Sublinhado"
+                    title="Sublinhado (Cmd+U)"
                 >
                     <UnderlineIcon className="w-4 h-4" />
+                </BubbleButton>
+                <BubbleButton
+                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                    isActive={editor.isActive('strike')}
+                    title="Tachado"
+                >
+                    <Strikethrough className="w-4 h-4" />
                 </BubbleButton>
 
                 <div className="w-px h-5 bg-gray-200 mx-1" />
 
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    isActive={editor.isActive('heading', { level: 1 })}
-                    title="Título 1"
-                >
-                    <Heading1 className="w-4 h-4" />
-                </BubbleButton>
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                     isActive={editor.isActive('heading', { level: 2 })}
@@ -229,7 +239,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             {/* Floating Menu - appears on empty lines */}
             <FloatingMenu
                 editor={editor}
-                className="bg-white border border-gray-200 rounded-lg shadow-xl flex items-center gap-0.5 p-1"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl flex items-center gap-0.5 p-1"
             >
                 <FloatingButton
                     onClick={triggerImageUpload}
@@ -255,28 +265,208 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                 >
                     <List className="w-4 h-4" />
                 </FloatingButton>
-                <FloatingButton
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    title="Lista numerada"
-                >
-                    <ListOrdered className="w-4 h-4" />
-                </FloatingButton>
             </FloatingMenu>
 
             {/* Editor Content */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white min-h-[500px] rounded-b-xl border border-t-0 md:border-t border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-orange-100 focus-within:border-orange-200">
                 <EditorContent editor={editor} />
+            </div>
 
-                {/* Character/Word count */}
-                <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 text-xs text-gray-400">
+            {/* Status Footer */}
+            <div className="mt-2 flex items-center justify-between px-2 text-xs text-gray-400 font-medium">
+                <div className="flex gap-4">
                     <span>{wordCount} palavras</span>
                     <span>{characterCount} caracteres</span>
+                </div>
+                <div>
+                    markdown support
                 </div>
             </div>
 
             {/* Mobile Bottom Toolbar */}
             <MobileToolbar editor={editor} onImageUpload={triggerImageUpload} />
         </div>
+    )
+}
+
+// Desktop Sticky Toolbar
+function DesktopToolbar({ editor, onImageUpload, onLink }: { editor: any, onImageUpload: () => void, onLink: () => void }) {
+    return (
+        <div className="hidden md:flex sticky top-[72px] z-30 mx-auto w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-gray-200 shadow-sm rounded-t-xl overflow-hidden mb-0 items-center justify-between p-2 gap-2 flex-wrap transition-all">
+
+            <div className="flex items-center gap-1">
+                {/* Text Formatting */}
+                <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100">
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        isActive={editor.isActive('bold')}
+                        title="Negrito (Cmd+B)"
+                    >
+                        <Bold className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        isActive={editor.isActive('italic')}
+                        title="Itálico (Cmd+I)"
+                    >
+                        <Italic className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        isActive={editor.isActive('underline')}
+                        title="Sublinhado (Cmd+U)"
+                    >
+                        <UnderlineIcon className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleStrike().run()}
+                        isActive={editor.isActive('strike')}
+                        title="Tachado"
+                    >
+                        <Strikethrough className="w-4 h-4" />
+                    </ToolbarButton>
+                </div>
+
+                {/* Headings */}
+                <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100 ml-2">
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        isActive={editor.isActive('heading', { level: 1 })}
+                        title="Título 1"
+                    >
+                        <Heading1 className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        isActive={editor.isActive('heading', { level: 2 })}
+                        title="Título 2"
+                    >
+                        <Heading2 className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                        isActive={editor.isActive('heading', { level: 3 })}
+                        title="Título 3"
+                    >
+                        <Heading3 className="w-4 h-4" />
+                    </ToolbarButton>
+                </div>
+
+                {/* Lists & Blocks */}
+                <div className="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100 ml-2">
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        isActive={editor.isActive('bulletList')}
+                        title="Lista com marcadores"
+                    >
+                        <List className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        isActive={editor.isActive('orderedList')}
+                        title="Lista numerada"
+                    >
+                        <ListOrdered className="w-4 h-4" />
+                    </ToolbarButton>
+                    <div className="w-px h-4 bg-gray-300 mx-1" />
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                        isActive={editor.isActive('blockquote')}
+                        title="Citação"
+                    >
+                        <Quote className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                        isActive={editor.isActive('codeBlock')}
+                        title="Bloco de código"
+                    >
+                        <Code className="w-4 h-4" />
+                    </ToolbarButton>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+                {/* Inserts */}
+                <div className="flex items-center bg-orange-50 rounded-lg p-1 border border-orange-100">
+                    <ToolbarButton
+                        onClick={onLink}
+                        isActive={editor.isActive('link')}
+                        title="Adicionar Link"
+                        className="text-orange-700 hover:bg-orange-100"
+                    >
+                        <LinkIcon className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={onImageUpload}
+                        title="Adicionar Imagem"
+                        className="text-orange-700 hover:bg-orange-100"
+                    >
+                        <ImageIcon className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+                        title="Separador Horizontal"
+                        className="text-orange-700 hover:bg-orange-100"
+                    >
+                        <Minus className="w-4 h-4" />
+                    </ToolbarButton>
+                </div>
+
+                {/* History */}
+                <div className="flex items-center gap-1 ml-2">
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().undo().run()}
+                        disabled={!editor.can().undo()}
+                        title="Desfazer (Cmd+Z)"
+                    >
+                        <Undo className="w-4 h-4" />
+                    </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().redo().run()}
+                        disabled={!editor.can().redo()}
+                        title="Refazer (Cmd+Shift+Z)"
+                    >
+                        <Redo className="w-4 h-4" />
+                    </ToolbarButton>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function ToolbarButton({
+    onClick,
+    isActive,
+    disabled,
+    children,
+    title,
+    className
+}: {
+    onClick: () => void
+    isActive?: boolean
+    disabled?: boolean
+    children: React.ReactNode
+    title: string
+    className?: string
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            disabled={disabled}
+            title={title}
+            className={cn(
+                "p-2 rounded-md transition-all flex items-center justify-center min-w-[32px] min-h-[32px]",
+                isActive
+                    ? "bg-white text-orange-600 shadow-sm border border-orange-100"
+                    : "text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm",
+                disabled && "opacity-30 cursor-not-allowed hover:bg-transparent hover:shadow-none hover:text-gray-500",
+                className
+            )}
+        >
+            {children}
+        </button>
     )
 }
 
@@ -298,7 +488,7 @@ function BubbleButton({
             onClick={onClick}
             title={title}
             className={cn(
-                "p-2 rounded-md transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center",
+                "p-2 rounded-md transition-colors min-w-[32px] min-h-[32px] flex items-center justify-center",
                 isActive
                     ? "bg-orange-500 text-white"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -324,7 +514,7 @@ function FloatingButton({
             type="button"
             onClick={onClick}
             title={title}
-            className="p-2 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
+            className="p-2 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-colors min-w-[32px] min-h-[32px] flex items-center justify-center"
         >
             {children}
         </button>

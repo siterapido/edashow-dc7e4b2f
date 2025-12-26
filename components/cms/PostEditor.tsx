@@ -160,12 +160,13 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         <Button
                             type="button"
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             onClick={() => setPreviewOpen(true)}
-                            className="text-gray-400 hover:text-gray-900"
+                            className="text-gray-500 hover:text-gray-900 gap-2"
                             title="Ver prévia"
                         >
-                            <Eye className="w-5 h-5" />
+                            <Eye className="w-4 h-4" />
+                            <span className="hidden md:inline font-medium">Prévia</span>
                         </Button>
 
                         <div className="w-px h-6 bg-gray-200 mx-1" />
@@ -184,11 +185,12 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         <Button
                             type="button"
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             onClick={() => setSettingsOpen(true)}
-                            className="text-gray-400 hover:text-gray-900"
+                            className="text-gray-500 hover:text-gray-900 gap-2"
                         >
-                            <Settings className="w-5 h-5" />
+                            <Settings className="w-4 h-4" />
+                            <span className="hidden md:inline font-medium">Configurações</span>
                         </Button>
                         {formData.status === 'published' ? (
                             <Button

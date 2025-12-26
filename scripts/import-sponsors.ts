@@ -42,10 +42,7 @@ async function importSponsors() {
 
         const ext = path.extname(sponsor.filename).toLowerCase();
 
-        if (ext === '.gif' && sponsor.filename === '31.gif') {
-            console.log('Skipping known bad file 31.gif');
-            continue;
-        }
+        // Removed skip to allow all files including 31.gif
 
         let fileBuffer = fs.readFileSync(originalFilePath);
         let contentType = getContentType(sponsor.filename);

@@ -11,8 +11,7 @@
  */
 
 import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+
 import { Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,7 +21,7 @@ import { Logo } from '@/components/logo'
 import { login, type AuthError } from '@/lib/actions/auth'
 
 export default function LoginPage() {
-  const router = useRouter()
+
   const [isPending, startTransition] = useTransition()
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<AuthError | null>(null)
@@ -151,26 +150,7 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Links auxiliares */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="text-center space-y-4">
-                <p className="text-sm text-gray-600">
-                  Primeira vez aqui?{' '}
-                  <Link href="/setup" className="text-primary hover:underline font-medium">
-                    Criar primeiro administrador
-                  </Link>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Esqueceu sua senha?{' '}
-                  <a href="mailto:adm.edashow@gmail.com" className="text-primary hover:underline font-medium">
-                    Entre em contato
-                  </a>
-                </p>
-                <p className="text-xs text-gray-500">
-                  Acesso restrito apenas para administradores autorizados
-                </p>
-              </div>
-            </div>
+
           </CardContent>
         </Card>
 
