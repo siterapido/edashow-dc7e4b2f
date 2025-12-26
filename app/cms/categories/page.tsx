@@ -78,15 +78,15 @@ export default function CMSCategoriesPage() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Categorias</h1>
-                    <p className="text-slate-400 text-sm mt-1">Organize seus posts por temas e editorias.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Categorias</h1>
+                    <p className="text-gray-500 text-sm mt-1">Organize seus posts por temas e editorias.</p>
                 </div>
                 <Button
                     onClick={() => {
                         setCurrentCat({ name: '', slug: '', display_order: categories.length + 1 })
                         setIsEditing(true)
                     }}
-                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-500/20"
                 >
                     <Plus className="w-4 h-4" /> Nova Categoria
                 </Button>
@@ -105,42 +105,42 @@ export default function CMSCategoriesPage() {
 
                 {/* Editor Section */}
                 <div className={cn(
-                    "bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit sticky top-24 transition-all",
+                    "bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-fit sticky top-24 transition-all",
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Tag className="w-4 h-4 text-orange-400" />
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                        <Tag className="w-4 h-4 text-orange-500" />
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
                             {currentCat.id ? 'Editar Categoria' : 'Nova Categoria'}
                         </h2>
                     </div>
 
                     <form onSubmit={handleSave} className="space-y-4">
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Nome</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Nome</Label>
                             <Input
                                 value={currentCat.name}
                                 onChange={(e) => updateName(e.target.value)}
                                 placeholder="Ex: Tecnologia"
-                                className="bg-slate-950 border-slate-800 text-white"
+                                className="bg-gray-50 border-gray-100 text-gray-900 focus:bg-white transition-colors"
                                 required
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Slug</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Slug</Label>
                             <Input
                                 value={currentCat.slug}
                                 onChange={(e) => setCurrentCat({ ...prev, slug: e.target.value })}
-                                className="bg-slate-950 border-slate-800 text-slate-400"
+                                className="bg-gray-50 border-gray-100 text-gray-500 focus:bg-white transition-colors"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Ordem de Exibição</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Ordem de Exibição</Label>
                             <Input
                                 type="number"
                                 value={currentCat.display_order}
                                 onChange={(e) => setCurrentCat({ ...prev, display_order: parseInt(e.target.value) })}
-                                className="bg-slate-950 border-slate-800 text-white w-24"
+                                className="bg-gray-50 border-gray-100 text-gray-900 w-24 focus:bg-white transition-colors"
                             />
                         </div>
 
@@ -158,7 +158,7 @@ export default function CMSCategoriesPage() {
                                     type="button"
                                     variant="outline"
                                     onClick={() => handleDelete(currentCat.id)}
-                                    className="border-red-900/50 text-red-500 hover:bg-red-950 hover:text-red-400"
+                                    className="border-red-100 text-red-500 hover:bg-red-50"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -168,7 +168,7 @@ export default function CMSCategoriesPage() {
                             type="button"
                             variant="ghost"
                             onClick={() => setIsEditing(false)}
-                            className="w-full text-slate-500 text-xs hover:bg-slate-800"
+                            className="w-full text-gray-400 text-xs hover:bg-gray-50"
                         >
                             Cancelar
                         </Button>

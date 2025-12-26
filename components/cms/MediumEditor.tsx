@@ -55,7 +55,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
-                    class: 'text-orange-400 underline hover:text-orange-300 transition-colors'
+                    class: 'text-orange-600 underline hover:text-orange-500 transition-colors'
                 }
             }),
             Placeholder.configure({
@@ -69,7 +69,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-invert prose-lg max-w-none min-h-[300px] outline-none px-4 py-6 md:px-0 text-slate-200 prose-headings:text-white prose-p:text-slate-300 prose-strong:text-white prose-blockquote:border-orange-500 prose-blockquote:text-slate-400',
+                class: 'prose prose-lg max-w-none min-h-[300px] outline-none px-4 py-6 md:px-0 text-gray-800 prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-blockquote:border-orange-500 prose-blockquote:text-gray-500',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {
@@ -174,7 +174,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             {/* Bubble Menu - appears on text selection */}
             <BubbleMenu
                 editor={editor}
-                className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex items-center gap-0.5 p-1 overflow-hidden"
+                className="bg-white border border-gray-200 rounded-lg shadow-xl flex items-center gap-0.5 p-1 overflow-hidden"
             >
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -198,7 +198,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                     <UnderlineIcon className="w-4 h-4" />
                 </BubbleButton>
 
-                <div className="w-px h-5 bg-slate-700 mx-1" />
+                <div className="w-px h-5 bg-gray-200 mx-1" />
 
                 <BubbleButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -215,7 +215,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                     <Heading2 className="w-4 h-4" />
                 </BubbleButton>
 
-                <div className="w-px h-5 bg-slate-700 mx-1" />
+                <div className="w-px h-5 bg-gray-200 mx-1" />
 
                 <BubbleButton
                     onClick={setLink}
@@ -229,7 +229,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             {/* Floating Menu - appears on empty lines */}
             <FloatingMenu
                 editor={editor}
-                className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex items-center gap-0.5 p-1"
+                className="bg-white border border-gray-200 rounded-lg shadow-xl flex items-center gap-0.5 p-1"
             >
                 <FloatingButton
                     onClick={triggerImageUpload}
@@ -264,11 +264,11 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             </FloatingMenu>
 
             {/* Editor Content */}
-            <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <EditorContent editor={editor} />
 
                 {/* Character/Word count */}
-                <div className="flex items-center justify-between px-4 py-2 border-t border-slate-800 text-xs text-slate-500">
+                <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 text-xs text-gray-400">
                     <span>{wordCount} palavras</span>
                     <span>{characterCount} caracteres</span>
                 </div>
@@ -301,7 +301,7 @@ function BubbleButton({
                 "p-2 rounded-md transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center",
                 isActive
                     ? "bg-orange-500 text-white"
-                    : "text-slate-300 hover:bg-slate-700 hover:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             )}
         >
             {children}
@@ -324,7 +324,7 @@ function FloatingButton({
             type="button"
             onClick={onClick}
             title={title}
-            className="p-2 rounded-md text-slate-400 hover:bg-slate-700 hover:text-white transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
+            className="p-2 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
         >
             {children}
         </button>
@@ -342,7 +342,7 @@ function MobileToolbar({
     if (!editor) return null
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 z-50 md:hidden safe-area-pb">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden safe-area-pb shadow-lg">
             <div className="flex items-center gap-1 px-2 py-2 overflow-x-auto scrollbar-hide">
                 <MobileToolbarButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -363,7 +363,7 @@ function MobileToolbar({
                     <UnderlineIcon className="w-5 h-5" />
                 </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-slate-700 mx-1 flex-shrink-0" />
+                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
                 <MobileToolbarButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -384,7 +384,7 @@ function MobileToolbar({
                     <Type className="w-5 h-5" />
                 </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-slate-700 mx-1 flex-shrink-0" />
+                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
                 <MobileToolbarButton
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -402,7 +402,7 @@ function MobileToolbar({
                     <ImageIcon className="w-5 h-5" />
                 </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-slate-700 mx-1 flex-shrink-0" />
+                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
                 <MobileToolbarButton
                     onClick={() => editor.chain().focus().undo().run()}
@@ -442,7 +442,7 @@ function MobileToolbarButton({
                 "p-3 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center flex-shrink-0",
                 isActive
                     ? "bg-orange-500 text-white"
-                    : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                    : "text-gray-400 hover:bg-gray-100 hover:text-gray-900",
                 disabled && "opacity-30 cursor-not-allowed"
             )}
         >

@@ -128,9 +128,9 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
     const currentCategory = categories.find(c => c.id === formData.category_id)?.name
 
     return (
-        <div className="min-h-screen bg-slate-950 pb-24 md:pb-8">
+        <div className="min-h-screen bg-gray-50 pb-24 md:pb-8">
             {/* Header */}
-            <header className="sticky top-0 bg-slate-950/90 backdrop-blur-sm border-b border-slate-800 z-40">
+            <header className="sticky top-0 bg-white/90 backdrop-blur-sm border-b border-gray-200 z-40">
                 <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
                     {/* Left: Back button */}
                     <div className="flex items-center gap-2">
@@ -139,7 +139,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                             variant="ghost"
                             size="icon"
                             onClick={() => router.push('/cms/posts')}
-                            className="text-slate-400 hover:text-white -ml-2"
+                            className="text-gray-400 hover:text-gray-900 -ml-2"
                         >
                             <ArrowLeft className="w-5 h-5" />
                         </Button>
@@ -151,7 +151,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                             ) : (
                                 <Check className="w-4 h-4 text-green-500" />
                             )}
-                            <span className="text-slate-400 text-xs">{statusText}</span>
+                            <span className="text-gray-400 text-xs">{statusText}</span>
                         </div>
                     </div>
 
@@ -162,13 +162,13 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                             variant="ghost"
                             size="icon"
                             onClick={() => setPreviewOpen(true)}
-                            className="text-slate-400 hover:text-white"
+                            className="text-gray-400 hover:text-gray-900"
                             title="Ver prévia"
                         >
                             <Eye className="w-5 h-5" />
                         </Button>
 
-                        <div className="w-px h-6 bg-slate-800 mx-1" />
+                        <div className="w-px h-6 bg-gray-200 mx-1" />
 
                         {formData.id !== 'new' && (
                             <Button
@@ -176,7 +176,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 variant="ghost"
                                 size="icon"
                                 onClick={handleDelete}
-                                className="text-slate-400 hover:text-red-400 hidden sm:flex"
+                                className="text-gray-400 hover:text-red-600 hidden sm:flex"
                             >
                                 <Trash2 className="w-5 h-5" />
                             </Button>
@@ -186,7 +186,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                             variant="ghost"
                             size="icon"
                             onClick={() => setSettingsOpen(true)}
-                            className="text-slate-400 hover:text-white"
+                            className="text-gray-400 hover:text-gray-900"
                         >
                             <Settings className="w-5 h-5" />
                         </Button>
@@ -226,10 +226,10 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         value={formData.title}
                         onChange={(e) => updateField('title', e.target.value)}
                         placeholder="Título do post"
-                        className="w-full bg-transparent text-3xl md:text-4xl font-bold text-white placeholder:text-slate-600 outline-none border-none"
+                        className="w-full bg-transparent text-3xl md:text-4xl font-bold text-gray-900 placeholder:text-gray-300 outline-none border-none"
                     />
                     {formData.slug && (
-                        <p className="text-xs text-slate-500 font-mono">
+                        <p className="text-xs text-gray-400 font-mono">
                             /posts/{formData.slug}
                         </p>
                     )}
@@ -246,12 +246,12 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     value={formData.excerpt}
                     onChange={(e) => updateField('excerpt', e.target.value)}
                     placeholder="Escreva um resumo ou subtítulo para o post..."
-                    className="w-full bg-transparent text-lg text-slate-400 placeholder:text-slate-600 outline-none border-none resize-none min-h-[60px]"
+                    className="w-full bg-transparent text-lg text-gray-700 placeholder:text-gray-400 outline-none border-none resize-none min-h-[60px]"
                     rows={2}
                 />
 
                 {/* Divider */}
-                <div className="border-t border-slate-800" />
+                <div className="border-t border-gray-200" />
 
                 {/* Editor */}
                 <MediumEditor

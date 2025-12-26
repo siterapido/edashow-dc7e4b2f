@@ -12,7 +12,7 @@ interface ThemeColors {
   secondaryForeground?: string;
   accent?: string;
   accentForeground?: string;
-  
+
   // Cores de fundo
   background?: string;
   foreground?: string;
@@ -20,13 +20,13 @@ interface ThemeColors {
   cardForeground?: string;
   muted?: string;
   mutedForeground?: string;
-  
+
   // Outras cores
   border?: string;
   ring?: string;
   destructive?: string;
   destructiveForeground?: string;
-  
+
   // Modo escuro
   darkBackground?: string;
   darkForeground?: string;
@@ -61,7 +61,7 @@ function CustomThemeProvider({ children }: { children: React.ReactNode }) {
     async function loadTheme() {
       try {
         const response = await fetch('/api/globals/site-settings');
-        
+
         if (!response.ok) {
           console.warn('[Theme] Não foi possível carregar as configurações do site');
           setIsLoading(false);
@@ -69,13 +69,13 @@ function CustomThemeProvider({ children }: { children: React.ReactNode }) {
         }
 
         const settings: SiteSettings = await response.json();
-        
+
         // Aplicar cores do tema
         applyThemeColors(settings);
-        
+
         // Aplicar tipografia
         applyTypography(settings.typography);
-        
+
         setIsLoading(false);
       } catch (error) {
         console.warn('[Theme] Erro ao carregar tema:', error);
@@ -97,7 +97,7 @@ function CustomThemeProvider({ children }: { children: React.ReactNode }) {
  */
 export function ThemeProvider({ children, ...props }: NextThemesProviderProps) {
   return (
-    <NextThemesProvider {...props}>
+    <NextThemesProvider {...props} forcedTheme="light">
       <CustomThemeProvider>
         {children}
       </CustomThemeProvider>
@@ -110,7 +110,7 @@ export function ThemeProvider({ children, ...props }: NextThemesProviderProps) {
  */
 function applyThemeColors(settings: SiteSettings) {
   const root = document.documentElement;
-  
+
   // Combinar todas as cores em um único objeto
   const colors = {
     ...settings.themeColors,
@@ -125,14 +125,14 @@ function applyThemeColors(settings: SiteSettings) {
   if (colors.secondaryForeground) root.style.setProperty('--secondary-foreground', colors.secondaryForeground);
   if (colors.accent) root.style.setProperty('--accent', colors.accent);
   if (colors.accentForeground) root.style.setProperty('--accent-foreground', colors.accentForeground);
-  
+
   if (colors.background) root.style.setProperty('--background', colors.background);
   if (colors.foreground) root.style.setProperty('--foreground', colors.foreground);
   if (colors.card) root.style.setProperty('--card', colors.card);
   if (colors.cardForeground) root.style.setProperty('--card-foreground', colors.cardForeground);
   if (colors.muted) root.style.setProperty('--muted', colors.muted);
   if (colors.mutedForeground) root.style.setProperty('--muted-foreground', colors.mutedForeground);
-  
+
   if (colors.border) root.style.setProperty('--border', colors.border);
   if (colors.ring) root.style.setProperty('--ring', colors.ring);
   if (colors.destructive) root.style.setProperty('--destructive', colors.destructive);
@@ -146,38 +146,6 @@ function applyThemeColors(settings: SiteSettings) {
   if (colors.primaryForeground) {
     root.style.setProperty('--sidebar-primary-foreground', colors.primaryForeground);
   }
-
-  // Aplicar cores do modo escuro se disponíveis
-  const darkColors = settings.darkModeColors;
-  if (darkColors && Object.keys(darkColors).length > 0) {
-    // Criar um style tag para o modo escuro
-    let darkModeStyle = document.getElementById('dark-mode-colors');
-    if (!darkModeStyle) {
-      darkModeStyle = document.createElement('style');
-      darkModeStyle.id = 'dark-mode-colors';
-      document.head.appendChild(darkModeStyle);
-    }
-
-    let cssText = '.dark {\n';
-    if (darkColors.darkBackground) cssText += `  --background: ${darkColors.darkBackground};\n`;
-    if (darkColors.darkForeground) cssText += `  --foreground: ${darkColors.darkForeground};\n`;
-    if (darkColors.darkCard) cssText += `  --card: ${darkColors.darkCard};\n`;
-    if (darkColors.darkCardForeground) cssText += `  --card-foreground: ${darkColors.darkCardForeground};\n`;
-    
-    // Manter as cores primárias no modo escuro
-    if (colors.primary) {
-      cssText += `  --primary: ${colors.primary};\n`;
-      cssText += `  --sidebar-primary: ${colors.primary};\n`;
-      cssText += `  --sidebar-ring: ${colors.primary};\n`;
-    }
-    if (colors.primaryForeground) {
-      cssText += `  --primary-foreground: ${colors.primaryForeground};\n`;
-      cssText += `  --sidebar-primary-foreground: ${colors.primaryForeground};\n`;
-    }
-    
-    cssText += '}\n';
-    darkModeStyle.textContent = cssText;
-  }
 }
 
 /**
@@ -187,7 +155,7 @@ function applyTypography(typography?: Typography) {
   if (!typography) return;
 
   const root = document.documentElement;
-  
+
   if (typography.borderRadius) {
     root.style.setProperty('--radius', typography.borderRadius);
   }

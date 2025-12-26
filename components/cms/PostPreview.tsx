@@ -23,18 +23,18 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
     if (!open) return null
 
     return (
-        <div className="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-md flex flex-col">
+        <div className="fixed inset-0 z-[100] bg-white/90 backdrop-blur-md flex flex-col">
             {/* Toolbar */}
-            <div className="border-b border-slate-800 bg-slate-950 p-4 flex items-center justify-between">
+            <div className="border-b border-gray-200 bg-white p-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-white font-bold">Pré-visualização</h2>
-                    <div className="h-6 w-px bg-slate-800" />
-                    <div className="flex bg-slate-900 rounded-lg p-1">
+                    <h2 className="text-gray-900 font-bold">Pré-visualização</h2>
+                    <div className="h-6 w-px bg-gray-200" />
+                    <div className="flex bg-gray-100 rounded-lg p-1">
                         <button
                             onClick={() => setViewMode('desktop')}
                             className={cn(
                                 "p-1.5 rounded-md transition-all",
-                                viewMode === 'desktop' ? "bg-slate-800 text-white shadow-sm" : "text-slate-500 hover:text-slate-300"
+                                viewMode === 'desktop' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
                             )}
                         >
                             <Monitor className="w-4 h-4" />
@@ -43,28 +43,28 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
                             onClick={() => setViewMode('mobile')}
                             className={cn(
                                 "p-1.5 rounded-md transition-all",
-                                viewMode === 'mobile' ? "bg-slate-800 text-white shadow-sm" : "text-slate-500 hover:text-slate-300"
+                                viewMode === 'mobile' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
                             )}
                         >
                             <Smartphone className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-400 hover:text-white">
+                <Button variant="ghost" size="icon" onClick={onClose} className="text-gray-400 hover:text-gray-900">
                     <X className="w-5 h-5" />
                 </Button>
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-slate-900/50">
+            <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-gray-50">
                 <div className={cn(
-                    "bg-slate-950 shadow-2xl transition-all duration-300 overflow-y-auto scrollbar-hide flex flex-col",
-                    viewMode === 'desktop' ? "w-full max-w-4xl rounded-xl" : "w-[375px] h-[667px] self-center rounded-[3rem] border-8 border-slate-800"
+                    "bg-white shadow-2xl transition-all duration-300 overflow-y-auto scrollbar-hide flex flex-col",
+                    viewMode === 'desktop' ? "w-full max-w-4xl rounded-xl" : "w-[375px] h-[667px] self-center rounded-[3rem] border-8 border-gray-200"
                 )}>
                     {/* Fake Browser/Mobile Status bar */}
                     {viewMode === 'mobile' && (
                         <div className="h-6 w-full flex justify-center items-center py-6">
-                            <div className="w-20 h-4 bg-slate-800 rounded-full" />
+                            <div className="w-20 h-4 bg-gray-100 rounded-full" />
                         </div>
                     )}
 
@@ -76,7 +76,7 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
                                     {post.category}
                                 </span>
                             )}
-                            <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight">
                                 {post.title || 'Título do Post'}
                             </h1>
                             {post.excerpt && (
@@ -88,7 +88,7 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
 
                         {/* Cover Image */}
                         {post.cover_image_url && (
-                            <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-800">
+                            <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-100 border border-gray-200">
                                 <img
                                     src={post.cover_image_url}
                                     alt={post.title}
@@ -99,8 +99,8 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
 
                         {/* Content */}
                         <div
-                            className="prose prose-invert prose-orange prose-lg max-w-none prose-headings:text-white prose-p:text-slate-300 prose-strong:text-white prose-blockquote:border-orange-500 prose-blockquote:bg-orange-500/5 prose-blockquote:py-1 prose-img:rounded-2xl"
-                            dangerouslySetInnerHTML={{ __html: post.content || '<p class="text-slate-600 italic">Escreva algo para ver o conteúdo...</p>' }}
+                            className="prose prose-orange prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-500/5 prose-blockquote:py-1 prose-img:rounded-2xl"
+                            dangerouslySetInnerHTML={{ __html: post.content || '<p class="text-gray-400 italic">Escreva algo para ver o conteúdo...</p>' }}
                         />
                     </div>
                 </div>

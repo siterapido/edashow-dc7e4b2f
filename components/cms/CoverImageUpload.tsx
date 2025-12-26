@@ -110,7 +110,7 @@ export function CoverImageUpload({ value, onChange, className }: CoverImageUploa
                 "flex flex-col items-center justify-center gap-3 p-8 h-48 md:h-64",
                 isDragging
                     ? "border-orange-500 bg-orange-500/10"
-                    : "border-slate-700 hover:border-slate-600 bg-slate-900/50 hover:bg-slate-900",
+                    : "border-gray-200 hover:border-gray-300 bg-gray-50/50 hover:bg-gray-100",
                 isUploading && "pointer-events-none",
                 className
             )}
@@ -126,18 +126,18 @@ export function CoverImageUpload({ value, onChange, className }: CoverImageUploa
             {isUploading ? (
                 <>
                     <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
-                    <span className="text-sm text-slate-400">Enviando imagem...</span>
+                    <span className="text-sm text-gray-400">Enviando imagem...</span>
                 </>
             ) : (
                 <>
-                    <div className="p-4 bg-slate-800 rounded-full">
-                        <ImageIcon className="w-8 h-8 text-slate-400" />
+                    <div className="p-4 bg-gray-100 rounded-full">
+                        <ImageIcon className="w-8 h-8 text-gray-400" />
                     </div>
                     <div className="text-center">
-                        <p className="text-sm font-medium text-slate-300">
+                        <p className="text-sm font-medium text-gray-600">
                             {isDragging ? 'Solte a imagem aqui' : 'Adicionar imagem de capa'}
                         </p>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-gray-400 mt-1">
                             Arraste uma imagem ou clique para selecionar
                         </p>
                     </div>

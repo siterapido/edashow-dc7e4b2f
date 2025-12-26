@@ -74,14 +74,14 @@ export default function CMSColumnistsPage() {
             label: 'Nome',
             render: (col: any) => (
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0">
                         {col.avatar_url ? (
                             <img src={col.avatar_url} alt={col.name} className="w-full h-full object-cover" />
                         ) : (
-                            <Users className="w-4 h-4 m-2 text-slate-500" />
+                            <Users className="w-4 h-4 m-2 text-gray-400" />
                         )}
                     </div>
-                    <span className="font-bold text-white">{col.name}</span>
+                    <span className="font-bold text-gray-900">{col.name}</span>
                 </div>
             )
         },
@@ -102,15 +102,15 @@ export default function CMSColumnistsPage() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Colunistas</h1>
-                    <p className="text-slate-400 text-sm mt-1">Gerencie os autores e especialistas do portal.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Colunistas</h1>
+                    <p className="text-gray-500 text-sm mt-1">Gerencie os autores e especialistas do portal.</p>
                 </div>
                 <Button
                     onClick={() => {
                         setCurrentCol({ name: '', slug: '', bio: '', avatar_url: '', social_instagram: '', social_twitter: '' })
                         setIsEditing(true)
                     }}
-                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-500/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Colunista
                 </Button>
@@ -127,12 +127,12 @@ export default function CMSColumnistsPage() {
                 </div>
 
                 <div className={cn(
-                    "bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit sticky top-24 transition-all",
+                    "bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-fit sticky top-24 transition-all",
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Users className="w-4 h-4 text-orange-400" />
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                        <Users className="w-4 h-4 text-orange-500" />
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
                             {currentCol.id ? 'Editar Colunista' : 'Novo Colunista'}
                         </h2>
                     </div>
@@ -140,11 +140,11 @@ export default function CMSColumnistsPage() {
                     <form onSubmit={handleSave} className="space-y-4">
                         <div className="flex justify-center mb-6">
                             <div className="relative group cursor-pointer">
-                                <div className="w-20 h-20 rounded-full bg-slate-950 border-2 border-slate-800 overflow-hidden flex items-center justify-center">
+                                <div className="w-20 h-20 rounded-full bg-gray-50 border-2 border-gray-100 overflow-hidden flex items-center justify-center">
                                     {currentCol.avatar_url ? (
                                         <img src={currentCol.avatar_url} className="w-full h-full object-cover" />
                                     ) : (
-                                        <Camera className="w-6 h-6 text-slate-700" />
+                                        <Camera className="w-6 h-6 text-gray-300" />
                                     )}
                                 </div>
                                 <div className="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -154,38 +154,38 @@ export default function CMSColumnistsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Nome Completo</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Nome Completo</Label>
                             <Input
                                 value={currentCol.name}
                                 onChange={(e) => updateName(e.target.value)}
                                 placeholder="Ex: João Silva"
-                                className="bg-slate-950 border-slate-800 text-white"
+                                className="bg-gray-50 border-gray-100 text-gray-900 focus:bg-white transition-colors"
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Slug</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Slug</Label>
                             <Input
                                 value={currentCol.slug}
                                 onChange={(e) => setCurrentCol({ ...prev, slug: e.target.value })}
-                                className="bg-slate-950 border-slate-800 text-slate-400"
+                                className="bg-gray-50 border-gray-100 text-gray-500 focus:bg-white transition-colors"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Biografia</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Biografia</Label>
                             <textarea
                                 value={currentCol.bio}
                                 onChange={(e) => setCurrentCol({ ...prev, bio: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-orange-400"
+                                className="w-full bg-gray-50 border border-gray-100 focus:bg-white transition-colors rounded-md p-3 text-gray-700 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-orange-500"
                                 placeholder="Breve descrição sobre o autor..."
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-2">
-                                <Label className="text-slate-500 text-[10px] font-bold uppercase flex items-center gap-1">
+                                <Label className="text-gray-400 text-[10px] font-bold uppercase flex items-center gap-1">
                                     <Instagram className="w-2.5 h-2.5" /> Instagram
                                 </Label>
                                 <Input
@@ -196,14 +196,14 @@ export default function CMSColumnistsPage() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-slate-500 text-[10px] font-bold uppercase flex items-center gap-1">
+                                <Label className="text-gray-400 text-[10px] font-bold uppercase flex items-center gap-1">
                                     <Twitter className="w-2.5 h-2.5" /> Twitter
                                 </Label>
                                 <Input
                                     value={currentCol.social_twitter}
                                     onChange={(e) => setCurrentCol({ ...prev, social_twitter: e.target.value })}
                                     placeholder="@username"
-                                    className="bg-slate-950 border-slate-800 text-orange-300 text-xs"
+                                    className="bg-gray-50 border-gray-100 text-orange-400 text-xs focus:bg-white transition-colors"
                                 />
                             </div>
                         </div>
@@ -222,7 +222,7 @@ export default function CMSColumnistsPage() {
                                     type="button"
                                     variant="outline"
                                     onClick={() => handleDelete(currentCol.id)}
-                                    className="border-red-900/50 text-red-500 hover:bg-red-950 hover:text-red-400"
+                                    className="border-red-100 text-red-500 hover:bg-red-50"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -232,7 +232,7 @@ export default function CMSColumnistsPage() {
                             type="button"
                             variant="ghost"
                             onClick={() => setIsEditing(false)}
-                            className="w-full text-slate-500 text-xs hover:bg-slate-800"
+                            className="w-full text-gray-400 text-xs hover:bg-gray-50"
                         >
                             Cancelar
                         </Button>

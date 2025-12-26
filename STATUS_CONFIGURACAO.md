@@ -88,3 +88,4 @@ postgresql://postgres.exeuuqbgyfaxgbwygfuu:[SUA-SENHA]@aws-1-sa-east-1.pooler.su
 
 
 
+

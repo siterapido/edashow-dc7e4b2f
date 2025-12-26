@@ -69,8 +69,8 @@ export default function CMSEventsPage() {
             label: 'Evento',
             render: (item: any) => (
                 <div className="flex flex-col">
-                    <span className="font-bold text-white">{item.title}</span>
-                    <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
+                    <span className="font-bold text-gray-900">{item.title}</span>
+                    <div className="flex items-center gap-2 text-[10px] text-gray-500 mt-0.5">
                         <MapPin className="w-2.5 h-2.5" /> {item.location || 'Local não definido'}
                     </div>
                 </div>
@@ -80,8 +80,8 @@ export default function CMSEventsPage() {
             key: 'event_date',
             label: 'Data',
             render: (item: any) => item.event_date ? (
-                <div className="flex items-center gap-1.5 text-slate-300">
-                    <Calendar className="w-3.5 h-3.5 text-orange-400" />
+                <div className="flex items-center gap-1.5 text-gray-600">
+                    <Calendar className="w-3.5 h-3.5 text-orange-500" />
                     {new Date(item.event_date).toLocaleDateString()}
                 </div>
             ) : '-'
@@ -92,7 +92,7 @@ export default function CMSEventsPage() {
             render: (item: any) => (
                 <span className={cn(
                     "text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider",
-                    item.status === 'upcoming' ? "bg-orange-400/10 text-orange-400 border border-orange-400/20" : "bg-slate-800 text-slate-400 border border-slate-700"
+                    item.status === 'upcoming' ? "bg-orange-50 text-orange-600 border border-orange-100" : "bg-gray-100 text-gray-500 border border-gray-200"
                 )}>
                     {item.status === 'upcoming' ? 'Em breve' : 'Encerrado'}
                 </span>
@@ -104,15 +104,15 @@ export default function CMSEventsPage() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Eventos</h1>
-                    <p className="text-slate-400 text-sm mt-1">Gerencie os próximos eventos, webinars e congressos.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Eventos</h1>
+                    <p className="text-gray-500 text-sm mt-1">Gerencie os próximos eventos, webinars e congressos.</p>
                 </div>
                 <Button
                     onClick={() => {
                         setCurrentEvent({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
                         setIsEditing(true)
                     }}
-                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-500/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Evento
                 </Button>
@@ -129,45 +129,45 @@ export default function CMSEventsPage() {
                 </div>
 
                 <div className={cn(
-                    "bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit sticky top-24 transition-all shadow-2xl shadow-black/40",
+                    "bg-white p-6 rounded-xl border border-gray-200 h-fit sticky top-24 transition-all shadow-sm",
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Calendar className="w-4 h-4 text-orange-400" />
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                        <Calendar className="w-4 h-4 text-orange-500" />
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
                             {currentEvent.id ? 'Editar Evento' : 'Novo Evento'}
                         </h2>
                     </div>
 
                     <form onSubmit={handleSave} className="space-y-4">
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Nome do Evento</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Nome do Evento</Label>
                             <Input
                                 value={currentEvent.title}
                                 onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
                                 placeholder="Ex: Congresso Saúde Digital 2026"
-                                className="bg-slate-950 border-slate-800 text-white h-11"
+                                className="bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
                                 required
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-2">
-                                <Label className="text-slate-500 text-[10px] font-bold uppercase">Data</Label>
+                                <Label className="text-gray-400 text-[10px] font-bold uppercase">Data</Label>
                                 <Input
                                     type="date"
                                     value={currentEvent.event_date}
                                     onChange={(e) => setCurrentEvent({ ...currentEvent, event_date: e.target.value })}
-                                    className="bg-slate-950 border-slate-800 text-slate-300 h-11"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-slate-500 text-[10px] font-bold uppercase">Status</Label>
+                                <Label className="text-gray-400 text-[10px] font-bold uppercase">Status</Label>
                                 <select
                                     value={currentEvent.status}
                                     onChange={(e) => setCurrentEvent({ ...currentEvent, status: e.target.value })}
-                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-orange-400"
+                                    className="w-full bg-gray-50 border-gray-100 text-gray-700 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors"
                                 >
                                     <option value="upcoming">Em breve</option>
                                     <option value="past">Encerrado</option>
@@ -176,37 +176,37 @@ export default function CMSEventsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Localização</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Localização</Label>
                             <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
+                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                                 <Input
                                     value={currentEvent.location}
                                     onChange={(e) => setCurrentEvent({ ...currentEvent, location: e.target.value })}
                                     placeholder="Ex: São Paulo, SP (ou Online)"
-                                    className="pl-9 bg-slate-950 border-slate-800 text-slate-300 h-11"
+                                    className="pl-9 bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Link para Inscrição (Opcional)</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Link para Inscrição (Opcional)</Label>
                             <div className="relative">
-                                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
+                                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                                 <Input
                                     value={currentEvent.registration_url}
                                     onChange={(e) => setCurrentEvent({ ...currentEvent, registration_url: e.target.value })}
                                     placeholder="https://sua-pagina.com.br"
-                                    className="pl-9 bg-slate-950 border-slate-800 text-slate-300 h-11"
+                                    className="pl-9 bg-gray-50 border-gray-100 text-orange-600 h-11 focus:bg-white transition-colors"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Descrição Curta</Label>
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Descrição Curta</Label>
                             <textarea
                                 value={currentEvent.description}
                                 onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-400"
+                                className="w-full bg-gray-50 border border-gray-100 focus:bg-white transition-colors rounded-md p-3 text-gray-700 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-500"
                                 placeholder="Principais detalhes do evento..."
                             />
                         </div>
@@ -225,7 +225,7 @@ export default function CMSEventsPage() {
                                     type="button"
                                     variant="outline"
                                     onClick={() => handleDelete(currentEvent.id)}
-                                    className="border-red-900/50 text-red-500 hover:bg-red-950 hover:text-red-400 h-11 px-4"
+                                    className="border-red-100 text-red-500 hover:bg-red-50 h-11 px-4"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -235,7 +235,7 @@ export default function CMSEventsPage() {
                             type="button"
                             variant="ghost"
                             onClick={() => setIsEditing(false)}
-                            className="w-full text-slate-500 text-xs hover:bg-slate-800 h-10"
+                            className="w-full text-gray-400 text-xs hover:bg-gray-50 h-10"
                         >
                             Cancelar
                         </Button>

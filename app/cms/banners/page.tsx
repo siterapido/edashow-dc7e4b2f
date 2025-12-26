@@ -122,7 +122,7 @@ export default function CMSBannersPage() {
             key: 'image',
             label: 'Preview',
             render: (item: Banner) => (
-                <div className="w-20 h-12 bg-slate-800 rounded overflow-hidden">
+                <div className="w-20 h-12 bg-gray-100 rounded overflow-hidden border border-gray-100 shadow-sm">
                     <img src={item.image_path} alt={item.title} className="w-full h-full object-cover" />
                 </div>
             )
@@ -132,8 +132,8 @@ export default function CMSBannersPage() {
             label: 'Título',
             render: (item: Banner) => (
                 <div>
-                    <p className="font-medium text-white">{item.title}</p>
-                    <p className="text-xs text-slate-400">{BANNER_LOCATIONS.find(l => l.value === item.location)?.label}</p>
+                    <p className="font-bold text-gray-900">{item.title}</p>
+                    <p className="text-xs text-gray-500">{BANNER_LOCATIONS.find(l => l.value === item.location)?.label}</p>
                 </div>
             )
         },
@@ -141,7 +141,7 @@ export default function CMSBannersPage() {
             key: 'link_url',
             label: 'Link',
             render: (item: Banner) => (
-                <a href={item.link_url} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 flex items-center gap-1 text-sm">
+                <a href={item.link_url} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-500 flex items-center gap-1 text-sm font-medium">
                     <ExternalLink className="w-3 h-3" />
                     Ver
                 </a>
@@ -151,14 +151,14 @@ export default function CMSBannersPage() {
             key: 'dimensions',
             label: 'Dimensões',
             render: (item: Banner) => (
-                <span className="text-sm text-slate-400">{item.width}x{item.height}px</span>
+                <span className="text-sm text-gray-500">{item.width}x{item.height}px</span>
             )
         },
         {
             key: 'dates',
             label: 'Período',
             render: (item: Banner) => (
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-gray-400">
                     <p>Início: {new Date(item.start_date).toLocaleDateString('pt-BR')}</p>
                     {item.end_date && <p>Fim: {new Date(item.end_date).toLocaleDateString('pt-BR')}</p>}
                 </div>
@@ -174,9 +174,9 @@ export default function CMSBannersPage() {
                 const isActive = item.is_active && start <= now && (!end || end >= now)
 
                 return (
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${isActive
-                            ? 'bg-green-500/20 text-green-400'
-                            : 'bg-slate-700 text-slate-400'
+                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isActive
+                        ? "bg-green-50 text-green-600 border border-green-100"
+                        : "bg-gray-100 text-gray-500 border border-gray-200"
                         }`}>
                         {isActive ? 'Ativo' : 'Inativo'}
                     </span>
@@ -197,7 +197,7 @@ export default function CMSBannersPage() {
             icon: Trash2,
             onClick: (item: Banner) => handleDelete(item.id),
             variant: 'ghost' as const,
-            className: 'text-red-400 hover:text-red-300 hover:bg-red-900/20'
+            className: 'text-red-500 hover:text-red-600 hover:bg-red-50'
         }
     ]
 
@@ -213,8 +213,8 @@ export default function CMSBannersPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">Publicidades</h1>
-                    <p className="text-slate-400 mt-1">Gerencie os banners publicitários do site</p>
+                    <h1 className="text-3xl font-bold text-gray-900">Publicidades</h1>
+                    <p className="text-gray-500 mt-1">Gerencie os banners publicitários do site</p>
                 </div>
                 <Button
                     onClick={() => setShowForm(!showForm)}
@@ -226,21 +226,22 @@ export default function CMSBannersPage() {
             </div>
 
             {showForm && (
-                <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-white mb-4">
+                <div className="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <Tag className="w-5 h-5 text-orange-500" />
                         {editingBanner ? 'Editar Banner' : 'Novo Banner'}
                     </h2>
                     <form onSubmit={handleSave} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Title */}
                             <div className="md:col-span-2">
-                                <Label htmlFor="title" className="text-slate-300">Título/Nome do Banner</Label>
+                                <Label htmlFor="title" className="text-gray-400 text-[10px] font-bold uppercase">Título/Nome do Banner</Label>
                                 <Input
                                     id="title"
                                     name="title"
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                                    className="bg-slate-800 border-slate-700 text-white mt-2"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 mt-1 focus:bg-white transition-colors"
                                     placeholder="Ex: Banner Patrocinador Principal - Dezembro 2024"
                                     required
                                 />
@@ -248,7 +249,7 @@ export default function CMSBannersPage() {
 
                             {/* Image Upload */}
                             <div className="md:col-span-2">
-                                <Label htmlFor="image" className="text-slate-300">Imagem do Banner</Label>
+                                <Label htmlFor="image" className="text-gray-400 text-[10px] font-bold uppercase">Imagem do Banner</Label>
                                 <div className="mt-2 space-y-3">
                                     <Input
                                         id="image"
@@ -256,12 +257,12 @@ export default function CMSBannersPage() {
                                         type="file"
                                         accept="image/*"
                                         onChange={handleImageChange}
-                                        className="bg-slate-800 border-slate-700 text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-orange-500 file:text-white file:cursor-pointer"
+                                        className="bg-gray-50 border-gray-100 text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-orange-500 file:text-white file:cursor-pointer focus:bg-white transition-colors"
                                         required={!editingBanner}
                                     />
                                     {imagePreview && (
-                                        <div className="border border-slate-700 rounded-lg p-4 bg-slate-800">
-                                            <p className="text-xs text-slate-400 mb-2">Preview:</p>
+                                        <div className="border border-gray-100 rounded-lg p-4 bg-gray-50/50">
+                                            <p className="text-[10px] font-bold uppercase text-gray-400 mb-2">Preview:</p>
                                             <img src={imagePreview} alt="Preview" className="max-h-48 rounded" />
                                         </div>
                                     )}
@@ -270,14 +271,14 @@ export default function CMSBannersPage() {
 
                             {/* Link URL */}
                             <div className="md:col-span-2">
-                                <Label htmlFor="link_url" className="text-slate-300">URL de Destino</Label>
+                                <Label htmlFor="link_url" className="text-gray-400 text-[10px] font-bold uppercase">URL de Destino</Label>
                                 <Input
                                     id="link_url"
                                     name="link_url"
                                     type="url"
                                     value={formData.link_url}
                                     onChange={e => setFormData({ ...formData, link_url: e.target.value })}
-                                    className="bg-slate-800 border-slate-700 text-white mt-2"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 mt-1 focus:bg-white transition-colors"
                                     placeholder="https://exemplo.com"
                                     required
                                 />
@@ -285,13 +286,13 @@ export default function CMSBannersPage() {
 
                             {/* Location */}
                             <div>
-                                <Label htmlFor="location" className="text-slate-300">Localização</Label>
+                                <Label htmlFor="location" className="text-gray-400 text-[10px] font-bold uppercase">Localização</Label>
                                 <select
                                     id="location"
                                     name="location"
                                     value={formData.location}
                                     onChange={e => setFormData({ ...formData, location: e.target.value as BannerLocation })}
-                                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-md px-3 py-2 mt-2"
+                                    className="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-md px-3 py-2 mt-1 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-orange-500"
                                     required
                                 >
                                     {BANNER_LOCATIONS.map(loc => (
@@ -299,7 +300,7 @@ export default function CMSBannersPage() {
                                     ))}
                                 </select>
                                 {selectedLocation && (
-                                    <p className="text-xs text-slate-500 mt-1">
+                                    <p className="text-[10px] text-gray-400 mt-1">
                                         Dimensões recomendadas: {selectedLocation.dimensions.width}x{selectedLocation.dimensions.height}px
                                     </p>
                                 )}
@@ -307,46 +308,46 @@ export default function CMSBannersPage() {
 
                             {/* Display Order */}
                             <div>
-                                <Label htmlFor="display_order" className="text-slate-300">Ordem de Exibição</Label>
+                                <Label htmlFor="display_order" className="text-gray-400 text-[10px] font-bold uppercase">Ordem de Exibição</Label>
                                 <Input
                                     id="display_order"
                                     name="display_order"
                                     type="number"
                                     value={formData.display_order}
                                     onChange={e => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                                    className="bg-slate-800 border-slate-700 text-white mt-2"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 mt-1 focus:bg-white transition-colors"
                                     min="0"
                                     required
                                 />
-                                <p className="text-xs text-slate-500 mt-1">Menor número aparece primeiro</p>
+                                <p className="text-[10px] text-gray-400 mt-1">Menor número aparece primeiro</p>
                             </div>
 
                             {/* Start Date */}
                             <div>
-                                <Label htmlFor="start_date" className="text-slate-300">Data de Início</Label>
+                                <Label htmlFor="start_date" className="text-gray-400 text-[10px] font-bold uppercase">Data de Início</Label>
                                 <Input
                                     id="start_date"
                                     name="start_date"
                                     type="datetime-local"
                                     value={formData.start_date}
                                     onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                                    className="bg-slate-800 border-slate-700 text-white mt-2"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 mt-1 focus:bg-white transition-colors"
                                     required
                                 />
                             </div>
 
                             {/* End Date */}
                             <div>
-                                <Label htmlFor="end_date" className="text-slate-300">Data de Fim (opcional)</Label>
+                                <Label htmlFor="end_date" className="text-gray-400 text-[10px] font-bold uppercase">Data de Fim (opcional)</Label>
                                 <Input
                                     id="end_date"
                                     name="end_date"
                                     type="datetime-local"
                                     value={formData.end_date}
                                     onChange={e => setFormData({ ...formData, end_date: e.target.value })}
-                                    className="bg-slate-800 border-slate-700 text-white mt-2"
+                                    className="bg-gray-50 border-gray-100 text-gray-900 mt-1 focus:bg-white transition-colors"
                                 />
-                                <p className="text-xs text-slate-500 mt-1">Deixe vazio para sem data de término</p>
+                                <p className="text-[10px] text-gray-400 mt-1">Deixe vazio para sem data de término</p>
                             </div>
 
                             {/* Hidden fields for dimensions */}
@@ -361,14 +362,14 @@ export default function CMSBannersPage() {
                                         type="checkbox"
                                         checked={formData.is_active}
                                         onChange={e => setFormData({ ...formData, is_active: e.target.checked })}
-                                        className="w-5 h-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500"
+                                        className="w-5 h-5 rounded border-gray-200 bg-gray-50 text-orange-500 focus:ring-orange-500"
                                     />
-                                    <span className="text-slate-300">Banner ativo</span>
+                                    <span className="text-sm font-medium text-gray-600">Banner ativo</span>
                                 </label>
                             </div>
                         </div>
 
-                        <div className="flex gap-3 pt-4 border-t border-slate-800">
+                        <div className="flex gap-3 pt-4 border-t border-gray-100">
                             <Button
                                 type="submit"
                                 disabled={saving}
@@ -387,7 +388,7 @@ export default function CMSBannersPage() {
                                 type="button"
                                 onClick={resetForm}
                                 variant="outline"
-                                className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                                className="border-gray-200 text-gray-500 hover:bg-gray-50"
                             >
                                 Cancelar
                             </Button>
@@ -396,7 +397,7 @@ export default function CMSBannersPage() {
                 </div>
             )}
 
-            <div className="bg-slate-900 border border-slate-800 rounded-lg">
+            <div className="bg-white border border-gray-200 shadow-sm rounded-xl">
                 <DataTable
                     data={banners}
                     columns={columns}
