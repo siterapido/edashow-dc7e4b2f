@@ -66,6 +66,12 @@ export default async function EventsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event: any, index: number) => {
               const eventDate = new Date(event.date)
+
+              if (isNaN(eventDate.getTime())) {
+                console.error(`Invalid date for event: ${event.id}`)
+                return null
+              }
+
               const day = format(eventDate, 'dd')
               const month = format(eventDate, 'MMM', { locale: ptBR }).toUpperCase()
 

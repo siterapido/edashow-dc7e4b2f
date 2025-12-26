@@ -54,3 +54,17 @@ export async function deleteColumnist(id: string) {
     revalidatePath('/cms/columnists')
     revalidatePath('/')
 }
+
+export async function getCategories() {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('categories').select('*').order('name')
+    if (error) throw error
+    return data
+}
+
+export async function getColumnists() {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('columnists').select('*').order('name')
+    if (error) throw error
+    return data
+}
