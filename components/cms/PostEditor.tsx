@@ -115,7 +115,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2"
+                        className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2"
                     >
                         {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
                         Salvar Post
@@ -133,7 +133,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 value={formData.title}
                                 onChange={(e) => updateTitle(e.target.value)}
                                 placeholder="Ex: O Futuro da Saúde Digital..."
-                                className="text-2xl font-bold bg-slate-950 border-slate-800 text-white h-auto p-4 placeholder:text-slate-700 focus:ring-blue-500"
+                                className="text-2xl font-bold bg-slate-950 border-slate-800 text-white h-auto p-4 placeholder:text-slate-700 focus:ring-orange-500"
                                 required
                             />
                         </div>
@@ -169,7 +169,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                             <textarea
                                 value={formData.excerpt}
                                 onChange={(e) => setFormData({ ...prev, excerpt: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-700"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-500 transition-all placeholder:text-slate-700"
                                 placeholder="Uma breve introdução para o post..."
                             />
                         </div>
@@ -189,7 +189,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     <Card className="bg-slate-900 border-slate-800 shadow-xl overflow-hidden">
                         <CardHeader className="p-4 border-b border-slate-800 bg-slate-900/50">
                             <div className="flex items-center gap-2">
-                                <Settings className="w-4 h-4 text-blue-500" />
+                                <Settings className="w-4 h-4 text-orange-500" />
                                 <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-400">Configurações</CardTitle>
                             </div>
                         </CardHeader>
@@ -199,7 +199,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 <select
                                     value={formData.status}
                                     onChange={(e) => setFormData({ ...prev, status: e.target.value })}
-                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-orange-500"
                                 >
                                     <option value="draft">Rascunho</option>
                                     <option value="published">Publicado</option>
@@ -212,7 +212,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 <select
                                     value={formData.category_id}
                                     onChange={(e) => setFormData({ ...prev, category_id: e.target.value })}
-                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-orange-500"
                                     required
                                 >
                                     <option value="">Selecione uma categoria</option>
@@ -227,7 +227,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 <select
                                     value={formData.columnist_id}
                                     onChange={(e) => setFormData({ ...prev, columnist_id: e.target.value })}
-                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-orange-500"
                                 >
                                     <option value="">Selecione um autor</option>
                                     {columnists.map(col => (
@@ -245,7 +245,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                     type="checkbox"
                                     checked={formData.featured_home}
                                     onChange={(e) => setFormData({ ...prev, featured_home: e.target.checked })}
-                                    className="w-4 h-4 bg-slate-800 rounded border-slate-700 text-blue-600 focus:ring-blue-500"
+                                    className="w-4 h-4 bg-slate-800 rounded border-slate-700 text-orange-500 focus:ring-orange-500"
                                 />
                             </div>
                         </CardContent>
@@ -254,7 +254,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     <Card className="bg-slate-900 border-slate-800 shadow-xl overflow-hidden">
                         <CardHeader className="p-4 border-b border-slate-800 bg-slate-900/50">
                             <div className="flex items-center gap-2">
-                                <TagIcon className="w-4 h-4 text-blue-500" />
+                                <TagIcon className="w-4 h-4 text-orange-500" />
                                 <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-400">Tags & SEO</CardTitle>
                             </div>
                         </CardHeader>

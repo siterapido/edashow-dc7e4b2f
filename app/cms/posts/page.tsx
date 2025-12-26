@@ -49,7 +49,7 @@ export default function CMSPostsPage() {
             label: 'Título',
             render: (post: any) => (
                 <div className="flex flex-col">
-                    <span className="font-bold text-white group-hover:text-blue-400 transition-colors">{post.title}</span>
+                    <span className="font-bold text-white group-hover:text-orange-300 transition-colors">{post.title}</span>
                     <span className="text-[10px] text-slate-500 font-mono mt-0.5">{post.id}</span>
                 </div>
             )
@@ -87,7 +87,7 @@ export default function CMSPostsPage() {
                 </div>
                 <Button
                     onClick={() => router.push('/cms/posts/new')}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Post
                 </Button>
@@ -105,7 +105,7 @@ export default function CMSPostsPage() {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-orange-400"
                     >
                         <option value="all">Todos os Status</option>
                         <option value="published">Publicados</option>

@@ -20,7 +20,7 @@ export default async function PatrocinadoresPage() {
         {/* Elementos decorativos de fundo */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-500/10 blur-[120px] rounded-full" />
         </div>
 
         <div className="container relative mx-auto px-4 z-10">
@@ -52,8 +52,8 @@ export default async function PatrocinadoresPage() {
             </div>
           </div>
           <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-6 h-6 text-orange-500" />
             </div>
             <div>
               <h3 className="font-bold text-slate-900 mb-1">Autoridade no Setor</h3>

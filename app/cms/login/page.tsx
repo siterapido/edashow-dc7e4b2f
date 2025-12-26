@@ -38,7 +38,7 @@ export default function CMSLoginPage() {
         <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4 ring-4 ring-blue-900/50">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-4 ring-4 ring-orange-900/50">
                         <Shield className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-2xl font-bold text-white mb-2">EDAShow CMS</h1>
@@ -68,7 +68,7 @@ export default function CMSLoginPage() {
                                         placeholder="admin@edashow.com.br"
                                         required
                                         disabled={isPending}
-                                        className="pl-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-blue-500"
+                                        className="pl-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-orange-400"
                                         autoComplete="email"
                                     />
                                 </div>
@@ -87,7 +87,7 @@ export default function CMSLoginPage() {
                                         placeholder="••••••••"
                                         required
                                         disabled={isPending}
-                                        className="pl-10 pr-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-blue-500"
+                                        className="pl-10 pr-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-orange-400"
                                         autoComplete="current-password"
                                     />
                                     <button
@@ -113,7 +113,7 @@ export default function CMSLoginPage() {
 
                             <Button
                                 type="submit"
-                                className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all shadow-lg active:scale-95"
+                                className="w-full h-11 bg-orange-500 hover:bg-orange-400 text-white font-semibold transition-all shadow-lg active:scale-95"
                                 disabled={isPending}
                             >
                                 {isPending ? (
@@ -128,7 +128,7 @@ export default function CMSLoginPage() {
                         </form>
 
                         <div className="mt-8 pt-6 border-t border-slate-700 text-center">
-                            <Link href="/" className="text-sm text-slate-400 hover:text-blue-400 transition-colors">
+                            <Link href="/" className="text-sm text-slate-400 hover:text-orange-300 transition-colors">
                                 ← Voltar para o site
                             </Link>
                         </div>

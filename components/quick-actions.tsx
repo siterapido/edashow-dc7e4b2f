@@ -1,19 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Newspaper, 
-  TrendingUp, 
-  Radio, 
-  Mic, 
-  Mail, 
+import {
+  Newspaper,
+  TrendingUp,
+  Radio,
+  Mic,
+  Mail,
   Calendar,
   ArrowRight
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const actions = [
-  { icon: Newspaper, label: "Últimas Notícias", href: "#", color: "text-blue-600" },
+  { icon: Newspaper, label: "Últimas Notícias", href: "#", color: "text-orange-600" },
   { icon: TrendingUp, label: "Mais Lidas", href: "#", color: "text-green-600" },
   { icon: Radio, label: "Ao Vivo", href: "#", color: "text-red-600" },
   { icon: Mic, label: "Podcasts", href: "#", color: "text-purple-600" },
@@ -28,7 +28,7 @@ export function QuickActions() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-bold text-slate-800 uppercase tracking-wide">Acesso Rápido</h2>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {actions.map((action, i) => (
             <motion.a

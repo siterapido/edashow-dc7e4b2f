@@ -74,7 +74,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={cn("h-8 w-8", editor.isActive('bold') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('bold') && "bg-slate-800 text-orange-400")}
                 >
                     <Bold className="w-4 h-4" />
                 </Button>
@@ -82,7 +82,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={cn("h-8 w-8", editor.isActive('italic') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('italic') && "bg-slate-800 text-orange-400")}
                 >
                     <Italic className="w-4 h-4" />
                 </Button>
@@ -90,7 +90,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    className={cn("h-8 w-8", editor.isActive('underline') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('underline') && "bg-slate-800 text-orange-400")}
                 >
                     <UnderlineIcon className="w-4 h-4" />
                 </Button>
@@ -101,7 +101,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={cn("h-8 w-8", editor.isActive('heading', { level: 1 }) && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('heading', { level: 1 }) && "bg-slate-800 text-orange-400")}
                 >
                     <Heading1 className="w-4 h-4" />
                 </Button>
@@ -109,7 +109,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={cn("h-8 w-8", editor.isActive('heading', { level: 2 }) && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('heading', { level: 2 }) && "bg-slate-800 text-orange-400")}
                 >
                     <Heading2 className="w-4 h-4" />
                 </Button>
@@ -117,7 +117,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                    className={cn("h-8 w-8", editor.isActive('blockquote') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('blockquote') && "bg-slate-800 text-orange-400")}
                 >
                     <Quote className="w-4 h-4" />
                 </Button>
@@ -128,7 +128,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={cn("h-8 w-8", editor.isActive('bulletList') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('bulletList') && "bg-slate-800 text-orange-400")}
                 >
                     <List className="w-4 h-4" />
                 </Button>
@@ -136,7 +136,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    className={cn("h-8 w-8", editor.isActive('orderedList') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('orderedList') && "bg-slate-800 text-orange-400")}
                 >
                     <ListOrdered className="w-4 h-4" />
                 </Button>
@@ -147,7 +147,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                     variant="ghost"
                     size="icon"
                     onClick={setLink}
-                    className={cn("h-8 w-8", editor.isActive('link') && "bg-slate-800 text-blue-400")}
+                    className={cn("h-8 w-8", editor.isActive('link') && "bg-slate-800 text-orange-400")}
                 >
                     <LinkIcon className="w-4 h-4" />
                 </Button>

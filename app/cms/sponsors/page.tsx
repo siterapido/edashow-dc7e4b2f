@@ -75,7 +75,7 @@ export default function CMSSponsorsPage() {
             key: 'link',
             label: 'Site',
             render: (item: any) => item.website_url ? (
-                <a href={item.website_url} target="_blank" className="text-blue-500 hover:text-blue-400 flex items-center gap-1">
+                <a href={item.website_url} target="_blank" className="text-orange-400 hover:text-orange-300 flex items-center gap-1">
                     Ver Site <ExternalLink className="w-3 h-3" />
                 </a>
             ) : '-'
@@ -94,7 +94,7 @@ export default function CMSSponsorsPage() {
                         setCurrentSponsor({ name: '', logo_url: '', website_url: '', display_order: sponsors.length + 1 })
                         setIsEditing(true)
                     }}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Patrocinador
                 </Button>
@@ -115,7 +115,7 @@ export default function CMSSponsorsPage() {
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <ShieldCheck className="w-4 h-4 text-blue-500" />
+                        <ShieldCheck className="w-4 h-4 text-orange-400" />
                         <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
                             {currentSponsor.id ? 'Editar Parceria' : 'Nova Parceria'}
                         </h2>
@@ -170,7 +170,7 @@ export default function CMSSponsorsPage() {
                             <Button
                                 type="submit"
                                 disabled={saving}
-                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                                className="flex-1 bg-orange-500 hover:bg-orange-400 text-white font-bold"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                                 {currentSponsor.id ? 'Atualizar' : 'Criar Parceria'}

@@ -86,7 +86,7 @@ export default function CMSCategoriesPage() {
                         setCurrentCat({ name: '', slug: '', display_order: categories.length + 1 })
                         setIsEditing(true)
                     }}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
                 >
                     <Plus className="w-4 h-4" /> Nova Categoria
                 </Button>
@@ -109,7 +109,7 @@ export default function CMSCategoriesPage() {
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Tag className="w-4 h-4 text-blue-500" />
+                        <Tag className="w-4 h-4 text-orange-400" />
                         <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
                             {currentCat.id ? 'Editar Categoria' : 'Nova Categoria'}
                         </h2>
@@ -148,7 +148,7 @@ export default function CMSCategoriesPage() {
                             <Button
                                 type="submit"
                                 disabled={saving}
-                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                                className="flex-1 bg-orange-500 hover:bg-orange-400 text-white font-bold"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                                 {currentCat.id ? 'Atualizar' : 'Criar Categoria'}

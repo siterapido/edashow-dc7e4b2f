@@ -31,8 +31,8 @@ export function PostStatusBadge({ status, publishedDate }: PostStatusBadgeProps)
         return {
           label: isScheduled ? 'Agendado' : 'Rascunho',
           variant: 'outline' as const,
-          className: isScheduled 
-            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+          className: isScheduled
+            ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
             : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
         }
     }
@@ -47,7 +47,7 @@ export function PostStatusBadge({ status, publishedDate }: PostStatusBadgeProps)
       <Badge className={config.className}>
         {config.label}
       </Badge>
-      
+
       {date && (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           {isScheduled ? (

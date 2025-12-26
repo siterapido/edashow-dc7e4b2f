@@ -13,7 +13,7 @@ export async function GET() {
             console.warn('[API Site Settings] Theme settings not found in Supabase:', error)
             return NextResponse.json({
                 themeColors: {
-                    primary: '#3b82f6', // Default blue
+                    primary: '#FF6F00', // Default orange
                     background: '#ffffff',
                     foreground: '#0f172a',
                 }

@@ -58,7 +58,7 @@ export default function CMSDashboard() {
     }, [])
 
     const statCards = [
-        { label: 'Total de Posts', value: stats.posts, icon: FileText, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+        { label: 'Total de Posts', value: stats.posts, icon: FileText, color: 'text-orange-400', bg: 'bg-orange-400/10' },
         { label: 'Eventos', value: stats.events, icon: Calendar, color: 'text-orange-500', bg: 'bg-orange-500/10' },
         { label: 'Patrocinadores', value: stats.sponsors, icon: Megaphone, color: 'text-purple-500', bg: 'bg-purple-500/10' },
         { label: 'Assinantes', value: stats.subscribers, icon: Mail, color: 'text-green-500', bg: 'bg-green-500/10' },
@@ -75,7 +75,7 @@ export default function CMSDashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {statCards.map((stat, i) => (
-                    <Card key={i} className="bg-slate-900 border-slate-800 shadow-lg group hover:border-blue-500/50 transition-all duration-300">
+                    <Card key={i} className="bg-slate-900 border-slate-800 shadow-lg group hover:border-orange-400/50 transition-all duration-300">
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                                 <div className={cn("p-2 rounded-lg", stat.bg)}>
@@ -102,10 +102,10 @@ export default function CMSDashboard() {
                 <Card className="lg:col-span-2 bg-slate-900 border-slate-800 shadow-xl overflow-hidden">
                     <CardHeader className="border-b border-slate-800 bg-slate-900/50 flex flex-row items-center justify-between py-4">
                         <div className="flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-blue-500" />
+                            <Clock className="w-5 h-5 text-orange-400" />
                             <CardTitle className="text-lg font-bold">Posts Recentes</CardTitle>
                         </div>
-                        <Link href="/cms/posts" className="text-xs text-blue-500 hover:text-blue-400 font-semibold flex items-center gap-1 transition-colors">
+                        <Link href="/cms/posts" className="text-xs text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1 transition-colors">
                             Ver todos <ArrowUpRight className="w-3 h-3" />
                         </Link>
                     </CardHeader>
@@ -129,7 +129,7 @@ export default function CMSDashboard() {
                                                 {post.title.substring(0, 2).toUpperCase()}
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">{post.title}</h4>
+                                                <h4 className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">{post.title}</h4>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <span className={cn(
                                                         "text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider",
@@ -157,11 +157,11 @@ export default function CMSDashboard() {
 
                 {/* Quick Actions / System Info */}
                 <div className="space-y-6">
-                    <Card className="bg-gradient-to-br from-blue-600 to-blue-800 border-none shadow-xl text-white">
+                    <Card className="bg-gradient-to-br from-orange-500 to-orange-800 border-none shadow-xl text-white">
                         <CardContent className="p-6">
                             <h3 className="text-xl font-bold">Precisando de ajuda?</h3>
-                            <p className="text-blue-100 text-sm mt-2 leading-relaxed">Confira a documentação do sistema ou entre em contato com o suporte técnico.</p>
-                            <Button className="mt-4 w-full bg-white text-blue-600 hover:bg-blue-50 font-bold">
+                            <p className="text-orange-100 text-sm mt-2 leading-relaxed">Confira a documentação do sistema ou entre em contato com o suporte técnico.</p>
+                            <Button className="mt-4 w-full bg-white text-orange-500 hover:bg-orange-50 font-bold">
                                 Documentação
                             </Button>
                         </CardContent>

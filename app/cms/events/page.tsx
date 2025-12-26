@@ -81,7 +81,7 @@ export default function CMSEventsPage() {
             label: 'Data',
             render: (item: any) => item.date ? (
                 <div className="flex items-center gap-1.5 text-slate-300">
-                    <Calendar className="w-3.5 h-3.5 text-blue-500" />
+                    <Calendar className="w-3.5 h-3.5 text-orange-400" />
                     {new Date(item.date).toLocaleDateString()}
                 </div>
             ) : '-'
@@ -92,7 +92,7 @@ export default function CMSEventsPage() {
             render: (item: any) => (
                 <span className={cn(
                     "text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider",
-                    item.status === 'upcoming' ? "bg-blue-500/10 text-blue-500 border border-blue-500/20" : "bg-slate-800 text-slate-400 border border-slate-700"
+                    item.status === 'upcoming' ? "bg-orange-400/10 text-orange-400 border border-orange-400/20" : "bg-slate-800 text-slate-400 border border-slate-700"
                 )}>
                     {item.status === 'upcoming' ? 'Em breve' : 'Encerrado'}
                 </span>
@@ -112,7 +112,7 @@ export default function CMSEventsPage() {
                         setCurrentEvent({ name: '', date: '', location: '', description: '', status: 'upcoming', external_link: '' })
                         setIsEditing(true)
                     }}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Evento
                 </Button>
@@ -133,7 +133,7 @@ export default function CMSEventsPage() {
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Calendar className="w-4 h-4 text-blue-500" />
+                        <Calendar className="w-4 h-4 text-orange-400" />
                         <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
                             {currentEvent.id ? 'Editar Evento' : 'Novo Evento'}
                         </h2>
@@ -167,7 +167,7 @@ export default function CMSEventsPage() {
                                 <select
                                     value={currentEvent.status}
                                     onChange={(e) => setCurrentEvent({ ...prev, status: e.target.value })}
-                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-orange-400"
                                 >
                                     <option value="upcoming">Em breve</option>
                                     <option value="past">Encerrado</option>
@@ -206,7 +206,7 @@ export default function CMSEventsPage() {
                             <textarea
                                 value={currentEvent.description}
                                 onChange={(e) => setCurrentEvent({ ...prev, description: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-400"
                                 placeholder="Principais detalhes do evento..."
                             />
                         </div>
@@ -215,7 +215,7 @@ export default function CMSEventsPage() {
                             <Button
                                 type="submit"
                                 disabled={saving}
-                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold h-11"
+                                className="flex-1 bg-orange-500 hover:bg-orange-400 text-white font-bold h-11"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                                 {currentEvent.id ? 'Salvar Alterações' : 'Criar Evento'}

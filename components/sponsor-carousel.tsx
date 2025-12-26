@@ -29,7 +29,7 @@ export function SponsorCarousel({ sponsors = [] }: SponsorCarouselProps) {
             <div className="container mx-auto px-4 mb-12 relative z-20">
                 <div className="flex flex-col items-center">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Pilar de Inovação e Parceria</h2>
-                    <div className="h-1 w-20 bg-blue-600 rounded-full mb-4" />
+                    <div className="h-1 w-20 bg-orange-500 rounded-full mb-4" />
                     <p className="text-gray-500 text-center max-w-2xl">
                         Colaboramos com as principais organizações do setor para trazer as notícias e análises mais relevantes da saúde.
                     </p>

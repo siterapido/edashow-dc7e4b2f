@@ -67,7 +67,7 @@ export default async function EventPage({ params }: EventPageProps) {
   // Status badge
   const getStatusBadge = (status: string) => {
     const badges = {
-      upcoming: { label: 'Próximo', color: 'bg-blue-100 text-blue-800' },
+      upcoming: { label: 'Próximo', color: 'bg-orange-100 text-orange-800' },
       ongoing: { label: 'Em Andamento', color: 'bg-green-100 text-green-800' },
       finished: { label: 'Finalizado', color: 'bg-gray-100 text-gray-800' },
       cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-800' },

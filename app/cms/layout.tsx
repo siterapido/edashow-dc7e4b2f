@@ -68,7 +68,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
     if (loading && !isLoginPage) {
         return (
             <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
             </div>
         )
     }
@@ -87,7 +87,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                 {/* Logo Area */}
                 <div className="h-16 flex items-center px-6 border-b border-slate-800">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                        <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center">
                             <span className="font-bold text-white">E</span>
                         </div>
                         {isSidebarOpen && <span className="font-bold text-lg tracking-tight">EDA.CMS</span>}
@@ -106,11 +106,11 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                                 className={cn(
                                     "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group",
                                     isActive
-                                        ? "bg-blue-600 text-white"
+                                        ? "bg-orange-500 text-white"
                                         : "text-slate-400 hover:bg-slate-800 hover:text-white"
                                 )}
                             >
-                                <Icon className={cn("w-5 h-5", isActive ? "text-white" : "text-slate-400 group-hover:text-blue-400")} />
+                                <Icon className={cn("w-5 h-5", isActive ? "text-white" : "text-slate-400 group-hover:text-orange-400")} />
                                 {isSidebarOpen && <span className="font-medium text-sm">{item.label}</span>}
                             </Link>
                         )
@@ -146,7 +146,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <Link href="/" target="_blank" className="text-sm text-slate-400 hover:text-blue-400 transition-colors hidden sm:block">
+                        <Link href="/" target="_blank" className="text-sm text-slate-400 hover:text-orange-400 transition-colors hidden sm:block">
                             Ver site
                         </Link>
                         <div className="w-px h-6 bg-slate-800 mx-2 hidden sm:block" />
@@ -156,7 +156,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                                 <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">{user?.role}</p>
                             </div>
                             <Avatar className="h-8 w-8 ring-2 ring-slate-800">
-                                <AvatarFallback className="bg-blue-600 text-white text-xs">
+                                <AvatarFallback className="bg-orange-500 text-white text-xs">
                                     {user?.name?.substring(0, 2).toUpperCase()}
                                 </AvatarFallback>
                             </Avatar>

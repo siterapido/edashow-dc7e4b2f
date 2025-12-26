@@ -74,7 +74,7 @@ export default function CMSMediaPage() {
                     <Label
                         htmlFor="media-upload"
                         className={cn(
-                            "flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md cursor-pointer transition-all font-bold shadow-lg shadow-blue-900/20 active:scale-95",
+                            "flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white rounded-md cursor-pointer transition-all font-bold shadow-lg shadow-orange-900/20 active:scale-95",
                             uploading && "opacity-50 cursor-not-allowed"
                         )}
                     >
@@ -91,7 +91,7 @@ export default function CMSMediaPage() {
                     ))
                 ) : media.length > 0 ? (
                     media.map((item) => (
-                        <div key={item.id} className="group relative aspect-square bg-slate-900 rounded-lg border border-slate-800 overflow-hidden hover:border-blue-500/50 transition-all shadow-lg shadow-black/20">
+                        <div key={item.id} className="group relative aspect-square bg-slate-900 rounded-lg border border-slate-800 overflow-hidden hover:border-orange-400/50 transition-all shadow-lg shadow-black/20">
                             <img
                                 src={item.url}
                                 alt={item.alt || item.title}
@@ -118,7 +118,7 @@ export default function CMSMediaPage() {
                         <p className="text-slate-500 italic">Sua biblioteca de mídia está vazia.</p>
                         <Button
                             variant="link"
-                            className="mt-2 text-blue-500 font-bold"
+                            className="mt-2 text-orange-400 font-bold"
                             onClick={() => document.getElementById('media-upload')?.click()}
                         >
                             Fazer seu primeiro upload

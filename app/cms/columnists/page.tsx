@@ -92,7 +92,7 @@ export default function CMSColumnistsPage() {
             render: (col: any) => (
                 <div className="flex gap-2">
                     {col.social_instagram && <Instagram className="w-3 h-3 text-pink-500" />}
-                    {col.social_twitter && <Twitter className="w-3 h-3 text-blue-400" />}
+                    {col.social_twitter && <Twitter className="w-3 h-3 text-orange-300" />}
                 </div>
             )
         }
@@ -110,7 +110,7 @@ export default function CMSColumnistsPage() {
                         setCurrentCol({ name: '', slug: '', bio: '', avatar_url: '', social_instagram: '', social_twitter: '' })
                         setIsEditing(true)
                     }}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
                 >
                     <Plus className="w-4 h-4" /> Novo Colunista
                 </Button>
@@ -131,7 +131,7 @@ export default function CMSColumnistsPage() {
                     !isEditing && "opacity-50 pointer-events-none grayscale"
                 )}>
                     <div className="flex items-center gap-2 mb-6">
-                        <Users className="w-4 h-4 text-blue-500" />
+                        <Users className="w-4 h-4 text-orange-400" />
                         <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
                             {currentCol.id ? 'Editar Colunista' : 'Novo Colunista'}
                         </h2>
@@ -178,7 +178,7 @@ export default function CMSColumnistsPage() {
                             <textarea
                                 value={currentCol.bio}
                                 onChange={(e) => setCurrentCol({ ...prev, bio: e.target.value })}
-                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-orange-400"
                                 placeholder="Breve descrição sobre o autor..."
                             />
                         </div>
@@ -203,7 +203,7 @@ export default function CMSColumnistsPage() {
                                     value={currentCol.social_twitter}
                                     onChange={(e) => setCurrentCol({ ...prev, social_twitter: e.target.value })}
                                     placeholder="@username"
-                                    className="bg-slate-950 border-slate-800 text-blue-400 text-xs"
+                                    className="bg-slate-950 border-slate-800 text-orange-300 text-xs"
                                 />
                             </div>
                         </div>
@@ -212,7 +212,7 @@ export default function CMSColumnistsPage() {
                             <Button
                                 type="submit"
                                 disabled={saving}
-                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                                className="flex-1 bg-orange-500 hover:bg-orange-400 text-white font-bold"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                                 {currentCol.id ? 'Atualizar' : 'Criar Autor'}
