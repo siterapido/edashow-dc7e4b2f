@@ -1,11 +1,11 @@
 import { ExternalLink, Award } from 'lucide-react'
 import Image from 'next/image'
 import { Card } from '@/components/ui/card'
-import { getImageUrl } from '@/lib/payload/api'
 
 interface Sponsor {
   name: string
   logo?: any
+  logoUrl?: string
   website?: string
   sponsorshipType?: 'gold' | 'silver' | 'bronze'
 }
@@ -67,20 +67,20 @@ export function EventSponsors({ sponsors, className }: EventSponsorsProps) {
             <h3 className="text-xl font-bold text-gray-900">{colors.label}</h3>
           </div>
         )}
-        
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {groupSponsors.map((sponsor, index) => {
-            const logoUrl = sponsor.logo 
-              ? (typeof sponsor.logo === 'string' ? sponsor.logo : getImageUrl(sponsor.logo, 'card'))
+            const logoUrl = sponsor.logo
+              ? (typeof sponsor.logo === 'string' ? sponsor.logo : (sponsor.logo.url || sponsor.logoUrl))
               : '/placeholder-logo.png'
 
             return (
-              <Card 
+              <Card
                 key={index}
                 className={`p-4 hover:shadow-xl hover:scale-105 transition-all cursor-pointer ${colors.bg} ${colors.border}`}
               >
                 {sponsor.website ? (
-                  <a 
+                  <a
                     href={sponsor.website}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -138,6 +138,8 @@ export function EventSponsors({ sponsors, className }: EventSponsorsProps) {
     </section>
   )
 }
+
+
 
 
 

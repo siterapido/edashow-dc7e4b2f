@@ -320,3 +320,5 @@ Se encontrar problemas:
 **Data das Correções**: 22 de Dezembro de 2024
 **Versão do Payload**: 3.69.0
 **Versão do Next.js**: 15.5.9
+
+

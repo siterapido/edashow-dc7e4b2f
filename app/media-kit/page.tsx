@@ -11,7 +11,8 @@ import {
   Eye,
   MousePointerClick,
   FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Award
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -365,6 +366,9 @@ export default function MediaKitPage() {
     </div>
   );
 }
+
+
+
 
 
 

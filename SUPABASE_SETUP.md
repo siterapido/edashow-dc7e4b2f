@@ -336,3 +336,5 @@ Se encontrar problemas:
 ---
 
 **✨ Pronto! Seu projeto está configurado com Supabase!**
+
+

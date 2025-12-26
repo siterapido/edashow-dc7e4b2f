@@ -21,8 +21,20 @@ async function test() {
     try {
         await client.connect()
         console.log('✅ Connected successfully!')
-        const res = await client.query('SELECT current_database(), current_user')
-        console.log('Results:', res.rows[0])
+        const res = await client.query(`
+            SELECT table_name, column_name 
+            FROM information_schema.columns 
+            WHERE table_schema = 'public' 
+            AND table_name IN ('theme_settings', 'home_settings', 'profiles', 'user_roles')
+            ORDER BY table_name, column_name;
+        `)
+        console.log('--- Columns Analysis ---')
+        const tables: Record<string, string[]> = {}
+        res.rows.forEach(row => {
+            if (!tables[row.table_name]) tables[row.table_name] = []
+            tables[row.table_name].push(row.column_name)
+        })
+        console.log(JSON.stringify(tables, null, 2))
         await client.end()
     } catch (err) {
         console.error('❌ Connection failed:', err)

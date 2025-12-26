@@ -2,7 +2,6 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { getImageUrl } from "@/lib/payload/api"
 import { getCategoryInfo } from "@/lib/categories"
 import Image from "next/image"
 import Link from "next/link"
@@ -19,8 +18,8 @@ export interface CategoryHeroProps {
     title: string
     slug: string
     excerpt?: string
-    featuredImage?: any
-    publishedDate?: string
+    featured_image?: any
+    published_at?: string
     author?: {
       name?: string
     }
@@ -34,12 +33,10 @@ export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
     return null
   }
 
-  const imageUrl = featuredPost.featuredImage
-    ? getImageUrl(featuredPost.featuredImage, 'tablet')
-    : '/placeholder.jpg'
+  const imageUrl = featuredPost.featured_image?.url || '/placeholder.jpg'
 
-  const publishedDate = featuredPost.publishedDate
-    ? formatDistanceToNow(new Date(featuredPost.publishedDate), { addSuffix: true, locale: ptBR })
+  const publishedAt = featuredPost.published_at
+    ? formatDistanceToNow(new Date(featuredPost.published_at), { addSuffix: true, locale: ptBR })
     : 'Recente'
 
   return (
@@ -76,7 +73,7 @@ export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
               </Badge>
               <span className="flex items-center gap-2 text-slate-300 text-sm">
                 <Clock className="w-4 h-4" />
-                {publishedDate}
+                {publishedAt}
               </span>
             </div>
 
@@ -114,6 +111,8 @@ export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
     </section>
   )
 }
+
+
 
 
 

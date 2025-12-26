@@ -1,7 +1,6 @@
 import { Mail, Building2, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
-import { getImageUrl } from '@/lib/payload/api'
 import Image from 'next/image'
 
 interface Organizer {
@@ -9,6 +8,7 @@ interface Organizer {
   company: string
   email?: string
   photo?: any
+  photoUrl?: string
   role?: string
 }
 
@@ -35,16 +35,16 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
             <div className="flex items-start gap-4">
               <Avatar className="h-16 w-16 shrink-0 border-2 border-orange-300">
                 {organizer.photo ? (
-                  <AvatarImage 
-                    src={typeof organizer.photo === 'string' 
-                      ? organizer.photo 
-                      : getImageUrl(organizer.photo, 'thumbnail')} 
-                    alt={organizer.name} 
+                  <AvatarImage
+                    src={typeof organizer.photo === 'string'
+                      ? organizer.photo
+                      : (organizer.photo.url || organizer.photoUrl)}
+                    alt={organizer.name}
                   />
                 ) : (
-                  <AvatarImage 
-                    src="/logo-dark.png" 
-                    alt="EDA Show Logo" 
+                  <AvatarImage
+                    src="/logo-dark.png"
+                    alt="EDA Show Logo"
                     className="object-contain p-2 bg-white"
                   />
                 )}
@@ -61,7 +61,7 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
 
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-lg text-gray-900 mb-1">{organizer.name}</h3>
-                
+
                 {organizer.role && (
                   <div className="flex items-center gap-1.5 mb-2">
                     <User className="h-3.5 w-3.5 text-orange-600" />
@@ -75,7 +75,7 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
                 </div>
 
                 {organizer.email && (
-                  <a 
+                  <a
                     href={`mailto:${organizer.email}`}
                     className="flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors"
                   >
@@ -91,6 +91,8 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
     </section>
   )
 }
+
+
 
 
 

@@ -382,3 +382,5 @@ Se encontrar problemas:
 **💡 Dica**: Imprima este checklist ou mantenha-o aberto enquanto realiza a migração!
 
 **📖 Próximo passo**: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
+
+

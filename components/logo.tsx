@@ -4,9 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
 import { cn } from "@/lib/utils";
-import { getImageUrl } from "@/lib/payload/api";
 
 type LogoProps = {
   containerClassName?: string;
@@ -17,11 +15,6 @@ type LogoProps = {
 
 /**
  * Componente Logo - Carrega o logo do CMS dinamicamente
- * 
- * Variantes:
- * - light: Logo principal (padrão)
- * - dark: Logo para fundo escuro
- * - white: Logo branco para header laranja
  */
 export function Logo({
   containerClassName,
@@ -35,44 +28,9 @@ export function Logo({
 
   useEffect(() => {
     async function loadLogo() {
-      try {
-        const response = await fetch('/api/globals/site-settings');
-        
-        if (!response.ok) {
-          // Fallback para logos padrão
-          setDefaultLogo();
-          return;
-        }
-
-        const settings = await response.json();
-        
-        // Selecionar logo baseado na variante
-        let logoMedia = null;
-        if (variant === "white" && settings.logoWhite) {
-          logoMedia = settings.logoWhite;
-        } else if (variant === "dark" && settings.logoDark) {
-          logoMedia = settings.logoDark;
-        } else if (settings.logo) {
-          logoMedia = settings.logo;
-        }
-
-        // Se encontrou logo no CMS, usar ele
-        if (logoMedia) {
-          const logoUrl = getImageUrl(logoMedia);
-          setLogoSrc(logoUrl);
-          
-          // Atualizar alt text se disponível
-          if (settings.siteName) {
-            setLogoAlt(settings.siteName);
-          }
-        } else {
-          // Fallback para logos padrão
-          setDefaultLogo();
-        }
-      } catch (error) {
-        console.warn('[Logo] Erro ao carregar logo do CMS, usando fallback:', error);
-        setDefaultLogo();
-      }
+      // Por enquanto, usamos os logos padrão já que site-settings ainda não foi migrado
+      // No futuro, buscaremos do Supabase
+      setDefaultLogo();
     }
 
     loadLogo();
@@ -88,13 +46,12 @@ export function Logo({
       setLogoSrc("/eda-show-logo.png");
     }
   };
-  
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push("/");
   };
 
-  // Não renderizar até ter o logo carregado
   if (!logoSrc) {
     return (
       <div className={cn("inline-flex items-center", containerClassName)}>
@@ -105,7 +62,7 @@ export function Logo({
       </div>
     );
   }
-  
+
   return (
     <Link
       href="/"
@@ -128,12 +85,3 @@ export function Logo({
     </Link>
   );
 }
-
-
-
-
-
-
-
-
-

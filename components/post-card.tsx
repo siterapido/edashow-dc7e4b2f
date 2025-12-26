@@ -2,7 +2,6 @@
 
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getImageUrl } from "@/lib/payload/api"
 import { getCategoryInfo } from "@/lib/categories"
 import Image from "next/image"
 import Link from "next/link"
@@ -18,9 +17,9 @@ export interface PostCardProps {
     title: string
     slug: string
     excerpt?: string
-    featuredImage?: any
-    category: string
-    publishedDate?: string
+    featured_image?: any
+    category: any
+    published_at?: string
     featured?: boolean
     author?: any
   }
@@ -29,10 +28,8 @@ export interface PostCardProps {
 }
 
 export function PostCard({ post, variant = 'default', className }: PostCardProps) {
-  const categoryInfo = getCategoryInfo(post.category)
-  const imageUrl = post.featuredImage
-    ? getImageUrl(post.featuredImage, variant === 'compact' ? 'thumbnail' : 'card')
-    : null
+  const categoryInfo = getCategoryInfo(typeof post.category === 'object' ? post.category.slug : post.category)
+  const imageUrl = post.featured_image?.url || null
 
   const cardContent = (
     <Card className={cn(
@@ -87,11 +84,11 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
           {post.featured && (
             <span className="text-yellow-500 text-xs">⭐</span>
           )}
-          {post.publishedDate && (
+          {post.published_at && (
             <div className="flex items-center gap-1 text-xs text-slate-400">
               <Calendar className="h-3 w-3" />
-              <time dateTime={post.publishedDate}>
-                {format(new Date(post.publishedDate), 'dd/MM/yyyy', { locale: ptBR })}
+              <time dateTime={post.published_at}>
+                {format(new Date(post.published_at), 'dd/MM/yyyy', { locale: ptBR })}
               </time>
             </div>
           )}
@@ -146,6 +143,8 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
     </Link>
   )
 }
+
+
 
 
 

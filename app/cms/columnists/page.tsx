@@ -1,0 +1,248 @@
+'use client'
+
+import React, { useEffect, useState } from 'react'
+import { Plus, Edit2, Trash2, Users, ArrowUpDown, Loader2, Instagram, Twitter, Globe, Camera } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { DataTable } from '@/components/cms/DataTable'
+import { getColumnists, saveColumnist, deleteColumnist } from '@/lib/actions/cms-taxonomy'
+import { slugify } from '@/lib/utils'
+
+export default function CMSColumnistsPage() {
+    const [columnists, setColumnists] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+    const [isEditing, setIsEditing] = useState(false)
+    const [currentCol, setCurrentCol] = useState<any>({ name: '', slug: '', bio: '', avatar_url: '', social_instagram: '', social_twitter: '' })
+    const [saving, setSaving] = useState(false)
+
+    const fetchCols = async () => {
+        setLoading(true)
+        try {
+            const { data } = await getColumnists() // This was already in cms-taxonomy
+            setColumnists(data || [])
+        } catch (error) {
+            console.error('Erro ao buscar colunistas:', error)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchCols()
+    }, [])
+
+    const handleSave = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setSaving(true)
+        try {
+            await saveColumnist(currentCol)
+            setIsEditing(false)
+            setCurrentCol({ name: '', slug: '', bio: '', avatar_url: '', social_instagram: '', social_twitter: '' })
+            fetchCols()
+        } catch (error) {
+            console.error('Erro ao salvar colunista:', error)
+        }
+        setSaving(false)
+    }
+
+    const handleEdit = (col: any) => {
+        setCurrentCol(col)
+        setIsEditing(true)
+    }
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Excluir este colunista?')) return
+        try {
+            await deleteColumnist(id)
+            fetchCols()
+        } catch (error) {
+            console.error('Erro ao deletar:', error)
+        }
+    }
+
+    const updateName = (name: string) => {
+        setCurrentCol(prev => ({
+            ...prev,
+            name,
+            slug: !prev.id ? slugify(name) : prev.slug
+        }))
+    }
+
+    const columns = [
+        {
+            key: 'name',
+            label: 'Nome',
+            render: (col: any) => (
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0">
+                        {col.avatar_url ? (
+                            <img src={col.avatar_url} alt={col.name} className="w-full h-full object-cover" />
+                        ) : (
+                            <Users className="w-4 h-4 m-2 text-slate-500" />
+                        )}
+                    </div>
+                    <span className="font-bold text-white">{col.name}</span>
+                </div>
+            )
+        },
+        { key: 'slug', label: 'Slug' },
+        {
+            key: 'social',
+            label: 'Redes',
+            render: (col: any) => (
+                <div className="flex gap-2">
+                    {col.social_instagram && <Instagram className="w-3 h-3 text-pink-500" />}
+                    {col.social_twitter && <Twitter className="w-3 h-3 text-blue-400" />}
+                </div>
+            )
+        }
+    ]
+
+    return (
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-white">Colunistas</h1>
+                    <p className="text-slate-400 text-sm mt-1">Gerencie os autores e especialistas do portal.</p>
+                </div>
+                <Button
+                    onClick={() => {
+                        setCurrentCol({ name: '', slug: '', bio: '', avatar_url: '', social_instagram: '', social_twitter: '' })
+                        setIsEditing(true)
+                    }}
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 shadow-lg shadow-blue-900/20"
+                >
+                    <Plus className="w-4 h-4" /> Novo Colunista
+                </Button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <DataTable
+                        columns={columns}
+                        data={columnists}
+                        loading={loading}
+                        onRowClick={handleEdit}
+                    />
+                </div>
+
+                <div className={cn(
+                    "bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit sticky top-24 transition-all",
+                    !isEditing && "opacity-50 pointer-events-none grayscale"
+                )}>
+                    <div className="flex items-center gap-2 mb-6">
+                        <Users className="w-4 h-4 text-blue-500" />
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+                            {currentCol.id ? 'Editar Colunista' : 'Novo Colunista'}
+                        </h2>
+                    </div>
+
+                    <form onSubmit={handleSave} className="space-y-4">
+                        <div className="flex justify-center mb-6">
+                            <div className="relative group cursor-pointer">
+                                <div className="w-20 h-20 rounded-full bg-slate-950 border-2 border-slate-800 overflow-hidden flex items-center justify-center">
+                                    {currentCol.avatar_url ? (
+                                        <img src={currentCol.avatar_url} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <Camera className="w-6 h-6 text-slate-700" />
+                                    )}
+                                </div>
+                                <div className="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Plus className="w-6 h-6 text-white" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Nome Completo</Label>
+                            <Input
+                                value={currentCol.name}
+                                onChange={(e) => updateName(e.target.value)}
+                                placeholder="Ex: João Silva"
+                                className="bg-slate-950 border-slate-800 text-white"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Slug</Label>
+                            <Input
+                                value={currentCol.slug}
+                                onChange={(e) => setCurrentCol({ ...prev, slug: e.target.value })}
+                                className="bg-slate-950 border-slate-800 text-slate-400"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-slate-500 text-[10px] font-bold uppercase">Biografia</Label>
+                            <textarea
+                                value={currentCol.bio}
+                                onChange={(e) => setCurrentCol({ ...prev, bio: e.target.value })}
+                                className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Breve descrição sobre o autor..."
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                                <Label className="text-slate-500 text-[10px] font-bold uppercase flex items-center gap-1">
+                                    <Instagram className="w-2.5 h-2.5" /> Instagram
+                                </Label>
+                                <Input
+                                    value={currentCol.social_instagram}
+                                    onChange={(e) => setCurrentCol({ ...prev, social_instagram: e.target.value })}
+                                    placeholder="@username"
+                                    className="bg-slate-950 border-slate-800 text-pink-500 text-xs"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-slate-500 text-[10px] font-bold uppercase flex items-center gap-1">
+                                    <Twitter className="w-2.5 h-2.5" /> Twitter
+                                </Label>
+                                <Input
+                                    value={currentCol.social_twitter}
+                                    onChange={(e) => setCurrentCol({ ...prev, social_twitter: e.target.value })}
+                                    placeholder="@username"
+                                    className="bg-slate-950 border-slate-800 text-blue-400 text-xs"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="pt-4 flex gap-2">
+                            <Button
+                                type="submit"
+                                disabled={saving}
+                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                            >
+                                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                                {currentCol.id ? 'Atualizar' : 'Criar Autor'}
+                            </Button>
+                            {currentCol.id && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => handleDelete(currentCol.id)}
+                                    className="border-red-900/50 text-red-500 hover:bg-red-950 hover:text-red-400"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            )}
+                        </div>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setIsEditing(false)}
+                            className="w-full text-slate-500 text-xs hover:bg-slate-800"
+                        >
+                            Cancelar
+                        </Button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function cn(...inputs: any[]) {
+    return inputs.filter(Boolean).join(' ')
+}

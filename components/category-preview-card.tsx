@@ -2,7 +2,6 @@
 
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getImageUrl } from "@/lib/payload/api"
 import { getCategoryInfo } from "@/lib/categories"
 import Image from "next/image"
 import Link from "next/link"
@@ -17,21 +16,19 @@ export interface CategoryPreviewCardProps {
     title: string
     slug: string
     excerpt?: string
-    featuredImage?: any
+    featured_image?: any
     category: 'news' | 'analysis' | 'interviews' | 'opinion'
-    publishedDate?: string
+    published_at?: string
   }
   className?: string
 }
 
 export function CategoryPreviewCard({ post, className }: CategoryPreviewCardProps) {
   const categoryInfo = getCategoryInfo(post.category)
-  const imageUrl = post.featuredImage 
-    ? getImageUrl(post.featuredImage, 'thumbnail')
-    : '/placeholder.jpg'
+  const imageUrl = post.featured_image?.url || '/placeholder.jpg'
 
-  const timeAgo = post.publishedDate 
-    ? formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true, locale: ptBR })
+  const timeAgo = post.published_at
+    ? formatDistanceToNow(new Date(post.published_at), { addSuffix: true, locale: ptBR })
     : null
 
   return (
@@ -53,9 +50,9 @@ export function CategoryPreviewCard({ post, className }: CategoryPreviewCardProp
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute top-1.5 left-1.5 md:top-2 md:left-2">
-              <Badge 
+              <Badge
                 className="text-[10px] md:text-xs font-semibold border-none backdrop-blur-sm shadow-sm px-1.5 md:px-2 py-0.5"
-                style={{ 
+                style={{
                   backgroundColor: categoryInfo.color ? `${categoryInfo.color}E6` : undefined,
                   color: 'white'
                 }}
@@ -70,7 +67,7 @@ export function CategoryPreviewCard({ post, className }: CategoryPreviewCardProp
             <h4 className="font-semibold text-xs md:text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors text-slate-900">
               {post.title}
             </h4>
-            
+
             {post.excerpt && (
               <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
                 {post.excerpt}
@@ -88,6 +85,8 @@ export function CategoryPreviewCard({ post, className }: CategoryPreviewCardProp
     </Link>
   )
 }
+
+
 
 
 

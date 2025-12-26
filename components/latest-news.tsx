@@ -1,8 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card"
-import { getPosts, getImageUrl } from "@/lib/payload/api"
-import { fallbackPosts } from "@/lib/fallback-data"
+import { getPosts } from "@/lib/supabase/api"
 import Image from "next/image"
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
@@ -16,21 +15,19 @@ interface LatestNewsProps {
 }
 
 export function LatestNews({ initialPosts = [] }: LatestNewsProps) {
-  const [posts, setPosts] = useState<any[]>(initialPosts.length > 0 ? initialPosts : fallbackPosts.slice(0, 8));
+  const [posts, setPosts] = useState<any[]>(initialPosts);
 
   useEffect(() => {
-    // Se não recebeu posts iniciais, busca do CMS
     if (initialPosts.length === 0) {
       const fetchData = async () => {
         try {
           const data = await getPosts({
             limit: 8,
-            status: 'published',
-            revalidate: 60
+            status: 'published'
           });
-          setPosts(data.length > 0 ? data : fallbackPosts.slice(0, 8));
+          setPosts(data);
         } catch (e) {
-          setPosts(fallbackPosts.slice(0, 8));
+          console.error("Error fetching latest news:", e);
         }
       };
       fetchData();
@@ -54,11 +51,7 @@ export function LatestNews({ initialPosts = [] }: LatestNewsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto">
           {posts.length > 0 && posts.map((item: any, index: number) => {
             // Determinar a URL da imagem
-            const imageUrl = item.featuredImage
-              ? (typeof item.featuredImage === 'string'
-                ? item.featuredImage
-                : getImageUrl(item.featuredImage, 'thumbnail'))
-              : null;
+            const imageUrl = item.cover_image_url || item.featured_image?.url || null;
 
             return (
               <motion.div

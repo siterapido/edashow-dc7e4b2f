@@ -333,3 +333,5 @@ runDiagnostics().catch((error) => {
   console.error('❌ Erro ao executar diagnóstico:', error)
   process.exit(1)
 })
+
+

@@ -67,20 +67,20 @@ export function getCategoryInfo(category: string): CategoryInfo {
  */
 export async function getAllCategoriesFromCMS(): Promise<CategoryInfo[]> {
   try {
-    const { getCategories } = await import('./payload/api')
+    const { getCategories } = await import('./supabase/api')
     const cmsCategories = await getCategories()
 
     if (cmsCategories && cmsCategories.length > 0) {
       return cmsCategories.map((cat: any) => ({
         value: cat.slug,
         slug: cat.slug,
-        label: cat.name,
+        label: cat.title || cat.name,
         description: cat.description || '',
         color: cat.color
       }))
     }
   } catch (error) {
-    console.warn('[Categories] Falha ao carregar categorias do CMS, usando local:', error)
+    console.warn('[Categories] Falha ao carregar categorias do Supabase, usando local:', error)
   }
 
   return Object.values(categoryMap)
@@ -92,6 +92,8 @@ export async function getAllCategoriesFromCMS(): Promise<CategoryInfo[]> {
 export function getAllCategories(): CategoryInfo[] {
   return Object.values(categoryMap)
 }
+
+
 
 
 

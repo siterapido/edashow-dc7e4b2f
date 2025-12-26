@@ -3,8 +3,7 @@ import { Footer } from "@/components/footer";
 import { InstitutionalSection } from "@/components/institutional-section";
 import { SponsorsGrid } from "@/components/sponsors-grid";
 import { Award, ShieldCheck, Zap } from "lucide-react";
-
-import { getSponsors } from "@/lib/payload/api";
+import { getSponsors } from "@/lib/supabase/api";
 
 export const metadata: Metadata = {
   title: "Patrocinadores | EDA Show",
@@ -77,7 +76,7 @@ export default async function PatrocinadoresPage() {
             <h2 className="text-3xl font-bold text-slate-900">Nossos Patrocinadores</h2>
             <div className="h-px flex-1 bg-slate-200 ml-8 hidden md:block" />
           </div>
-          
+
           <SponsorsGrid sponsors={sponsors} />
         </div>
 
@@ -87,8 +86,8 @@ export default async function PatrocinadoresPage() {
             <p className="text-slate-600 mb-8 max-w-xl mx-auto">
               Junte-se à maior plataforma de comunicação do setor de saúde suplementar e conecte-se com milhares de profissionais diariamente.
             </p>
-            <a 
-              href="/anuncie" 
+            <a
+              href="/anuncie"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-primary text-white font-bold hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20"
             >
               Seja um Patrocinador
@@ -101,6 +100,4 @@ export default async function PatrocinadoresPage() {
     </div>
   );
 }
-
-
 

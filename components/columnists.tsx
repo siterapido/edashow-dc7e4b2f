@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getColumnists, getImageUrl } from "@/lib/payload/api"
+import { getColumnists } from "@/lib/supabase/api"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { motion } from "framer-motion"
@@ -54,8 +54,7 @@ export function Columnists({ initialColumnists = [] }: ColumnistsProps) {
       const fetchData = async () => {
         try {
           let data = await getColumnists({
-            limit: 4,
-            revalidate: 60
+            limit: 4
           });
           if (!data || data.length === 0) {
             data = fallbackColumnists;
@@ -110,9 +109,9 @@ export function Columnists({ initialColumnists = [] }: ColumnistsProps) {
                     className="mb-4"
                   >
                     <Avatar className="w-24 h-24 border-4 border-slate-50 shadow-inner group-hover:border-primary/20 transition-colors">
-                      {columnist.photo && (
+                      {columnist.avatar_url && (
                         <AvatarImage
-                          src={getImageUrl(columnist.photo, 'thumbnail')}
+                          src={columnist.avatar_url}
                           alt={columnist.name}
                         />
                       )}

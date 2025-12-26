@@ -1,5 +1,4 @@
-import { getPostBySlug, getPosts, getImageUrl } from '@/lib/payload/api'
-import { fallbackPostsFull } from '@/lib/fallback-data'
+import { getPostBySlug, getImageUrl } from '@/lib/supabase/api'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -8,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { LexicalRenderer } from '@/components/lexical-renderer'
 import { PostSidebar } from '@/components/post-sidebar'
 import { AdBanner } from '@/components/ad-banner'
 import { PostImageGallery } from '@/components/post-image-gallery'
@@ -28,12 +26,7 @@ interface PostPageProps {
 // Metadados da página
 export async function generateMetadata({ params }: PostPageProps) {
   const { slug } = await params
-  let post = await getPostBySlug(slug)
-
-  // Se não encontrar no CMS, tenta usar dados fallback
-  if (!post && fallbackPostsFull[slug]) {
-    post = fallbackPostsFull[slug]
-  }
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -47,20 +40,14 @@ export async function generateMetadata({ params }: PostPageProps) {
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.featuredImage ? [getImageUrl(post.featuredImage)] : [],
+      images: post.featured_image ? [post.featured_image.url] : [],
     },
   }
 }
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
-  let post = await getPostBySlug(slug)
-
-  // Se não encontrar no CMS, tenta usar dados fallback
-  // getPostBySlug já retorna fallback automaticamente, mas mantemos esta verificação como backup
-  if (!post && fallbackPostsFull[slug]) {
-    post = fallbackPostsFull[slug]
-  }
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
@@ -83,14 +70,11 @@ export default async function PostPage({ params }: PostPageProps) {
         <div className="max-w-4xl mx-auto">
           {/* Categoria */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-              {typeof post.category === 'object' && post.category !== null
-                ? post.category.name
-                : (post.category === 'news' ? 'Notícias' :
-                  post.category === 'analysis' ? 'Análises' :
-                    post.category === 'interviews' ? 'Entrevistas' :
-                      post.category === 'opinion' ? 'Opinião' : 'Geral')}
-            </span>
+            {post.category && (
+              <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                {post.category.title}
+              </span>
+            )}
             {post.featured && (
               <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
                 ⭐ Destaque
@@ -112,11 +96,11 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Meta informações */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-            {post.publishedDate && (
+            {post.published_at && (
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <time dateTime={post.publishedDate}>
-                  {format(new Date(post.publishedDate), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                <time dateTime={post.published_at}>
+                  {format(new Date(post.published_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                 </time>
               </div>
             )}
@@ -135,47 +119,28 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Coluna Principal - Conteúdo do Artigo */}
           <article className="lg:col-span-8">
             {/* Imagem Destacada */}
-            {post.featuredImage && (
+            {post.featured_image && (
               <div className="relative w-full h-[400px] md:h-[500px] mb-8 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src={getImageUrl(post.featuredImage)}
-                  alt={post.featuredImage.alt || post.title}
+                  src={post.featured_image.url}
+                  alt={post.featured_image.alt_text || post.title}
                   fill
                   className="object-cover"
                   priority
                 />
-                {post.featuredImage.caption && (
-                  <p className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-sm p-3">
-                    {post.featuredImage.caption}
-                  </p>
-                )}
               </div>
             )}
 
             {/* Conteúdo do Artigo */}
-            <div className="prose prose-lg max-w-none mb-8">
-              {post.content ? (
-                <LexicalRenderer content={post.content} />
-              ) : (
-                <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
-                  <p className="text-slate-600">
-                    Conteúdo não disponível.
-                  </p>
-                </div>
-              )}
-            </div>
+            <div
+              className="prose prose-lg max-w-none mb-8 tiptap-content"
+              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+            />
 
             {/* Banner In-Article - No meio do conteúdo */}
             <div className="my-12">
               <AdBanner width={728} height={90} label="Publicidade" />
             </div>
-
-            {/* Galeria de Imagens */}
-            {(post as any).gallery && (post as any).gallery.length > 0 ? (
-              <PostImageGallery images={(post as any).gallery} />
-            ) : (
-              <PostImageGallery images={[]} fallbackImage="/placeholder.jpg" />
-            )}
 
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
@@ -185,12 +150,12 @@ export default async function PostPage({ params }: PostPageProps) {
                   <h3 className="font-semibold text-slate-900">Tags</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag: any, index: number) => (
+                  {post.tags.map((tag: string, index: number) => (
                     <span
                       key={index}
                       className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors"
                     >
-                      {tag.tag}
+                      {tag}
                     </span>
                   ))}
                 </div>
@@ -205,14 +170,14 @@ export default async function PostPage({ params }: PostPageProps) {
             />
 
             {/* Informações do Autor (expandido) - Mantido no final do conteúdo */}
-            {post.author && post.author.bio && (
+            {post.author && (
               <div className="border-t border-slate-200 pt-8 mt-8">
                 <h3 className="text-2xl font-bold mb-6 text-slate-900">Sobre o Autor</h3>
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <Avatar className="h-24 w-24 shrink-0">
-                    {post.author.photo ? (
+                    {post.author.avatar_url ? (
                       <AvatarImage
-                        src={getImageUrl(post.author.photo, 'thumbnail')}
+                        src={post.author.avatar_url}
                         alt={post.author.name}
                       />
                     ) : (
@@ -234,44 +199,29 @@ export default async function PostPage({ params }: PostPageProps) {
                   </Avatar>
                   <div className="flex-1">
                     <p className="font-bold text-xl text-slate-900 mb-1">{post.author.name}</p>
-                    {post.author.role && (
-                      <p className="text-sm text-slate-600 mb-3 font-medium">{post.author.role}</p>
-                    )}
                     <p className="text-sm text-slate-700 leading-relaxed mb-4">{post.author.bio}</p>
-                    {post.author.social && (
-                      <div className="flex gap-4 pt-2 border-t border-slate-200">
-                        {post.author.social.twitter && (
-                          <a
-                            href={post.author.social.twitter}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
-                          >
-                            Twitter
-                          </a>
-                        )}
-                        {post.author.social.linkedin && (
-                          <a
-                            href={post.author.social.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
-                          >
-                            LinkedIn
-                          </a>
-                        )}
-                        {post.author.social.instagram && (
-                          <a
-                            href={post.author.social.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
-                          >
-                            Instagram
-                          </a>
-                        )}
-                      </div>
-                    )}
+                    <div className="flex gap-4 pt-2 border-t border-slate-200">
+                      {post.author.twitter_url && (
+                        <a
+                          href={post.author.twitter_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
+                        >
+                          Twitter
+                        </a>
+                      )}
+                      {post.author.instagram_url && (
+                        <a
+                          href={post.author.instagram_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
+                        >
+                          Instagram
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -288,10 +238,12 @@ export default async function PostPage({ params }: PostPageProps) {
 
         {/* Posts Relacionados */}
         <div className="max-w-4xl mx-auto">
+          {/* RelatedPosts might need update too if it uses Payload internaly */}
           <RelatedPosts currentSlug={slug} />
         </div>
       </div>
     </div>
   )
 }
+
 

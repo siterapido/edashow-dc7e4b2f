@@ -1,15 +1,13 @@
-import { withPayload } from '@payloadcms/next/withPayload'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  
+
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
+
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -25,4 +23,4 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+export default nextConfig

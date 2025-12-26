@@ -1,4 +1,4 @@
-import { getColumnists, getColumnistBySlug, getPosts, getImageUrl } from '@/lib/payload/api'
+import { getColumnistBySlug, getPosts } from '@/lib/supabase/api'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -12,65 +12,48 @@ export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 interface ColumnistPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
-}
-
-// Gerar páginas estáticas para colunistas existentes
-export async function generateStaticParams() {
-  const columnists = await getColumnists({ limit: 100 })
-  
-  return columnists.map((columnist: any) => ({
-    slug: columnist.slug,
-  }))
+  }>
 }
 
 // Metadados da página
 export async function generateMetadata({ params }: ColumnistPageProps) {
-  const columnist = await getColumnistBySlug(params.slug)
-  
+  const { slug } = await params
+  const columnist = await getColumnistBySlug(slug)
+
   if (!columnist) {
     return {
       title: 'Colunista não encontrado',
     }
   }
-  
+
   return {
     title: `${columnist.name} | EdaShow`,
     description: columnist.bio || `Confira os artigos de ${columnist.name}`,
     openGraph: {
       title: columnist.name,
       description: columnist.bio,
-      images: columnist.photo ? [getImageUrl(columnist.photo)] : [],
+      images: columnist.avatar_url ? [columnist.avatar_url] : [],
     },
   }
 }
 
 export default async function ColumnistPage({ params }: ColumnistPageProps) {
-  const columnist = await getColumnistBySlug(params.slug)
-  
+  const { slug } = await params
+  const columnist = await getColumnistBySlug(slug)
+
   if (!columnist) {
     notFound()
   }
 
-  // Buscar posts do colunista
-  const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-  let columnistPosts = []
-  
-  try {
-    const response = await fetch(
-      `${API_URL}/api/posts?where[author][equals]=${columnist.id}&where[status][equals]=published&limit=20`,
-      { next: { revalidate: 60 } }
-    )
-    if (response.ok) {
-      const data = await response.json()
-      columnistPosts = data.docs || []
-    }
-  } catch (error) {
-    console.error('Error fetching columnist posts:', error)
-  }
-  
+  // Buscar posts do colunista do Supabase
+  const columnistPosts = await getPosts({
+    columnistId: columnist.id,
+    limit: 20,
+    status: 'published'
+  })
+
   return (
     <div className="min-h-screen bg-background">
       {/* Botão Voltar */}
@@ -87,64 +70,48 @@ export default async function ColumnistPage({ params }: ColumnistPageProps) {
         {/* Header do Colunista */}
         <header className="mb-12 text-center">
           <Avatar className="h-32 w-32 mx-auto mb-6">
-            {columnist.photo && (
-              <AvatarImage 
-                src={getImageUrl(columnist.photo)} 
-                alt={columnist.name} 
+            {columnist.avatar_url && (
+              <AvatarImage
+                src={columnist.avatar_url}
+                alt={columnist.name}
               />
             )}
             <AvatarFallback className="text-4xl">
               {columnist.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          
+
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{columnist.name}</h1>
-          
-          {columnist.role && (
-            <p className="text-xl text-muted-foreground mb-6">{columnist.role}</p>
-          )}
-          
+
           {columnist.bio && (
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {columnist.bio}
             </p>
           )}
-          
+
           {/* Redes Sociais */}
-          {columnist.social && (
-            <div className="flex justify-center gap-4 mt-6">
-              {columnist.social.twitter && (
-                <a 
-                  href={columnist.social.twitter} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  Twitter
-                </a>
-              )}
-              {columnist.social.linkedin && (
-                <a 
-                  href={columnist.social.linkedin} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  LinkedIn
-                </a>
-              )}
-              {columnist.social.instagram && (
-                <a 
-                  href={columnist.social.instagram} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  Instagram
-                </a>
-              )}
-            </div>
-          )}
+          <div className="flex justify-center gap-4 mt-6">
+            {columnist.twitter_url && (
+              <a
+                href={columnist.twitter_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Twitter
+              </a>
+            )}
+            {columnist.instagram_url && (
+              <a
+                href={columnist.instagram_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Instagram
+              </a>
+            )}
+          </div>
         </header>
 
         {/* Artigos do Colunista */}
@@ -152,7 +119,7 @@ export default async function ColumnistPage({ params }: ColumnistPageProps) {
           <h2 className="text-3xl font-bold mb-6">
             Artigos de {columnist.name.split(' ')[0]}
           </h2>
-          
+
           {columnistPosts.length === 0 ? (
             <div className="text-center py-12 bg-muted rounded-lg">
               <p className="text-muted-foreground">
@@ -164,10 +131,10 @@ export default async function ColumnistPage({ params }: ColumnistPageProps) {
               {columnistPosts.map((post: any) => (
                 <Link href={`/posts/${post.slug}`} key={post.id}>
                   <Card className="p-4 hover:shadow-lg transition-shadow h-full">
-                    {post.featuredImage && (
+                    {post.featured_image && (
                       <div className="relative h-40 w-full mb-4 rounded overflow-hidden">
                         <Image
-                          src={getImageUrl(post.featuredImage, 'card')}
+                          src={post.featured_image.url}
                           alt={post.title}
                           fill
                           className="object-cover"
@@ -192,6 +159,9 @@ export default async function ColumnistPage({ params }: ColumnistPageProps) {
     </div>
   )
 }
+
+
+
 
 
 

@@ -15,7 +15,8 @@ import {
   GraduationCap,
   Home,
   Stethoscope,
-  ArrowRight
+  ArrowRight,
+  Target
 } from "lucide-react";
 import Link from "next/link";
 
@@ -424,6 +425,9 @@ export default function TrabalheConoscoPage() {
     </div>
   );
 }
+
+
+
 
 
 

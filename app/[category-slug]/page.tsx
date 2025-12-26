@@ -1,4 +1,4 @@
-import { getPosts, getCategoryBySlug } from '@/lib/payload/api'
+import { getPosts, getCategoryBySlug } from '@/lib/supabase/api'
 import { CategoryHero } from '@/components/category-hero'
 import { CategoryPostsGrid } from '@/components/category-posts-grid'
 import { CategorySidebar } from '@/components/category-sidebar'
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     }
 
     return {
-        title: `${category.name} | EdaShow`,
-        description: category.description || `Veja todas as publicações em ${category.name}`,
+        title: `${category.title} | EdaShow`,
+        description: category.description || `Veja todas as publicações em ${category.title}`,
     }
 }
 
@@ -36,12 +36,11 @@ export default async function DynamicCategoryPage({ params }: CategoryPageProps)
         notFound()
     }
 
-    // Buscar todos os posts da categoria usando o ID do relacionamento
+    // Buscar todos os posts da categoria
     const allPosts = await getPosts({
         limit: 50,
-        category: category.id,
-        status: 'published',
-        revalidate: 60
+        category: category.slug,
+        status: 'published'
     })
 
     // Buscar post em destaque específico da categoria se disponível, senão usa o mais recente featured
@@ -59,13 +58,9 @@ export default async function DynamicCategoryPage({ params }: CategoryPageProps)
     // Extrair tags únicas
     const allTags = allPosts
         .flatMap((post: any) => post.tags || [])
-        .map((tag: any) => tag.tag)
         .filter((tag: any, index: number, self: any[]) => self.indexOf(tag) === index)
         .slice(0, 10)
 
-    // Converter CMS Category para o formato esperado pelos componentes se necessário
-    // Os componentes atuais parecem esperar o 'slug' (CategoryValue) das categorias hardcoded
-    // Mas vamos tentar passar o slug dinâmico
     const categoryValue = category.slug
 
     return (
@@ -82,7 +77,7 @@ export default async function DynamicCategoryPage({ params }: CategoryPageProps)
                     <div className="lg:col-span-3">
                         <header className="mb-8">
                             <h2 className="text-3xl md:text-4xl font-bold mb-2">
-                                Todas as {category.name}
+                                Todas as {category.title}
                             </h2>
                             {category.description && (
                                 <p className="text-lg text-muted-foreground">
@@ -112,3 +107,4 @@ export default async function DynamicCategoryPage({ params }: CategoryPageProps)
         </div>
     )
 }
+

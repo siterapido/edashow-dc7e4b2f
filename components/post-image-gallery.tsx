@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Grid3x3, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getImageUrl } from "@/lib/payload/api";
 
 interface GalleryImage {
   url: string;
@@ -150,11 +149,10 @@ export function PostImageGallery({
               <button
                 key={index}
                 onClick={() => goToImage(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentIndex
+                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
                     ? "bg-primary w-8"
                     : "bg-slate-300 hover:bg-slate-400"
-                }`}
+                  }`}
                 aria-label={`Ir para imagem ${index + 1}`}
               />
             ))}
@@ -171,6 +169,8 @@ export function PostImageGallery({
     </div>
   );
 }
+
+
 
 
 

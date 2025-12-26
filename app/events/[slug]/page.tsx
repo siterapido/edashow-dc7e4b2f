@@ -1,5 +1,4 @@
-import { getEvents, getImageUrl } from '@/lib/payload/api'
-import { fallbackEvents } from '@/lib/fallback-data'
+import { getEvents, getEventBySlug, getImageUrl } from '@/lib/supabase/api'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { MapPin, ArrowLeft, ExternalLink } from 'lucide-react'
@@ -17,50 +16,16 @@ import { EventSpeakers } from '@/components/event-speakers'
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
-interface EventPageProps{
+interface EventPageProps {
   params: {
     slug: string
-  }
-}
-
-// Buscar evento por slug
-async function getEventBySlug(slug: string) {
-  const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-  
-  try {
-    const response = await fetch(
-      `${API_URL}/api/events?where[slug][equals]=${slug}&limit=1`,
-      { next: { revalidate: 60 } }
-    )
-    
-    if (!response.ok) {
-      // Se não encontrar no CMS, tenta fallback
-      const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
-      return fallbackEvent || null
-    }
-    
-    const data = await response.json()
-    const event = data.docs?.[0] || null
-    
-    // Se não encontrar no CMS, tenta fallback
-    if (!event) {
-      const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
-      return fallbackEvent || null
-    }
-    
-    return event
-  } catch (error) {
-    console.error('Error fetching event:', error)
-    // Em caso de erro, tenta fallback
-    const fallbackEvent = fallbackEvents.find(e => e.slug === slug)
-    return fallbackEvent || null
   }
 }
 
 // Gerar páginas estáticas para eventos existentes
 export async function generateStaticParams() {
   const events = await getEvents({ limit: 100, status: 'upcoming' })
-  
+
   return events.map((event: any) => ({
     slug: event.slug,
   }))
@@ -69,50 +34,36 @@ export async function generateStaticParams() {
 // Metadados da página
 export async function generateMetadata({ params }: EventPageProps) {
   const event = await getEventBySlug(params.slug)
-  
+
   if (!event) {
     return {
       title: 'Evento não encontrado',
     }
   }
-  
+
   return {
     title: `${event.title} | EdaShow`,
-    description: typeof event.description === 'string' 
-      ? event.description 
+    description: typeof event.description === 'string'
+      ? event.description
       : 'Confira os detalhes do evento',
     openGraph: {
       title: event.title,
       description: typeof event.description === 'string' ? event.description : '',
-      images: event.image ? [getImageUrl(event.image)] : [],
+      images: event.image_url ? [event.image_url] : [],
     },
   }
 }
 
 export default async function EventPage({ params }: EventPageProps) {
-  // #region agent log
-  const logData = async (location: string, message: string, data: any) => {
-    try {
-      await fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location,message,data,timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})});
-    } catch {}
-  };
-  await logData('app/events/[slug]/page.tsx:69', 'EventPage started', {slug:params.slug});
-  // #endregion
   const event = await getEventBySlug(params.slug)
-  // #region agent log
-  await logData('app/events/[slug]/page.tsx:75', 'Event fetched by slug', {slug:params.slug,eventFound:!!event,eventId:event?.id,eventTitle:event?.title});
-  // #endregion
-  
+
   if (!event) {
-    // #region agent log
-    await logData('app/events/[slug]/page.tsx:80', 'Event not found, calling notFound()', {slug:params.slug});
-    // #endregion
     notFound()
   }
-  
-  const startDate = new Date(event.startDate)
-  const endDate = event.endDate ? new Date(event.endDate) : null
-  
+
+  const startDate = new Date(event.date)
+  const endDate = event.end_date ? new Date(event.end_date) : null
+
   // Status badge
   const getStatusBadge = (status: string) => {
     const badges = {
@@ -123,9 +74,9 @@ export default async function EventPage({ params }: EventPageProps) {
     }
     return badges[status as keyof typeof badges] || badges.upcoming
   }
-  
+
   const statusBadge = getStatusBadge(event.status)
-  
+
   // Tipo de evento
   const getEventType = (type: string) => {
     const types = {
@@ -135,10 +86,8 @@ export default async function EventPage({ params }: EventPageProps) {
     }
     return types[type as keyof typeof types] || type
   }
-  
-  const imageUrl = event.image 
-    ? (typeof event.image === 'string' ? event.image : getImageUrl(event.image))
-    : '/conference-healthcare-panel.jpg'
+
+  const imageUrl = event.image_url || '/conference-healthcare-panel.jpg'
 
   return (
     <div className="min-h-screen bg-background">
@@ -168,9 +117,9 @@ export default async function EventPage({ params }: EventPageProps) {
               <Badge className={`${statusBadge.color} border-0 shadow-md`}>
                 {statusBadge.label}
               </Badge>
-              {event.eventType && (
+              {event.event_type && (
                 <Badge variant="secondary" className="bg-orange-500/90 text-white border-orange-400/50 shadow-md">
-                  {getEventType(event.eventType)}
+                  {getEventType(event.event_type)}
                 </Badge>
               )}
             </div>
@@ -184,9 +133,9 @@ export default async function EventPage({ params }: EventPageProps) {
       <article className="container mx-auto px-4 pb-12 max-w-6xl">
         {/* Card de Data Destacado */}
         <div className="mb-8">
-          <EventDateCard 
-            startDate={event.startDate} 
-            endDate={event.endDate}
+          <EventDateCard
+            startDate={event.date}
+            endDate={event.end_date}
           />
         </div>
 
@@ -206,15 +155,15 @@ export default async function EventPage({ params }: EventPageProps) {
         )}
 
         {/* Botão de Inscrição Principal */}
-        {event.registrationUrl && event.status === 'upcoming' && (
+        {event.registration_url && event.status === 'upcoming' && (
           <div className="mb-12 text-center p-8 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 rounded-xl shadow-xl border-2 border-orange-600">
             <h2 className="text-3xl font-bold text-white mb-3">Não perca esta oportunidade!</h2>
             <p className="text-white/95 mb-6 text-lg font-medium">
               Garanta sua vaga e participe deste evento incrível
             </p>
-            <a 
-              href={event.registrationUrl} 
-              target="_blank" 
+            <a
+              href={event.registration_url}
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-block"
             >
@@ -234,46 +183,43 @@ export default async function EventPage({ params }: EventPageProps) {
               {typeof event.description === 'string' ? (
                 <p className="text-gray-700 leading-relaxed text-lg">{event.description}</p>
               ) : (
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-600">
-                    A descrição completa do evento será renderizada aqui.
-                    Para renderizar o conteúdo rico do Lexical, você precisará 
-                    instalar e configurar o componente de renderização apropriado.
-                  </p>
-                </div>
+                <div
+                  className="text-gray-700 leading-relaxed text-lg"
+                  dangerouslySetInnerHTML={{ __html: event.description }}
+                />
               )}
             </div>
           </section>
         )}
 
         {/* Organizadores */}
-        <EventOrganizers 
-          organizers={event.organizers} 
+        <EventOrganizers
+          organizers={event.organizers}
           className="mb-12"
         />
 
         {/* Empresas Patrocinadoras */}
-        <EventSponsors 
-          sponsors={event.sponsors} 
+        <EventSponsors
+          sponsors={event.sponsors}
           className="mb-12"
         />
 
         {/* Palestrantes */}
-        <EventSpeakers 
-          speakers={event.speakers} 
+        <EventSpeakers
+          speakers={event.speakers}
           className="mb-12"
         />
 
         {/* CTA Final */}
-        {event.registrationUrl && event.status === 'upcoming' && (
+        {event.registration_url && event.status === 'upcoming' && (
           <div className="mt-12 pt-12 border-t-2 border-orange-200 text-center bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-8">
             <h3 className="text-2xl font-bold mb-4 text-orange-900">Pronto para participar?</h3>
             <p className="text-orange-800 mb-6 text-lg font-medium">
               Faça sua inscrição agora e garante sua vaga neste evento exclusivo.
             </p>
-            <a 
-              href={event.registrationUrl} 
-              target="_blank" 
+            <a
+              href={event.registration_url}
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-block"
             >
@@ -288,13 +234,4 @@ export default async function EventPage({ params }: EventPageProps) {
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
 

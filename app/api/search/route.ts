@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getPosts } from '@/lib/payload/api'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
@@ -10,25 +10,26 @@ export async function GET(request: Request) {
     }
 
     try {
+        const supabase = await createClient()
+
         // Busca posts que contenham o termo no título ou resumo
-        // O getPosts já tem suporte a busca se adicionarmos os parâmetros certos
-        // Como getPosts é flexível, vamos usá-lo ou chamar a API diretamente
+        const { data, error } = await supabase
+            .from('posts')
+            .select(`
+                *,
+                category:categories(id, title, slug),
+                author:columnists(id, name, slug, avatar_url),
+                featured_image:media(id, url, alt_text)
+            `)
+            .or(`title.ilike.%${query}%,excerpt.ilike.%${query}%`)
+            .eq('status', 'published')
+            .limit(20)
 
-        const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-
-        const response = await fetch(
-            `${API_URL}/api/posts?where[or][0][title][contains]=${query}&where[or][1][excerpt][contains]=${query}&limit=20&status=published`,
-            {
-                next: { revalidate: 60 },
-            }
-        )
-
-        if (!response.ok) {
-            throw new Error('Falha ao buscar posts')
+        if (error) {
+            throw error
         }
 
-        const data = await response.json()
-        return NextResponse.json(data)
+        return NextResponse.json({ docs: data || [] })
     } catch (error) {
         console.error('Erro na API de busca:', error)
         return NextResponse.json({ error: 'Erro ao processar busca' }, { status: 500 })

@@ -9,7 +9,6 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { getImageUrl } from "@/lib/payload/api";
 
 interface SlideData {
   id: string;
@@ -29,9 +28,10 @@ interface Post {
   id: string;
   title: string;
   excerpt?: string;
-  featuredImage?: any;
-  publishedDate?: string;
-  category?: string;
+  cover_image_url?: string;
+  featured_image?: any;
+  published_at?: string;
+  category?: any;
   featured?: boolean;
   slug?: string;
   author?: {
@@ -127,21 +127,23 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
       .slice(0, 4); // Limitar a 4 slides
 
     return sortedPosts.map((post, index) => {
-      const publishedDate = post.publishedDate
-        ? formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true, locale: ptBR })
+      const publishedAt = post.published_at
+        ? formatDistanceToNow(new Date(post.published_at), { addSuffix: true, locale: ptBR })
         : 'Recente';
+
+      const categorySlug = typeof post.category === 'object' ? post.category.slug : post.category;
 
       return {
         id: post.id || `post-${index}`,
-        badge: getCategoryBadge(post.category),
-        time: publishedDate,
+        badge: getCategoryBadge(categorySlug),
+        time: publishedAt,
         title: post.title || 'Sem título',
         description: post.excerpt || 'Leia a matéria completa para saber mais.',
-        image: getImageUrl(post.featuredImage, 'tablet') || '/placeholder.jpg',
+        image: post.cover_image_url || post.featured_image?.url || '/placeholder.jpg',
         imageAlt: post.title || 'Imagem do post',
         credit: post.author?.name ? `Foto: ${post.author.name}` : 'Foto: Divulgação',
         statLabel: post.featured ? 'Destaque' : 'Novo',
-        statValue: post.category === 'interviews' ? 'Entrevista exclusiva' : 'Matéria em destaque',
+        statValue: categorySlug === 'interviews' ? 'Entrevista exclusiva' : 'Matéria em destaque',
         slug: post.slug
       };
     });
@@ -276,8 +278,8 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
               key={index}
               onClick={() => goToSlide(index)}
               className={`transition-all duration-300 rounded-full ${index === currentSlide
-                  ? "bg-primary w-8 h-2"
-                  : "bg-white/30 hover:bg-white/50 w-2 h-2"
+                ? "bg-primary w-8 h-2"
+                : "bg-white/30 hover:bg-white/50 w-2 h-2"
                 }`}
               aria-label={`Ir para slide ${index + 1}`}
             />

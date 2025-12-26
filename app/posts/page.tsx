@@ -1,4 +1,4 @@
-import { getPosts, getImageUrl } from '@/lib/payload/api'
+import { getPosts, getImageUrl } from '@/lib/supabase/api'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
@@ -12,10 +12,9 @@ export const metadata = {
 }
 
 export default async function PostsPage() {
-  const posts = await getPosts({ 
-    limit: 50, 
-    status: 'published',
-    revalidate: 60 
+  const posts = await getPosts({
+    limit: 50,
+    status: 'published'
   })
 
   return (
@@ -34,7 +33,7 @@ export default async function PostsPage() {
               Nenhum post publicado ainda.
             </p>
             <p className="text-sm text-muted-foreground">
-              Acesse <Link href="/admin" className="text-primary hover:underline">/admin</Link> para criar seu primeiro post.
+              Acesse <Link href="/cms" className="text-primary hover:underline">o CMS</Link> para criar seu primeiro post.
             </p>
           </div>
         ) : (
@@ -42,10 +41,10 @@ export default async function PostsPage() {
             {posts.map((post: any) => (
               <Link href={`/posts/${post.slug}`} key={post.id}>
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-                  {post.featuredImage ? (
+                  {post.featured_image ? (
                     <div className="relative h-48 w-full">
                       <Image
-                        src={getImageUrl(post.featuredImage, 'card')}
+                        src={getImageUrl(post.featured_image, 'card')}
                         alt={post.title}
                         fill
                         className="object-cover"
@@ -58,12 +57,11 @@ export default async function PostsPage() {
                   )}
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
-                        {post.category === 'news' && 'Notícias'}
-                        {post.category === 'analysis' && 'Análises'}
-                        {post.category === 'interviews' && 'Entrevistas'}
-                        {post.category === 'opinion' && 'Opinião'}
-                      </span>
+                      {post.category && (
+                        <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
+                          {typeof post.category === 'object' ? post.category.title : post.category}
+                        </span>
+                      )}
                       {post.featured && (
                         <span className="text-yellow-500">⭐</span>
                       )}
@@ -76,11 +74,11 @@ export default async function PostsPage() {
                         {post.excerpt}
                       </p>
                     )}
-                    {post.publishedDate && (
+                    {post.published_at && (
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <Calendar className="h-3 w-3" />
-                        <time dateTime={post.publishedDate}>
-                          {format(new Date(post.publishedDate), 'dd/MM/yyyy', { locale: ptBR })}
+                        <time dateTime={post.published_at}>
+                          {format(new Date(post.published_at), 'dd/MM/yyyy', { locale: ptBR })}
                         </time>
                       </div>
                     )}
@@ -94,13 +92,4 @@ export default async function PostsPage() {
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
 

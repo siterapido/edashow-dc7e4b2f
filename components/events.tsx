@@ -3,8 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { getEvents, getImageUrl } from "@/lib/payload/api"
-import { fallbackEvents } from "@/lib/fallback-data"
+import { getEvents } from "@/lib/supabase/api"
 import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -26,12 +25,11 @@ const eventExampleImages = [
 
 // Função para garantir que eventos sempre tenham uma imagem de exemplo
 function ensureEventImage(event: any, index: number): any {
-  if (!event.image) {
-    // Usa uma imagem de exemplo baseada no índice do evento
+  if (!event.image_url) {
     const imageIndex = index % eventExampleImages.length
     return {
       ...event,
-      image: eventExampleImages[imageIndex]
+      image_url: eventExampleImages[imageIndex]
     }
   }
   return event
@@ -52,19 +50,18 @@ export function Events({ initialEvents = [] }: EventsProps) {
         try {
           let data = await getEvents({
             limit: 3,
-            status: 'upcoming',
-            revalidate: 60
+            status: 'upcoming'
           });
 
           if (!data || data.length === 0) {
-            data = fallbackEvents.slice(0, 3);
+            data = [];
           } else {
             data = data.map((event: any, index: number) => ensureEventImage(event, index));
           }
 
           setEvents(data);
         } catch (e) {
-          setEvents(fallbackEvents.slice(0, 3));
+          console.error("Error fetching events:", e);
         }
       };
       fetchData();
@@ -86,24 +83,13 @@ export function Events({ initialEvents = [] }: EventsProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
           {events.map((event: any, index: number) => {
-            // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:108', message: 'Rendering event card', data: { eventId: event.id, eventTitle: event.title, eventSlug: event.slug, hasImage: !!event.image, imageType: typeof event.image, index }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
-            // #endregion
-            const eventDate = new Date(event.startDate)
-            const day = format(eventDate, 'dd')
-            const month = format(eventDate, 'MMM', { locale: ptBR }).toUpperCase()
+            const eventDate = new Date(event.event_date || event.date)
+            const isValidDate = !isNaN(eventDate.getTime())
+            const day = isValidDate ? format(eventDate, 'dd') : '??'
+            const month = isValidDate ? format(eventDate, 'MMM', { locale: ptBR }).toUpperCase() : '???'
 
-            // Garante que sempre há uma imagem de exemplo
             const eventWithImage = ensureEventImage(event, index)
-            // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:117', message: 'After ensureEventImage call', data: { originalImage: event.image, processedImage: eventWithImage.image, imageType: typeof eventWithImage.image }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
-            // #endregion
-            const imageUrl = typeof eventWithImage.image === 'string'
-              ? eventWithImage.image
-              : getImageUrl(eventWithImage.image, 'card')
-            // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:123', message: 'Final imageUrl computed', data: { imageUrl, eventSlug: event.slug }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
-            // #endregion
+            const imageUrl = eventWithImage.image_url
 
             return (
               <motion.div
@@ -170,19 +156,13 @@ export function Events({ initialEvents = [] }: EventsProps) {
                       <Button
                         className="w-full mt-5 h-10 md:h-auto text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition-all duration-300 uppercase tracking-wide min-h-[44px]"
                         onClick={(e) => {
-                          // #region agent log
-                          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:184', message: 'Button clicked', data: { hasRegistrationUrl: !!event.registrationUrl, registrationUrl: event.registrationUrl, eventSlug: event.slug }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'C' }) }).catch(() => { });
-                          // #endregion
-                          if (event.registrationUrl) {
+                          if (event.registration_url) {
                             e.preventDefault()
-                            // #region agent log
-                            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:189', message: 'Opening registration URL', data: { url: event.registrationUrl }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'C' }) }).catch(() => { });
-                            // #endregion
-                            window.open(event.registrationUrl, '_blank')
+                            window.open(event.registration_url, '_blank')
                           }
                         }}
                       >
-                        {event.registrationUrl ? 'Inscrever-se' : 'Ver Detalhes'}
+                        {event.registration_url ? 'Inscrever-se' : 'Ver Detalhes'}
                       </Button>
                     </CardContent>
                   </Card>

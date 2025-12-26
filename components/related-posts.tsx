@@ -3,17 +3,21 @@ import Image from "next/image";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { getImageUrl } from "@/lib/payload/api";
-import { fallbackPosts } from "@/lib/fallback-data";
 
 interface RelatedPost {
-  id?: number;
+  id?: string | number;
   slug: string;
   title: string;
   excerpt?: string;
-  publishedDate?: string;
-  featuredImage?: string | any;
-  category?: string;
+  published_at?: string;
+  featured_image?: {
+    url: string;
+    alt_text?: string;
+  } | any;
+  category?: {
+    title: string;
+    slug: string;
+  } | any;
 }
 
 interface RelatedPostsProps {
@@ -27,9 +31,9 @@ export function RelatedPosts({
   limit = 3,
   posts,
 }: RelatedPostsProps) {
-  // Se não houver posts fornecidos, usar fallback
-  const availablePosts = posts || fallbackPosts;
-  
+  // Se não houver posts fornecidos, retornar null por enquanto (ou usar fallback local)
+  const availablePosts = posts || [];
+
   // Filtrar o post atual e pegar os primeiros 'limit' posts
   const relatedPosts = availablePosts
     .filter((post) => post.slug !== currentSlug)
@@ -46,12 +50,7 @@ export function RelatedPosts({
       </h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedPosts.map((post) => {
-          const imageUrl =
-            typeof post.featuredImage === "string"
-              ? post.featuredImage
-              : post.featuredImage
-              ? getImageUrl(post.featuredImage)
-              : "/placeholder.jpg";
+          const imageUrl = post.featured_image?.url || "/placeholder.jpg";
 
           return (
             <Link
@@ -69,12 +68,12 @@ export function RelatedPosts({
                 />
               </div>
               <div className="p-4">
-                {post.publishedDate && (
+                {post.published_at && (
                   <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
                     <Calendar className="w-3 h-3" />
-                    <time dateTime={post.publishedDate}>
+                    <time dateTime={post.published_at}>
                       {format(
-                        new Date(post.publishedDate),
+                        new Date(post.published_at),
                         "dd 'de' MMMM 'de' yyyy",
                         { locale: ptBR }
                       )}
@@ -97,6 +96,9 @@ export function RelatedPosts({
     </section>
   );
 }
+
+
+
 
 
 

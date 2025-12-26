@@ -134,3 +134,5 @@ Após a execução, você pode verificar os posts criados:
 - `scripts/migrate-fallback-posts.ts` - Script de migração
 - `lib/fallback-data.ts` - Dados fallback originais
 - `lib/payload/client.ts` - Cliente PayloadCMS para operações administrativas
+
+

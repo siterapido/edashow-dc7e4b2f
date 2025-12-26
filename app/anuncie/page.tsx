@@ -11,7 +11,8 @@ import {
   BarChart3,
   Target,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Award
 } from "lucide-react";
 import Link from "next/link";
 
@@ -401,6 +402,9 @@ export default function AnunciePage() {
     </div>
   );
 }
+
+
+
 
 
 

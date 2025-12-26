@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, ArrowRight, ExternalLink } from "lucide-react";
-import { getImageUrl } from "@/lib/payload/api";
 import { useState } from "react";
 import { PartnerLogo } from "@/components/partner-logo";
 
@@ -13,12 +12,9 @@ interface Author {
   name: string;
   role?: string;
   bio?: string;
-  photo?: string;
-  social?: {
-    twitter?: string;
-    linkedin?: string;
-    instagram?: string;
-  };
+  avatar_url?: string;
+  twitter_url?: string;
+  instagram_url?: string;
 }
 
 interface PostSidebarProps {
@@ -71,9 +67,9 @@ export function PostSidebar({ author }: PostSidebarProps) {
           <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
               <Avatar className="h-16 w-16 flex-shrink-0">
-                {author.photo && (
+                {author.avatar_url && (
                   <AvatarImage
-                    src={getImageUrl(author.photo, "thumbnail")}
+                    src={author.avatar_url}
                     alt={author.name}
                   />
                 )}
@@ -98,27 +94,27 @@ export function PostSidebar({ author }: PostSidebarProps) {
                 )}
               </div>
             </div>
-            {author.social && (
+            {(author.twitter_url || author.instagram_url) && (
               <div className="flex gap-2 pt-2 border-t border-slate-100">
-                {author.social.linkedin && (
+                {author.twitter_url && (
                   <a
-                    href={author.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-primary hover:text-primary/80 flex items-center gap-1"
-                  >
-                    LinkedIn
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
-                {author.social.twitter && (
-                  <a
-                    href={author.social.twitter}
+                    href={author.twitter_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs text-primary hover:text-primary/80 flex items-center gap-1"
                   >
                     Twitter
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+                {author.instagram_url && (
+                  <a
+                    href={author.instagram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:text-primary/80 flex items-center gap-1"
+                  >
+                    Instagram
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 )}
@@ -235,6 +231,8 @@ export function PostSidebar({ author }: PostSidebarProps) {
     </aside>
   );
 }
+
+
 
 
 

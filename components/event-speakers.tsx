@@ -1,12 +1,13 @@
 import { Building2, User, Mic } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
-import { getImageUrl } from '@/lib/payload/api'
 import Image from 'next/image'
 
 interface Speaker {
   name: string
   photo?: any
+  avatar_url?: string
+  photoUrl?: string
   company: string
   role: string
   bio?: string
@@ -36,16 +37,16 @@ export function EventSpeakers({ speakers, className }: EventSpeakersProps) {
             <div className="flex flex-col items-center text-center mb-4">
               <Avatar className="h-24 w-24 mb-4 border-4 border-orange-300 group-hover:border-orange-500 transition-colors">
                 {speaker.photo ? (
-                  <AvatarImage 
-                    src={typeof speaker.photo === 'string' 
-                      ? speaker.photo 
-                      : getImageUrl(speaker.photo, 'thumbnail')} 
-                    alt={speaker.name} 
+                  <AvatarImage
+                    src={typeof speaker.photo === 'string'
+                      ? speaker.photo
+                      : (speaker.photo.url || speaker.avatar_url)}
+                    alt={speaker.name}
                   />
                 ) : (
-                  <AvatarImage 
-                    src="/logo-dark.png" 
-                    alt="EDA Show Logo" 
+                  <AvatarImage
+                    src="/logo-dark.png"
+                    alt="EDA Show Logo"
                     className="object-contain p-2 bg-white"
                   />
                 )}
@@ -61,7 +62,7 @@ export function EventSpeakers({ speakers, className }: EventSpeakersProps) {
               </Avatar>
 
               <h3 className="font-bold text-xl text-gray-900 mb-1">{speaker.name}</h3>
-              
+
               <div className="flex items-center gap-1.5 mb-2 text-sm text-orange-700">
                 <User className="h-4 w-4" />
                 <span className="font-medium">{speaker.role}</span>
@@ -96,6 +97,8 @@ export function EventSpeakers({ speakers, className }: EventSpeakersProps) {
     </section>
   )
 }
+
+
 
 
 

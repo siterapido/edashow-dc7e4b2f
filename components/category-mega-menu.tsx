@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight, Loader2 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { getPosts, getImageUrl } from "@/lib/payload/api"
+import { getPosts } from "@/lib/supabase/api"
 import { getAllCategories, getCategoryInfo } from "@/lib/categories"
 import { CategoryPreviewCard } from "./category-preview-card"
 import { cn } from "@/lib/utils"
@@ -23,38 +23,22 @@ export function CategoryMegaMenu() {
   const [activeTab, setActiveTab] = useState<string>('news')
 
   useEffect(() => {
-    const fetchCategoryPosts = async () => {
+    const fetchAllData = async () => {
       setIsLoading(true)
       const categories = getAllCategories()
-      
+
       const promises = categories.map(async (cat) => {
         try {
-          // Buscar posts via API diretamente (client-side safe)
-          const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || window.location.origin
-          const params = new URLSearchParams({
-            limit: '3',
-            'where[status][equals]': 'published',
-            'where[category][equals]': cat.value,
-            sort: '-publishedDate',
-          })
-          
-          const response = await fetch(`${API_URL}/api/posts?${params.toString()}`)
-          
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`)
-          }
-          
-          const data = await response.json()
-          const posts = data.docs || []
-          
-          // Se não houver posts da API, usar posts de fallback
-          const finalPosts = posts.length > 0 
-            ? posts 
-            : getFallbackPosts({ category: cat.value, limit: 3 })
-          
+          // Buscar posts via Supabase API
+          const posts = await getPosts({
+            limit: 3,
+            status: 'published',
+            category: cat.slug || cat.value
+          });
+
           return {
-            category: cat.value,
-            posts: finalPosts,
+            category: cat.value as any,
+            posts: posts,
             loading: false
           }
         } catch (error) {
@@ -62,7 +46,7 @@ export function CategoryMegaMenu() {
           // Em caso de erro, usar posts de fallback
           const fallbackPosts = getFallbackPosts({ category: cat.value, limit: 3 })
           return {
-            category: cat.value,
+            category: cat.value as any,
             posts: fallbackPosts,
             loading: false
           }
@@ -74,7 +58,7 @@ export function CategoryMegaMenu() {
       setIsLoading(false)
     }
 
-    fetchCategoryPosts()
+    fetchAllData()
   }, [])
 
   const categories = getAllCategories()
@@ -99,7 +83,7 @@ export function CategoryMegaMenu() {
             {categories.map((category) => {
               const categoryInfo = getCategoryInfo(category.value)
               const isActive = activeTab === category.value
-              
+
               return (
                 <button
                   key={category.value}
@@ -124,8 +108,8 @@ export function CategoryMegaMenu() {
               )
             })}
           </div>
-          <Link 
-            href="/posts" 
+          <Link
+            href="/posts"
             className="text-xs text-gray-500 hover:text-primary font-medium flex items-center gap-1 transition-colors ml-3 flex-shrink-0"
           >
             Ver tudo
@@ -169,19 +153,15 @@ export function CategoryMegaMenu() {
                     >
                       {/* Imagem */}
                       <div className="relative w-24 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                        {post.featuredImage ? (
+                        {post.featured_image ? (
                           <Image
-                            src={
-                              typeof post.featuredImage === 'string'
-                                ? post.featuredImage
-                                : getImageUrl(post.featuredImage)
-                            }
+                            src={post.featured_image.url}
                             alt={post.title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
-                          <div 
+                          <div
                             className="w-full h-full flex items-center justify-center text-white font-bold text-xs"
                             style={{ backgroundColor: activeCategoryInfo.color }}
                           >
@@ -201,11 +181,11 @@ export function CategoryMegaMenu() {
                           </p>
                         )}
                         <div className="flex items-center gap-2 mt-1">
-                          <span 
+                          <span
                             className="text-xs font-medium px-2 py-0.5 rounded-full"
-                            style={{ 
+                            style={{
                               backgroundColor: `${activeCategoryInfo.color}15`,
-                              color: activeCategoryInfo.color 
+                              color: activeCategoryInfo.color
                             }}
                           >
                             {activeCategoryInfo.label}
@@ -236,6 +216,8 @@ export function CategoryMegaMenu() {
     </motion.div>
   )
 }
+
+
 
 
 

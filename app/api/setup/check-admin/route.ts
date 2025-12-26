@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { hasAdmin } from '@/lib/actions/setup'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * API route para verificar se já existe um admin
  */
@@ -16,3 +19,6 @@ export async function GET() {
     )
   }
 }
+
+
+

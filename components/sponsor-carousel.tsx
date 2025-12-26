@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { getImageUrl } from "@/lib/payload/api"
 
 interface Sponsor {
     id: string | number
     name: string
-    logo: any
+    logo?: any
+    logo_path?: string
     website?: string
 }
 
@@ -49,7 +49,7 @@ export function SponsorCarousel({ sponsors = [] }: SponsorCarouselProps) {
                     }}
                 >
                     {duplicatedSponsors.map((sponsor, index) => {
-                        const imageUrl = getImageUrl(sponsor.logo)
+                        const imageUrl = sponsor.logo_path || sponsor.logo?.url || '/placeholder.jpg'
 
                         return (
                             <div
