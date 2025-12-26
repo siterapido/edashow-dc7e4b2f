@@ -91,7 +91,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
     if (isLoginPage) return <>{children}</>
 
     return (
-        <div className="h-screen bg-gray-50 text-gray-900 flex overflow-hidden">
+        <div className="fixed inset-0 h-screen bg-gray-50 text-gray-900 flex overflow-hidden">
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && (
                 <div

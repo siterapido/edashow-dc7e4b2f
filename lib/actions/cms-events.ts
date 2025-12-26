@@ -14,12 +14,24 @@ export async function getEvents() {
     return data
 }
 
+export async function getEvent(id: string) {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+    if (error) throw error
+    return data
+}
+
 export async function saveEvent(data: any) {
     const supabase = await createClient()
     const { id, ...eventData } = data
 
     let result
-    if (id === 'new') {
+    if (!id || id === 'new') {
         result = await supabase.from('events').insert([eventData]).select().single()
     } else {
         result = await supabase.from('events').update(eventData).eq('id', id).select().single()

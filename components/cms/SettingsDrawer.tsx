@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Drawer } from 'vaul'
-import { Settings, X, Calendar, Tag, User, Star, Link as LinkIcon, ChevronRight } from 'lucide-react'
+import { Settings, X, Calendar, Tag, User, Star, Link as LinkIcon, ChevronRight, Trash2, AlertTriangle } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,8 @@ interface SettingsDrawerProps {
     onChange: (field: string, value: any) => void
     categories: Array<{ id: string; name: string }>
     columnists: Array<{ id: string; name: string }>
+    onDelete?: () => void
+    isNew?: boolean
 }
 
 // Desktop Sidebar Panel Component
@@ -31,7 +33,9 @@ function DesktopSettingsPanel({
     formData,
     onChange,
     categories,
-    columnists
+    columnists,
+    onDelete,
+    isNew
 }: SettingsDrawerProps) {
     return (
         <>
@@ -214,6 +218,21 @@ function DesktopSettingsPanel({
                                 className="bg-gray-50 border-gray-200 text-gray-900 rounded-xl h-12 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all hover:border-gray-300"
                             />
                         </section>
+
+                        {/* Danger Zone */}
+                        {!isNew && onDelete && (
+                            <section className="pt-4 border-t border-gray-100">
+                                <Label className="text-xs font-bold uppercase text-red-500 mb-3 block">Zona de Perigo</Label>
+                                <Button
+                                    variant="outline"
+                                    onClick={onDelete}
+                                    className="w-full justify-start text-red-600 border-red-100 bg-red-50 hover:bg-red-100 hover:border-red-200 hover:text-red-700 h-12 rounded-xl"
+                                >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Excluir Post
+                                </Button>
+                            </section>
+                        )}
                     </div>
                 </div>
 
@@ -239,7 +258,9 @@ function MobileSettingsDrawer({
     formData,
     onChange,
     categories,
-    columnists
+    columnists,
+    onDelete,
+    isNew
 }: SettingsDrawerProps) {
     return (
         <Drawer.Root open={open} onOpenChange={onOpenChange}>
@@ -396,6 +417,24 @@ function MobileSettingsDrawer({
                                 className="bg-gray-50 border-gray-200 text-gray-900 rounded-xl h-12"
                             />
                         </div>
+
+                        {/* Danger Zone */}
+                        {!isNew && onDelete && (
+                            <div className="pt-4 border-t border-gray-100 space-y-3">
+                                <Label className="text-gray-400 text-xs font-bold uppercase flex items-center gap-2 text-red-400">
+                                    <AlertTriangle className="w-4 h-4" />
+                                    Zona de Perigo
+                                </Label>
+                                <Button
+                                    variant="outline"
+                                    onClick={onDelete}
+                                    className="w-full text-red-600 border-red-100 bg-red-50 hover:bg-red-100 hover:border-red-200 hover:text-red-700 h-12 rounded-xl"
+                                >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Excluir Post
+                                </Button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Footer - Aplicar */}

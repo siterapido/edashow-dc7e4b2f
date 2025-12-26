@@ -14,7 +14,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   // Se for uma rota do admin, não renderiza o Header e Footer do site
-  const isAdmin = pathname?.startsWith('/admin');
+  const isAdmin = pathname?.toLowerCase()?.startsWith('/admin') || pathname?.toLowerCase()?.startsWith('/cms');
 
   if (isAdmin) {
     return (

@@ -128,10 +128,10 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
     const currentCategory = categories.find(c => c.id === formData.category_id)?.name
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-24 md:pb-8">
+        <div className="min-h-screen bg-white pb-24 md:pb-8">
             {/* Header */}
-            <header className="sticky top-0 bg-white/90 backdrop-blur-sm border-b border-gray-200 z-40">
-                <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <header className="sticky top-0 bg-white/90 backdrop-blur-sm z-40 transition-all duration-200">
+                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
                     {/* Left: Back button */}
                     <div className="flex items-center gap-2">
                         <Button
@@ -143,84 +143,16 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         >
                             <ArrowLeft className="w-5 h-5" />
                         </Button>
-                        <div className="hidden sm:flex items-center gap-2 text-sm">
-                            {isSaving ? (
-                                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
-                            ) : hasUnsavedChanges ? (
-                                <div className="w-2 h-2 rounded-full bg-orange-500" />
-                            ) : (
-                                <Check className="w-4 h-4 text-green-500" />
-                            )}
-                            <span className="text-gray-400 text-xs">{statusText}</span>
-                        </div>
                     </div>
 
-                    {/* Right: Actions */}
                     <div className="flex items-center gap-2">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setPreviewOpen(true)}
-                            className="text-gray-500 hover:text-gray-900 gap-2"
-                            title="Ver prévia"
-                        >
-                            <Eye className="w-4 h-4" />
-                            <span className="hidden md:inline font-medium">Prévia</span>
-                        </Button>
-
-                        <div className="w-px h-6 bg-gray-200 mx-1" />
-
-                        {formData.id !== 'new' && (
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={handleDelete}
-                                className="text-gray-400 hover:text-red-600 hidden sm:flex"
-                            >
-                                <Trash2 className="w-5 h-5" />
-                            </Button>
-                        )}
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSettingsOpen(true)}
-                            className="text-gray-500 hover:text-gray-900 gap-2"
-                        >
-                            <Settings className="w-4 h-4" />
-                            <span className="hidden md:inline font-medium">Configurações</span>
-                        </Button>
-                        {formData.status === 'published' ? (
-                            <Button
-                                onClick={handleSave}
-                                disabled={isSaving}
-                                className="bg-green-600 hover:bg-green-500 text-white font-medium px-4 gap-2"
-                            >
-                                <Check className="w-4 h-4" />
-                                <span className="hidden sm:inline">Atualizar</span>
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={handlePublish}
-                                disabled={isPublishing || !formData.title}
-                                className="bg-orange-500 hover:bg-orange-400 text-white font-medium px-4 gap-2"
-                            >
-                                {isPublishing ? (
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                ) : (
-                                    <Send className="w-4 h-4" />
-                                )}
-                                <span className="hidden sm:inline">Publicar</span>
-                            </Button>
-                        )}
+                        {/* Header actions if needed, otherwise empty to balance */}
                     </div>
                 </div>
             </header>
 
             {/* Main Content */}
-            <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+            <main className="max-w-3xl mx-auto px-4 py-6 space-y-6">
                 {/* Title Input - Medium Style */}
                 <div className="space-y-1">
                     <input
@@ -278,6 +210,8 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                 onChange={updateField}
                 categories={categories}
                 columnists={columnists}
+                onDelete={handleDelete}
+                isNew={formData.id === 'new'}
             />
 
             {/* Post Preview Modal */}
@@ -293,8 +227,87 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                 }}
             />
 
-            {/* Mobile Bottom Spacer (for the editor toolbar) */}
-            <div className="h-16 md:hidden" />
-        </div>
+            {/* Bottom Action Bar */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] safe-area-pb">
+                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+
+                    {/* Status Section - Mobile: Icon only / Desktop: Full badge */}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                        <div className="flex items-center gap-2 text-sm bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                            {isSaving ? (
+                                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+                            ) : hasUnsavedChanges ? (
+                                <div className="w-2 h-2 rounded-full bg-orange-500" />
+                            ) : (
+                                <Check className="w-4 h-4 text-green-500" />
+                            )}
+                            <span className="text-gray-600 text-xs font-medium hidden sm:inline">
+                                {isSaving ? 'Salvando...' : statusText || 'Rascunho'}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Actions Group */}
+                    <div className="flex items-center gap-2 flex-1 justify-end">
+                        {/* Settings */}
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setSettingsOpen(true)}
+                            className="text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-xl w-10 h-10 shrink-0"
+                            title="Configurações"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </Button>
+
+                        {/* Preview */}
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setPreviewOpen(true)}
+                            className="text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-xl w-10 h-10 shrink-0"
+                            title="Prévia"
+                        >
+                            <Eye className="w-5 h-5" />
+                        </Button>
+
+                        {/* Separator - Small */}
+                        <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+
+                        {/* Publish / Update */}
+                        {formData.status === 'published' ? (
+                            <Button
+                                onClick={handleSave}
+                                disabled={isSaving}
+                                className="flex-1 sm:flex-none bg-green-600 hover:bg-green-500 text-white font-bold h-10 px-6 gap-2 rounded-xl shadow-sm shadow-green-200 transition-all"
+                            >
+                                <Check className="w-4 h-4" />
+                                <span className="hidden sm:inline">Atualizar Post</span>
+                                <span className="sm:hidden">Atualizar</span>
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={handlePublish}
+                                disabled={isPublishing || !formData.title}
+                                className="flex-1 sm:flex-none bg-orange-500 hover:bg-orange-400 text-white font-bold h-10 px-6 gap-2 rounded-xl shadow-lg shadow-orange-200 transition-all"
+                            >
+                                {isPublishing ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <Send className="w-4 h-4" />
+                                )}
+                                <span className="hidden sm:inline">Publicar Agora</span>
+                                <span className="sm:hidden">Publicar</span>
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Spacer for bottom bar */}
+            <div className="h-24" />
+        </div >
     )
 }

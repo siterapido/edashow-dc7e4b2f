@@ -1,20 +1,18 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Plus, Edit2, Trash2, Calendar, MapPin, ArrowUpDown, Loader2, Link as LinkIcon, Clock } from 'lucide-react'
+import { Plus, MapPin, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { DataTable } from '@/components/cms/DataTable'
-import { getEvents, saveEvent, deleteEvent } from '@/lib/actions/cms-events'
+import { getEvents } from '@/lib/actions/cms-events'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function CMSEventsPage() {
+    const router = useRouter()
     const [events, setEvents] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
-    const [isEditing, setIsEditing] = useState(false)
-    const [currentEvent, setCurrentEvent] = useState<any>({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
-    const [saving, setSaving] = useState(false)
 
     const fetchEvents = async () => {
         setLoading(true)
@@ -31,36 +29,8 @@ export default function CMSEventsPage() {
         fetchEvents()
     }, [])
 
-    const handleSave = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setSaving(true)
-        try {
-            await saveEvent(currentEvent)
-            setIsEditing(false)
-            setCurrentEvent({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
-            fetchEvents()
-        } catch (error) {
-            console.error('Erro ao salvar evento:', error)
-        }
-        setSaving(false)
-    }
-
     const handleEdit = (event: any) => {
-        setCurrentEvent({
-            ...event,
-            event_date: event.event_date ? new Date(event.event_date).toISOString().split('T')[0] : ''
-        })
-        setIsEditing(true)
-    }
-
-    const handleDelete = async (id: string) => {
-        if (!confirm('Excluir este evento?')) return
-        try {
-            await deleteEvent(id)
-            fetchEvents()
-        } catch (error) {
-            console.error('Erro ao deletar:', error)
-        }
+        router.push(`/cms/events/${event.id}`)
     }
 
     const columns = [
@@ -107,145 +77,25 @@ export default function CMSEventsPage() {
                     <h1 className="text-2xl font-bold tracking-tight text-gray-900">Eventos</h1>
                     <p className="text-gray-500 text-sm mt-1">Gerencie os próximos eventos, webinars e congressos.</p>
                 </div>
-                <Button
-                    onClick={() => {
-                        setCurrentEvent({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
-                        setIsEditing(true)
-                    }}
-                    className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-500/20"
-                >
-                    <Plus className="w-4 h-4" /> Novo Evento
-                </Button>
+                <Link href="/cms/events/new">
+                    <Button
+                        className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-500/20"
+                    >
+                        <Plus className="w-4 h-4" /> Novo Evento
+                    </Button>
+                </Link>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2">
-                    <DataTable
-                        columns={columns}
-                        data={events}
-                        loading={loading}
-                        onRowClick={handleEdit}
-                    />
-                </div>
-
-                <div className={cn(
-                    "bg-white p-6 rounded-xl border border-gray-200 h-fit sticky top-24 transition-all shadow-sm",
-                    !isEditing && "opacity-50 pointer-events-none grayscale"
-                )}>
-                    <div className="flex items-center gap-2 mb-6">
-                        <Calendar className="w-4 h-4 text-orange-500" />
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
-                            {currentEvent.id ? 'Editar Evento' : 'Novo Evento'}
-                        </h2>
-                    </div>
-
-                    <form onSubmit={handleSave} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Nome do Evento</Label>
-                            <Input
-                                value={currentEvent.title}
-                                onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
-                                placeholder="Ex: Congresso Saúde Digital 2026"
-                                className="bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
-                                required
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-2">
-                                <Label className="text-gray-400 text-[10px] font-bold uppercase">Data</Label>
-                                <Input
-                                    type="date"
-                                    value={currentEvent.event_date}
-                                    onChange={(e) => setCurrentEvent({ ...currentEvent, event_date: e.target.value })}
-                                    className="bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label className="text-gray-400 text-[10px] font-bold uppercase">Status</Label>
-                                <select
-                                    value={currentEvent.status}
-                                    onChange={(e) => setCurrentEvent({ ...currentEvent, status: e.target.value })}
-                                    className="w-full bg-gray-50 border-gray-100 text-gray-700 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors"
-                                >
-                                    <option value="upcoming">Em breve</option>
-                                    <option value="past">Encerrado</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Localização</Label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-                                <Input
-                                    value={currentEvent.location}
-                                    onChange={(e) => setCurrentEvent({ ...currentEvent, location: e.target.value })}
-                                    placeholder="Ex: São Paulo, SP (ou Online)"
-                                    className="pl-9 bg-gray-50 border-gray-100 text-gray-900 h-11 focus:bg-white transition-colors"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Link para Inscrição (Opcional)</Label>
-                            <div className="relative">
-                                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-                                <Input
-                                    value={currentEvent.registration_url}
-                                    onChange={(e) => setCurrentEvent({ ...currentEvent, registration_url: e.target.value })}
-                                    placeholder="https://sua-pagina.com.br"
-                                    className="pl-9 bg-gray-50 border-gray-100 text-orange-600 h-11 focus:bg-white transition-colors"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Descrição Curta</Label>
-                            <textarea
-                                value={currentEvent.description}
-                                onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
-                                className="w-full bg-gray-50 border border-gray-100 focus:bg-white transition-colors rounded-md p-3 text-gray-700 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-500"
-                                placeholder="Principais detalhes do evento..."
-                            />
-                        </div>
-
-                        <div className="pt-4 flex gap-2">
-                            <Button
-                                type="submit"
-                                disabled={saving}
-                                className="flex-1 bg-orange-500 hover:bg-orange-400 text-white font-bold h-11"
-                            >
-                                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                                {currentEvent.id ? 'Salvar Alterações' : 'Criar Evento'}
-                            </Button>
-                            {currentEvent.id && (
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => handleDelete(currentEvent.id)}
-                                    className="border-red-100 text-red-500 hover:bg-red-50 h-11 px-4"
-                                >
-                                    <Trash2 className="w-4 h-4" />
-                                </Button>
-                            )}
-                        </div>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => setIsEditing(false)}
-                            className="w-full text-gray-400 text-xs hover:bg-gray-50 h-10"
-                        >
-                            Cancelar
-                        </Button>
-                    </form>
-                </div>
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <DataTable
+                    columns={columns}
+                    data={events}
+                    loading={loading}
+                    onRowClick={handleEdit}
+                />
             </div>
         </div>
     )
 }
 
-function cn(...inputs: any[]) {
-    return inputs.filter(Boolean).join(' ')
-}
+
