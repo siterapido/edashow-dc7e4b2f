@@ -15,7 +15,7 @@ export async function getPosts(options: {
       *,
       category:categories(id, name, slug),
       author:columnists(id, name, slug, photo_url),
-      featured_image:media(id, url, alt)
+      cover_image_url
     `)
         .order('published_at', { ascending: false })
 
@@ -53,7 +53,7 @@ export async function getPostBySlug(slug: string) {
       *,
       category:categories(id, name, slug),
       author:columnists(id, name, slug, bio, photo_url, instagram_url, twitter_url),
-      featured_image:media(id, url, alt)
+      cover_image_url
     `)
         .eq('slug', slug)
         .single()

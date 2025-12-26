@@ -31,6 +31,7 @@ const navItems = [
     { label: 'Colunistas', href: '/cms/columnists', icon: Users },
     { label: 'Eventos', href: '/cms/events', icon: Calendar },
     { label: 'Patrocinadores', href: '/cms/sponsors', icon: Megaphone },
+    { label: 'Publicidades', href: '/cms/banners', icon: Megaphone },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
     { label: 'Mídia', href: '/cms/media', icon: ImageIcon },
 ]

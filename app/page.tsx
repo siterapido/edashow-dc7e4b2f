@@ -6,6 +6,7 @@ import { Newsletter } from "@/components/newsletter"
 import { Events } from "@/components/events"
 import { LatestNews } from "@/components/latest-news"
 import { Columnists } from "@/components/columnists"
+import BannerDisplay from "@/components/BannerDisplay"
 import { getPosts, getSponsors, getImageUrl, getEvents, getColumnists } from "@/lib/supabase/api"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
@@ -143,6 +144,10 @@ export default async function HomePage() {
     <div className="min-h-screen bg-white">
       <main>
         <HeroSection posts={heroPosts} />
+
+        {/* Banner Hero - Topo da Home */}
+        <BannerDisplay location="home_hero" className="container mx-auto px-4 py-6" />
+
         <SponsorCarousel sponsors={sponsors} />
         <LatestNews initialPosts={allPosts.slice(0, 8)} />
 
@@ -176,6 +181,10 @@ export default async function HomePage() {
 
         <Columnists initialColumnists={columnists} />
         <Events initialEvents={events} />
+
+        {/* Banner Rodapé - Antes do Footer */}
+        <BannerDisplay location="home_footer" className="container mx-auto px-4 py-6" />
+
         <Newsletter />
       </main>
       <Footer />

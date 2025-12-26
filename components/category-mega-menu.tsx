@@ -119,16 +119,15 @@ export function CategoryMegaMenu() {
       </div>
 
       {/* Content Area */}
-      <div className="p-4">
+      <div className="p-4 bg-white">
         {isLoading ? (
-          <div className="space-y-3">
+          <div className="grid grid-cols-3 gap-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex gap-3 animate-pulse">
-                <div className="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 rounded w-full" />
-                  <div className="h-3 bg-gray-200 rounded w-1/2" />
+              <div key={i} className="space-y-3 animate-pulse">
+                <div className="aspect-[16/10] bg-gray-100 rounded-xl" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-100 rounded w-3/4" />
+                  <div className="h-3 bg-gray-100 rounded w-1/2" />
                 </div>
               </div>
             ))}
@@ -137,76 +136,70 @@ export function CategoryMegaMenu() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.2 }}
-              className="space-y-3"
+              className="space-y-6"
             >
               {activePosts.length > 0 ? (
-                <>
-                  {activePosts.map((post, index) => (
-                    <Link
-                      key={post.id}
-                      href={`/posts/${post.slug}`}
-                      className="flex gap-3 group hover:bg-gray-50 rounded-lg p-2 -m-2 transition-colors"
-                    >
-                      {/* Imagem */}
-                      <div className="relative w-24 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                        {post.featured_image ? (
-                          <Image
-                            src={post.featured_image.url}
-                            alt={post.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div
-                            className="w-full h-full flex items-center justify-center text-white font-bold text-xs"
-                            style={{ backgroundColor: activeCategoryInfo.color }}
-                          >
-                            {post.title.substring(0, 2).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Conteúdo */}
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
-                          {post.title}
-                        </h4>
-                        {post.excerpt && (
-                          <p className="text-xs text-gray-500 line-clamp-1 mt-1">
-                            {post.excerpt}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-2 mt-1">
-                          <span
-                            className="text-xs font-medium px-2 py-0.5 rounded-full"
-                            style={{
-                              backgroundColor: `${activeCategoryInfo.color}15`,
-                              color: activeCategoryInfo.color
-                            }}
-                          >
-                            {activeCategoryInfo.label}
-                          </span>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-3 gap-4">
+                    {activePosts.map((post, index) => (
+                      <Link
+                        key={post.id}
+                        href={`/posts/${post.slug}`}
+                        className="group flex flex-col gap-3 rounded-xl transition-all duration-300"
+                      >
+                        {/* Imagem */}
+                        <div className="relative aspect-[16/10] flex-shrink-0 rounded-xl overflow-hidden bg-gray-50 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                          {post.cover_image_url ? (
+                            <Image
+                              src={post.cover_image_url}
+                              alt={post.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div
+                              className="w-full h-full flex items-center justify-center text-white font-bold text-2xl"
+                              style={{ backgroundColor: activeCategoryInfo.color }}
+                            >
+                              {post.title.substring(0, 1).toUpperCase()}
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+
+                        {/* Conteúdo */}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-[13px] font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors leading-[1.4]">
+                            {post.title}
+                          </h4>
+                          {post.excerpt && (
+                            <p className="text-[11px] text-gray-500 line-clamp-1 mt-1.5 font-medium">
+                              {post.excerpt}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
 
                   {/* Ver mais link */}
-                  <Link
-                    href={`/${categories.find(c => c.value === activeTab)?.slug}`}
-                    className="flex items-center justify-center gap-2 text-sm font-medium text-gray-600 hover:text-primary transition-colors py-2 group"
-                  >
-                    Ver mais em {activeCategoryInfo.label}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </>
+                  <div className="pt-2 border-t border-gray-50 flex justify-center">
+                    <Link
+                      href={`/${categories.find(c => c.value === activeTab)?.slug}`}
+                      className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gray-50 text-xs font-bold text-gray-600 hover:bg-primary/5 hover:text-primary transition-all duration-300 group shadow-sm border border-gray-100"
+                    >
+                      Ver todos os conteúdos em {activeCategoryInfo.label}
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
               ) : (
-                <div className="text-center py-8 text-gray-400">
-                  <p className="text-sm">Nenhum post disponível</p>
+                <div className="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-100">
+                  <p className="text-sm font-medium text-gray-400">Nenhum post disponível nesta categoria</p>
                 </div>
               )}
             </motion.div>

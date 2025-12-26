@@ -128,4 +128,66 @@
   .safe-area-pb {
     padding-bottom: env(safe-area-inset-bottom);
   }
+  
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: rgb(100 116 139);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5rem auto;
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid rgb(51 65 85);
+  margin: 2rem 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid rgb(249 115 22);
+  padding-left: 1rem;
+  margin-left: 0;
+  font-style: italic;
+  color: rgb(148 163 184);
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  .ProseMirror {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  
+  /* Prevent text selection on toolbar buttons */
+  button {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+}
+

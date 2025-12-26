@@ -17,10 +17,10 @@ export async function getPost(id: string) {
 
 export async function savePost(data: any) {
     const supabase = await createClient()
-    const { id, ...postData } = data
+    const { id, categories, columnists, ...postData } = data
 
     let result
-    if (id === 'new') {
+    if (id === 'new' || !id) {
         result = await supabase.from('posts').insert([postData]).select().single()
     } else {
         result = await supabase.from('posts').update(postData).eq('id', id).select().single()
@@ -30,8 +30,27 @@ export async function savePost(data: any) {
 
     revalidatePath('/cms/posts')
     revalidatePath('/')
+    revalidatePath(`/posts/${result.data.slug}`)
     return result.data
 }
+
+export async function autoSavePost(data: any) {
+    const supabase = await createClient()
+    const { id, categories, columnists, ...postData } = data
+
+    if (!id || id === 'new') return null // Can't auto-save a new post without ID
+
+    const { data: result, error } = await supabase
+        .from('posts')
+        .update(postData)
+        .eq('id', id)
+        .select()
+        .single()
+
+    if (error) throw error
+    return result
+}
+
 
 export async function deletePost(id: string) {
     const supabase = await createClient()

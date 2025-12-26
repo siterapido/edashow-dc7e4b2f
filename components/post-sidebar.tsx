@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, ArrowRight, ExternalLink } from "lucide-react";
 import { useState } from "react";
-import { PartnerLogo } from "@/components/partner-logo";
+import { SponsorsCarouselWidget } from "@/components/sponsors-carousel-widget";
+import BannerDisplay from "@/components/BannerDisplay";
 
 interface Author {
   name: string;
@@ -17,30 +18,20 @@ interface Author {
   instagram_url?: string;
 }
 
-interface PostSidebarProps {
-  author?: Author;
+interface Sponsor {
+  id: string | number;
+  name: string;
+  logo?: any;
+  logo_path?: string;
+  website?: string;
 }
 
-// Dados mockados de parceiros
-const mockPartners = [
-  {
-    name: "ANS",
-    logo: "/regulatory-agency-logo.jpg",
-    url: "#",
-  },
-  {
-    name: "SUSEP",
-    logo: "/susep-logo-green.jpg",
-    url: "#",
-  },
-  {
-    name: "Conexão Saúde",
-    logo: "/placeholder-logo.svg",
-    url: "#",
-  },
-];
+interface PostSidebarProps {
+  author?: Author;
+  sponsors?: Sponsor[];
+}
 
-export function PostSidebar({ author }: PostSidebarProps) {
+export function PostSidebar({ author, sponsors = [] }: PostSidebarProps) {
   const [email, setEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "success">("idle");
 
@@ -124,51 +115,22 @@ export function PostSidebar({ author }: PostSidebarProps) {
         </Card>
       )}
 
-      {/* Espaço Publicitário - Retângulo Médio */}
-      <Card className="border border-slate-200 bg-slate-50">
-        <CardContent className="p-0">
-          <div className="w-full h-[250px] bg-slate-50 flex items-center justify-center border border-dashed border-slate-300">
-            <div className="text-center p-4">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                Espaço Publicitário
-              </p>
-              <p className="text-xs text-slate-400">300 x 250</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Banner Sidebar - 300x250 */}
+      <BannerDisplay location="article_sidebar" />
 
-      {/* Widget de Parceiros */}
-      <Card className="border border-slate-200">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg font-bold text-slate-900">
-            Nossos Parceiros
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {mockPartners.map((partner, index) => (
-              <a
-                key={index}
-                href={partner.url}
-                className="flex flex-col items-center gap-2 p-3 border border-slate-200 bg-white hover:border-primary transition-colors group"
-              >
-                <div className="w-16 h-16 bg-white border border-slate-200 flex items-center justify-center overflow-hidden">
-                  <PartnerLogo
-                    src={partner.logo}
-                    alt={partner.name}
-                    name={partner.name}
-                    size={64}
-                  />
-                </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-primary transition-colors text-center">
-                  {partner.name}
-                </span>
-              </a>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Widget de Parceiros - Carrossel */}
+      {sponsors && sponsors.length > 0 && (
+        <Card className="border border-slate-200">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-bold text-slate-900">
+              Nossos Parceiros
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SponsorsCarouselWidget sponsors={sponsors} />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Newsletter Widget */}
       <Card className="border border-slate-200 bg-white">

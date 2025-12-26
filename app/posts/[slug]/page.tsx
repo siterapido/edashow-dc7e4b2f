@@ -1,4 +1,4 @@
-import { getPostBySlug, getImageUrl } from '@/lib/supabase/api'
+import { getPostBySlug, getImageUrl, getSponsors } from '@/lib/supabase/api'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { PostSidebar } from '@/components/post-sidebar'
-import { AdBanner } from '@/components/ad-banner'
+import BannerDisplay from '@/components/BannerDisplay'
 import { PostImageGallery } from '@/components/post-image-gallery'
 import { RelatedPosts } from '@/components/related-posts'
 import { SocialShare } from '@/components/social-share'
@@ -52,6 +52,11 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound()
   }
+
+  // Buscar patrocinadores ativos
+  const sponsors = await getSponsors({
+    active: true
+  })
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,9 +113,9 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
       </header>
 
-      {/* Banner Publicitário - Leaderboard após Header */}
+      {/* Banner Publicitário - Topo do Artigo */}
       <div className="container mx-auto px-4 mb-8">
-        <AdBanner width={728} height={90} className="max-w-4xl mx-auto" />
+        <BannerDisplay location="article_top" className="max-w-4xl mx-auto" />
       </div>
 
       {/* Grid Layout: Conteúdo Principal + Sidebar */}
@@ -139,7 +144,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
             {/* Banner In-Article - No meio do conteúdo */}
             <div className="my-12">
-              <AdBanner width={728} height={90} label="Publicidade" />
+              <BannerDisplay location="article_content" />
             </div>
 
             {/* Tags */}
@@ -231,7 +236,7 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Sidebar - Widgets */}
           <aside className="lg:col-span-4">
             <div className="sticky top-6">
-              <PostSidebar author={post.author} />
+              <PostSidebar author={post.author} sponsors={sponsors} />
             </div>
           </aside>
         </div>
