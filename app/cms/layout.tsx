@@ -40,8 +40,7 @@ const navItems = [
     { label: 'Publicidades', href: '/cms/banners', icon: Megaphone },
     { label: 'YouTube', href: '/cms/youtube', icon: Youtube },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
-    { label: 'Galeria', href: '/cms/gallery', icon: ImageIcon },
-    { label: 'Mídia', href: '/cms/media', icon: ImageIcon },
+    { label: 'Galeria & Mídia', href: '/cms/media', icon: ImageIcon },
     // Configurações
     { label: 'Configurações Gerais', href: '/cms/settings/general', icon: Settings },
     { label: 'Branding', href: '/cms/settings/branding', icon: Settings },

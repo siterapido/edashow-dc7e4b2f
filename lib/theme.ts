@@ -17,16 +17,36 @@ export interface ThemeSettings {
             destructiveForeground?: string
         }
         darkModeColors?: {
+            darkPrimary?: string
+            darkSecondary?: string
             darkBackground?: string
             darkForeground?: string
             darkCard?: string
             darkCardForeground?: string
         }
     }
+    branding?: {
+        colors?: {
+            light: {
+                primary?: string
+                secondary?: string
+                background?: string
+                foreground?: string
+            }
+            dark: {
+                primary?: string
+                secondary?: string
+                background?: string
+                foreground?: string
+            }
+        }
+    }
     typography?: {
         fontFamily?: string
         headingFontFamily?: string
         borderRadius?: string
+        fontHeading?: string
+        fontBody?: string
     }
 }
 
@@ -70,34 +90,40 @@ function hexToHSLVariables(hex: string): string {
 export function generateCSSVariables(settings: ThemeSettings): string {
     if (!settings) return ''
 
-    const { themeColors: colors, typography } = settings
+    const branding = settings.branding
+    const colors = settings.themeColors
+    const typography = settings.typography
+
     let css = ':root {\n'
 
-    if (colors) {
-        if (colors.primary) css += `  --primary: ${hexToHSLVariables(colors.primary)};\n`
-        if (colors.primaryForeground) css += `  --primary-foreground: ${hexToHSLVariables(colors.primaryForeground)};\n`
-        if (colors.secondary) css += `  --secondary: ${hexToHSLVariables(colors.secondary)};\n`
-        if (colors.secondaryForeground) css += `  --secondary-foreground: ${hexToHSLVariables(colors.secondaryForeground)};\n`
-        if (colors.background) css += `  --background: ${hexToHSLVariables(colors.background)};\n`
-        if (colors.foreground) css += `  --foreground: ${hexToHSLVariables(colors.foreground)};\n`
-        if (colors.card) css += `  --card: ${hexToHSLVariables(colors.card)};\n`
-        if (colors.cardForeground) css += `  --card-foreground: ${hexToHSLVariables(colors.cardForeground)};\n`
-        if (colors.muted) css += `  --muted: ${hexToHSLVariables(colors.muted)};\n`
-        if (colors.mutedForeground) css += `  --muted-foreground: ${hexToHSLVariables(colors.mutedForeground)};\n`
-
-        if (colors.otherColors) {
-            if (colors.otherColors.border) css += `  --border: ${hexToHSLVariables(colors.otherColors.border)};\n`
-            if (colors.otherColors.ring) css += `  --ring: ${hexToHSLVariables(colors.otherColors.ring)};\n`
-            if (colors.otherColors.destructive) css += `  --destructive: ${hexToHSLVariables(colors.otherColors.destructive)};\n`
-            if (colors.otherColors.destructiveForeground) css += `  --destructive-foreground: ${hexToHSLVariables(colors.otherColors.destructiveForeground)};\n`
-        }
+    // Light Mode Colors
+    const light = branding?.colors?.light || colors
+    if (light) {
+        if (light.primary) css += `  --primary: ${hexToHSLVariables(light.primary)};\n`
+        if (light.secondary || (light as any).secondary) css += `  --secondary: ${hexToHSLVariables(light.secondary || (light as any).secondary)};\n`
+        if (light.background) css += `  --background: ${hexToHSLVariables(light.background)};\n`
+        if (light.foreground) css += `  --foreground: ${hexToHSLVariables(light.foreground)};\n`
     }
 
-    if (typography?.borderRadius) {
-        css += `  --radius: ${typography.borderRadius};\n`
+    // Typography & Border Radius
+    if (typography) {
+        if (typography.borderRadius) css += `  --radius: ${typography.borderRadius};\n`
+        if (typography.fontHeading) css += `  --font-heading: '${typography.fontHeading}', ui-sans-serif, system-ui;\n`
+        if (typography.fontBody) css += `  --font-body: '${typography.fontBody}', ui-sans-serif, system-ui;\n`
     }
 
-    css += '}\n'
+    css += '}\n\n'
+
+    // Dark Mode Colors
+    const dark = branding?.colors?.dark || colors?.darkModeColors
+    if (dark) {
+        css += '.dark {\n'
+        if ((dark as any).primary || (dark as any).darkPrimary) css += `  --primary: ${hexToHSLVariables((dark as any).primary || (dark as any).darkPrimary)};\n`
+        if ((dark as any).secondary || (dark as any).darkSecondary) css += `  --secondary: ${hexToHSLVariables((dark as any).secondary || (dark as any).darkSecondary)};\n`
+        if ((dark as any).background || (dark as any).darkBackground) css += `  --background: ${hexToHSLVariables((dark as any).background || (dark as any).darkBackground)};\n`
+        if ((dark as any).foreground || (dark as any).darkForeground) css += `  --foreground: ${hexToHSLVariables((dark as any).foreground || (dark as any).darkForeground)};\n`
+        css += '}\n'
+    }
 
     return css
 }

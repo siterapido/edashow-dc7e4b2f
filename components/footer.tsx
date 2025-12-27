@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 export function Footer() {
   const [footerLinks, setFooterLinks] = useState<any[]>([]);
   const [siteSettings, setSiteSettings] = useState<any>(null);
-  const [copyright, setCopyright] = useState<string>(`© ${new Date().getFullYear()} EDA Show. Todos os direitos reservados.`);
+  const [copyright, setCopyright] = useState<string>(`© ${new Date().getFullYear()} EDA Show. Todos os direitos reservados.`)
+  const [footerText, setFooterText] = useState<string>("")
 
   useEffect(() => {
     async function loadFooterData() {
@@ -20,16 +21,24 @@ export function Footer() {
         ]);
 
         if (footerRes.ok) {
-          const footerData = await footerRes.json();
-          if (footerData.links) setFooterLinks(footerData.links);
+          const footerData = await footerRes.json()
+          if (footerData.links) setFooterLinks(footerData.links)
+          // O copyright e texto serão prioritários se vindos do site-settings, 
+          // mas carregamos o do footer API como fallback
           if (footerData.copyright) {
-            setCopyright(footerData.copyright.replace('{{year}}', new Date().getFullYear().toString()));
+            setCopyright(footerData.copyright.replace('{{year}}', new Date().getFullYear().toString()))
           }
         }
 
         if (settingsRes.ok) {
-          const settingsData = await settingsRes.json();
-          setSiteSettings(settingsData);
+          const settingsData = await settingsRes.json()
+          setSiteSettings(settingsData)
+          if (settingsData.footer?.copyright) {
+            setCopyright(settingsData.footer.copyright.replace('{{year}}', new Date().getFullYear().toString()))
+          }
+          if (settingsData.footer?.text) {
+            setFooterText(settingsData.footer.text)
+          }
         }
       } catch (error) {
         console.error('Erro ao carregar dados do footer:', error);
@@ -48,7 +57,7 @@ export function Footer() {
           <div className="space-y-4 md:space-y-6">
             <Logo imageClassName="h-10 md:h-12 w-auto drop-shadow-none" variant="dark" />
             <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-              O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas e profissionais do mercado de saúde suplementar, conectando marcas, corretores e soluções de forma clara, estratégica e humana, em todo o Brasil.
+              {footerText || "O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas e profissionais do mercado de saúde suplementar, conectando marcas, corretores e soluções de forma clara, estratégica e humana, em todo o Brasil."}
             </p>
             <div className="flex flex-wrap gap-3 md:gap-4">
               {siteSettings?.socialMedia?.instagram && (

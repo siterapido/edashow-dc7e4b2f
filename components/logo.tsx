@@ -28,29 +28,43 @@ export function Logo({
 
   useEffect(() => {
     async function loadLogo() {
-      // Por enquanto, usamos os logos padrão já que site-settings ainda não foi migrado
-      // No futuro, buscaremos do Supabase
-      setDefaultLogo();
+      try {
+        const response = await fetch('/api/globals/site-settings')
+        if (response.ok) {
+          const settings = await response.json()
+          if (settings.logo_url) {
+            setLogoSrc(settings.logo_url)
+            if (settings.site_name) setLogoAlt(settings.site_name)
+          } else {
+            setDefaultLogo()
+          }
+        } else {
+          setDefaultLogo()
+        }
+      } catch (error) {
+        console.error('Error loading dynamic logo:', error)
+        setDefaultLogo()
+      }
     }
 
-    loadLogo();
-  }, [variant]);
+    loadLogo()
+  }, [variant])
 
   const setDefaultLogo = () => {
     // Logos padrão baseados na variante
     if (variant === "dark") {
-      setLogoSrc("/logo-dark.png");
+      setLogoSrc("/logo-dark.png")
     } else if (variant === "white") {
-      setLogoSrc("/eda-show-logo.png");
+      setLogoSrc("/eda-show-logo.png")
     } else {
-      setLogoSrc("/eda-show-logo.png");
+      setLogoSrc("/eda-show-logo.png")
     }
-  };
+  }
 
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    router.push("/");
-  };
+    e.preventDefault()
+    router.push("/")
+  }
 
   if (!logoSrc) {
     return (
@@ -60,7 +74,7 @@ export function Logo({
           imageClassName
         )} />
       </div>
-    );
+    )
   }
 
   return (
@@ -79,9 +93,12 @@ export function Logo({
         sizes="(max-width: 768px) 140px, 180px"
         className={cn(
           "h-10 w-auto object-contain drop-shadow-lg md:h-12",
-          imageClassName
+          imageClassName,
+          // Se for uma URL externa ou vinda do Supabase, talvez queiramos manter o brilho original
+          // No mobile, anteriormente usávamos brightness-0 invert para o logo padrão
+          variant === "white" && !logoSrc.startsWith('http') && "brightness-0 invert"
         )}
       />
     </Link>
-  );
+  )
 }
