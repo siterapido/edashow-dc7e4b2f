@@ -20,7 +20,8 @@ import {
     User,
     Sparkles,
     Share2,
-    Youtube
+    Youtube,
+    BookOpen
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -39,8 +40,10 @@ const navItems = [
     { label: 'Publicidades', href: '/cms/banners', icon: Megaphone },
     { label: 'YouTube', href: '/cms/youtube', icon: Youtube },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
+    { label: 'Galeria', href: '/cms/gallery', icon: ImageIcon },
     { label: 'Redes Sociais', href: '/cms/settings/social', icon: Share2 },
     { label: 'Mídia', href: '/cms/media', icon: ImageIcon },
+    { label: 'Documentação', href: '/cms/docs', icon: BookOpen },
 ]
 
 export default function CMSLayout({ children }: { children: React.ReactNode }) {
