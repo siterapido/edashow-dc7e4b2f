@@ -38,11 +38,11 @@ export default function CMSLoginPage() {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-4 ring-4 ring-orange-100">
-                        <Shield className="w-8 h-8 text-white" />
+                    <div className="inline-flex items-center justify-center mb-4">
+                        <Logo variant="white" imageClassName="h-16 w-auto" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">EDAShow CMS</h1>
-                    <p className="text-gray-500 font-medium">Painel de Administração</p>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-1">Painel Administrativo</h1>
+                    <p className="text-gray-500 font-medium tracking-tight">Gerenciamento de Conteúdo EDA Show</p>
                 </div>
 
                 <Card className="shadow-xl border-gray-200 bg-white text-gray-900">

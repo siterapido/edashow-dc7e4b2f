@@ -17,15 +17,18 @@ import {
     ChevronRight,
     Menu,
     X,
-    User
+    User,
+    Sparkles
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image'
 import { isAuthenticated, logout, getCurrentUser } from '@/lib/actions/cms-auth'
 import { cn } from '@/lib/utils'
 
 const navItems = [
     { label: 'Dashboard', href: '/cms/dashboard', icon: LayoutDashboard },
+    { label: 'AI Studio', href: '/cms/ai', icon: Sparkles },
     { label: 'Posts', href: '/cms/posts', icon: FileText },
     { label: 'Categorias', href: '/cms/categories', icon: Tags },
     { label: 'Colunistas', href: '/cms/columnists', icon: Users },
@@ -110,14 +113,24 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                         : "w-20 -translate-x-full lg:translate-x-0"
                 )}
             >
-                {/* Logo Area */}
-                <div className="h-16 flex items-center px-6 border-b border-gray-200">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center">
-                            <span className="font-bold text-white">E</span>
+                <div className={cn("h-16 flex items-center border-b border-gray-200 overflow-hidden", isSidebarOpen ? "px-6" : "justify-center")}>
+                    <Link href="/cms/dashboard" className="flex items-center gap-3">
+                        <div className="relative w-10 h-10 shrink-0">
+                            <Image
+                                src="/eda-show-logo.png"
+                                alt="EDA Show"
+                                width={40}
+                                height={40}
+                                className="object-contain"
+                                priority
+                            />
                         </div>
-                        {isSidebarOpen && <span className="font-bold text-lg tracking-tight text-gray-900">EDA.CMS</span>}
-                    </div>
+                        {isSidebarOpen && (
+                            <span className="font-bold text-xl tracking-tighter text-gray-900 whitespace-nowrap">
+                                EDA<span className="text-orange-600">SHOW</span>
+                            </span>
+                        )}
+                    </Link>
                 </div>
 
                 {/* Navigation Items */}
@@ -191,10 +204,8 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                 </header>
 
                 {/* Main View */}
-                <main className="flex-1 p-6 overflow-y-auto">
-                    <div className="max-w-7xl mx-auto">
-                        {children}
-                    </div>
+                <main className="flex-1 overflow-y-auto">
+                    {children}
                 </main>
             </div>
         </div >

@@ -66,7 +66,7 @@ export default function CMSDashboard() {
     ]
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Welcome Header & Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>

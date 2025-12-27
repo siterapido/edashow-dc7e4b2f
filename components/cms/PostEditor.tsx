@@ -131,7 +131,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
         <div className="min-h-screen bg-white pb-24 md:pb-8">
             {/* Header */}
             <header className="sticky top-0 bg-white/90 backdrop-blur-sm z-40 transition-all duration-200">
-                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
                     {/* Left: Back button */}
                     <div className="flex items-center gap-2">
                         <Button
@@ -152,7 +152,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
             </header>
 
             {/* Main Content */}
-            <main className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+            <main className="max-w-5xl mx-auto px-6 py-10 space-y-8">
                 {/* Title Input - Medium Style */}
                 <div className="space-y-1">
                     <input
@@ -228,8 +228,8 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
             />
 
             {/* Bottom Action Bar */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] safe-area-pb">
-                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <div className="sticky bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] safe-area-pb">
+                <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
 
                     {/* Status Section - Mobile: Icon only / Desktop: Full badge */}
                     <div className="flex items-center gap-3 flex-shrink-0">
@@ -305,9 +305,6 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     </div>
                 </div>
             </div>
-
-            {/* Spacer for bottom bar */}
-            <div className="h-24" />
-        </div >
+        </div>
     )
 }

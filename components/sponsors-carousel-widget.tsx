@@ -25,14 +25,15 @@ export function SponsorsCarouselWidget({ sponsors = [] }: SponsorsCarouselWidget
     return (
         <div className="overflow-hidden relative">
             {/* Gradiente nas bordas */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-            {/* Carrossel Vertical */}
-            <div className="relative flex flex-col overflow-y-hidden py-2 h-[300px]">
+            {/* Carrossel Horizontal */}
+            <div className="relative flex overflow-x-hidden py-4">
                 <motion.div
-                    className="flex flex-col items-center gap-6"
+                    className="flex whitespace-nowrap items-center gap-8"
                     animate={{
-                        y: ["0%", "-33.333%"],
+                        x: ["0%", "-33.333%"],
                     }}
                     transition={{
                         duration: 30,
@@ -46,15 +47,15 @@ export function SponsorsCarouselWidget({ sponsors = [] }: SponsorsCarouselWidget
                         return (
                             <div
                                 key={`${sponsor.id}-${index}`}
-                                className="flex items-center justify-center transition-all duration-500 opacity-80 hover:opacity-100 transform hover:scale-105"
-                                style={{ minHeight: "60px", width: "100%" }}
+                                className="flex-shrink-0 flex items-center justify-center transition-all duration-500 opacity-80 hover:opacity-100 transform hover:scale-105"
+                                style={{ minWidth: "120px" }}
                             >
-                                <div className="relative h-14 w-32">
+                                <div className="relative h-12 w-28">
                                     <Image
                                         src={imageUrl}
                                         alt={sponsor.name}
                                         fill
-                                        sizes="(max-width: 768px) 100vw, 200px"
+                                        sizes="(max-width: 768px) 100vw, 120px"
                                         className="object-contain"
                                     />
                                 </div>
