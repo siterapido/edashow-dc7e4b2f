@@ -1,0 +1,184 @@
+'use server'
+
+/**
+ * AI Image Server Actions
+ * Server actions for image search and management
+ */
+
+import { searchImages, downloadAndSaveImage, getCuratedImages, getAvailableProviders, NormalizedImage } from '@/lib/images/image-service'
+
+export type { NormalizedImage }
+
+export interface ImageSearchParams {
+    query: string
+    provider?: 'pexels' | 'unsplash' | 'all'
+    orientation?: 'landscape' | 'portrait' | 'square'
+    page?: number
+    perPage?: number
+    color?: string
+}
+
+/**
+ * Check which image providers are configured
+ */
+export async function checkImageProviders() {
+    return getAvailableProviders()
+}
+
+/**
+ * Search images across providers
+ */
+export async function searchStockImages(params: ImageSearchParams) {
+    const providers = getAvailableProviders()
+
+    if (!providers.pexels && !providers.unsplash) {
+        return {
+            images: [],
+            total: 0,
+            page: 1,
+            hasMore: false,
+            providers,
+            error: 'Nenhuma API de imagens configurada. Adicione PEXELS_API_KEY ou UNSPLASH_ACCESS_KEY ao .env'
+        }
+    }
+
+    try {
+        const result = await searchImages({
+            query: params.query,
+            provider: params.provider || 'all',
+            orientation: params.orientation,
+            page: params.page,
+            perPage: params.perPage,
+            color: params.color
+        })
+
+        return {
+            ...result,
+            error: null
+        }
+    } catch (error) {
+        console.error('Image search error:', error)
+        return {
+            images: [],
+            total: 0,
+            page: params.page || 1,
+            hasMore: false,
+            providers,
+            error: error instanceof Error ? error.message : 'Erro ao buscar imagens'
+        }
+    }
+}
+
+/**
+ * Get curated/popular images
+ */
+export async function getCuratedStockImages(count?: number) {
+    const providers = getAvailableProviders()
+
+    if (!providers.pexels && !providers.unsplash) {
+        return {
+            images: [],
+            error: 'Nenhuma API de imagens configurada'
+        }
+    }
+
+    try {
+        const images = await getCuratedImages(count)
+        return { images, error: null }
+    } catch (error) {
+        console.error('Curated images error:', error)
+        return {
+            images: [],
+            error: error instanceof Error ? error.message : 'Erro ao buscar imagens'
+        }
+    }
+}
+
+/**
+ * Download and save image to storage
+ */
+export async function saveImageToStorage(image: NormalizedImage, folder?: string) {
+    try {
+        const url = await downloadAndSaveImage(image, folder)
+        return { url, error: null }
+    } catch (error) {
+        console.error('Save image error:', error)
+        return {
+            url: null,
+            error: error instanceof Error ? error.message : 'Erro ao salvar imagem'
+        }
+    }
+}
+
+/**
+ * Get image search suggestions based on topic
+ */
+export async function getImageSearchSuggestions(topic: string): Promise<string[]> {
+    // Healthcare-related search term enhancements
+    const baseTerms = [topic]
+
+    // Add variations
+    if (!topic.toLowerCase().includes('saúde') && !topic.toLowerCase().includes('health')) {
+        baseTerms.push(`${topic} saúde`)
+        baseTerms.push(`${topic} healthcare`)
+    }
+
+    if (!topic.toLowerCase().includes('médico') && !topic.toLowerCase().includes('medical')) {
+        baseTerms.push(`${topic} medical`)
+    }
+
+    // Add professional context
+    baseTerms.push(`${topic} professional`)
+    baseTerms.push(`${topic} clinic`)
+
+    return baseTerms.slice(0, 6)
+}
+
+/**
+ * Get trending image searches
+ */
+export async function getTrendingImageSearches(): Promise<string[]> {
+    return [
+        'healthcare technology',
+        'dental clinic',
+        'medical team',
+        'health wellness',
+        'doctor patient',
+        'medical equipment',
+        'hospital',
+        'dental care',
+        'health insurance',
+        'telemedicine'
+    ]
+}
+
+/**
+ * Upload local image to storage
+ */
+export async function uploadImageFromUrl(
+    imageUrl: string,
+    folder: string = 'uploads'
+) {
+    try {
+        // Create a mock NormalizedImage for the upload
+        const image: NormalizedImage = {
+            id: `upload-${Date.now()}`,
+            provider: 'pexels', // Using pexels type as it's just for the upload
+            url: imageUrl,
+            thumbnailUrl: imageUrl,
+            width: 0,
+            height: 0,
+            alt: 'Uploaded image',
+            downloadUrl: imageUrl
+        }
+
+        const url = await downloadAndSaveImage(image, folder)
+        return { url, error: null }
+    } catch (error) {
+        console.error('Upload error:', error)
+        return {
+            url: null,
+            error: error instanceof Error ? error.message : 'Erro ao fazer upload'
+        }
+    }
+}
