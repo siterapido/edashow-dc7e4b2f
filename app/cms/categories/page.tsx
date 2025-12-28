@@ -61,7 +61,7 @@ export default function CMSCategoriesPage() {
     }
 
     const updateName = (name: string) => {
-        setCurrentCat(prev => ({
+        setCurrentCat((prev: any) => ({
             ...prev,
             name,
             slug: !prev.id ? slugify(name) : prev.slug
@@ -130,7 +130,7 @@ export default function CMSCategoriesPage() {
                             <Label className="text-gray-400 text-[10px] font-bold uppercase">Slug</Label>
                             <Input
                                 value={currentCat.slug}
-                                onChange={(e) => setCurrentCat({ ...prev, slug: e.target.value })}
+                                onChange={(e) => setCurrentCat((prev: any) => ({ ...prev, slug: e.target.value }))}
                                 className="bg-gray-50 border-gray-100 text-gray-500 focus:bg-white transition-colors"
                             />
                         </div>
@@ -139,7 +139,7 @@ export default function CMSCategoriesPage() {
                             <Input
                                 type="number"
                                 value={currentCat.display_order}
-                                onChange={(e) => setCurrentCat({ ...prev, display_order: parseInt(e.target.value) })}
+                                onChange={(e) => setCurrentCat((prev: any) => ({ ...prev, display_order: parseInt(e.target.value) }))}
                                 className="bg-gray-50 border-gray-100 text-gray-900 w-24 focus:bg-white transition-colors"
                             />
                         </div>
