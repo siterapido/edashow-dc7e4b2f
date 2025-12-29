@@ -60,79 +60,142 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Botão Voltar */}
-      <div className="container mx-auto px-4 py-6">
-        <Link href="/">
-          <Button variant="ghost" className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Voltar
-          </Button>
-        </Link>
-      </div>
-
-      {/* Header - Largura Total */}
-      <header className="container mx-auto px-4 pb-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Categoria */}
-          <div className="flex items-center gap-2 mb-4">
-            {post.category && (
-              <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                {post.category.title}
-              </span>
-            )}
-            {post.featured && (
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                ⭐ Destaque
-              </span>
-            )}
+      {/* Hero Header com Imagem Destacada */}
+      {post.featured_image ? (
+        <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={post.featured_image.url}
+              alt={post.featured_image.alt_text || post.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Overlay Gradiente */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-black/20" />
           </div>
 
-          {/* Título */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900">
-            {post.title}
-          </h1>
+          <div className="container relative z-10 h-full mx-auto px-4 flex flex-col justify-end pb-12">
+            <div className="max-w-4xl">
+              {/* Botão Voltar (Estilo Light) */}
+              <Link href="/" className="inline-block mb-8">
+                <Button variant="ghost" className="text-white hover:bg-white/10 gap-2 pl-0">
+                  <ArrowLeft className="h-4 w-4" />
+                  Voltar
+                </Button>
+              </Link>
 
-          {/* Resumo */}
-          {post.excerpt && (
-            <p className="text-xl text-slate-600 mb-6 leading-relaxed">
-              {post.excerpt}
-            </p>
-          )}
-
-          {/* Meta informações */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-            {post.published_at && (
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <time dateTime={post.published_at}>
-                  {format(new Date(post.published_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                </time>
+              {/* Categorias e Tags */}
+              <div className="flex items-center gap-2 mb-6">
+                {post.category && (
+                  <span className="px-3 py-1 bg-primary text-white rounded-full text-sm font-semibold uppercase tracking-wider">
+                    {post.category.title}
+                  </span>
+                )}
+                {post.featured && (
+                  <span className="px-3 py-1 bg-yellow-400 text-yellow-950 rounded-full text-sm font-bold">
+                    ⭐ DESTAQUE
+                  </span>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      </header>
 
-      {/* Banner Publicitário - Topo do Artigo */}
-      <div className="container mx-auto px-4 mb-8">
-        <BannerDisplay location="article_top" className="max-w-4xl mx-auto" />
-      </div>
+              {/* Título Principal */}
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tight shadow-text">
+                {post.title}
+              </h1>
+
+              {/* Meta informações do Header */}
+              <div className="flex flex-wrap items-center gap-6 text-slate-200">
+                {post.author && (
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10 border-2 border-white/20">
+                      {post.author.avatar_url ? (
+                        <AvatarImage src={post.author.avatar_url} alt={post.author.name} />
+                      ) : (
+                        <AvatarFallback>
+                          {post.author.name?.charAt(0) || 'E'}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <span className="font-medium text-white">{post.author.name}</span>
+                  </div>
+                )}
+
+                {post.published_at && (
+                  <div className="flex items-center gap-2 text-sm opacity-90">
+                    <Calendar className="h-4 w-4" />
+                    <time dateTime={post.published_at}>
+                      {format(new Date(post.published_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                    </time>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        /* Header Fallback (sem imagem) */
+        <header className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto">
+            <Link href="/" className="inline-block mb-8">
+              <Button variant="ghost" className="gap-2 pl-0">
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </Button>
+            </Link>
+
+            <div className="flex items-center gap-2 mb-4">
+              {post.category && (
+                <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                  {post.category.title}
+                </span>
+              )}
+              {post.featured && (
+                <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                  ⭐ Destaque
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900">
+              {post.title}
+            </h1>
+
+            {post.excerpt && (
+              <p className="text-xl text-slate-600 mb-6 leading-relaxed">
+                {post.excerpt}
+              </p>
+            )}
+
+            <div className="flex items-center gap-4 text-sm text-slate-500">
+              {post.published_at && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <time dateTime={post.published_at}>
+                    {format(new Date(post.published_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                  </time>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+      )}
 
       {/* Grid Layout: Conteúdo Principal + Sidebar */}
-      <div className="container mx-auto px-4 pb-12">
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Coluna Principal - Conteúdo do Artigo */}
           <article className="lg:col-span-8">
-            {/* Imagem Destacada */}
-            {post.featured_image && (
-              <div className="relative w-full h-[400px] md:h-[500px] mb-8 rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src={post.featured_image.url}
-                  alt={post.featured_image.alt_text || post.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+            {/* Banner Publicitário - Topo do Artigo */}
+            <div className="mb-8">
+              <BannerDisplay location="article_top" />
+            </div>
+
+            {/* Resumo do Post (apenas se tiver imagem de capa, se não tiver, já aparece no header fallback) */}
+            {post.featured_image && post.excerpt && (
+              <div className="border-l-4 border-primary pl-6 mb-8 italic text-xl text-slate-700 leading-relaxed font-serif">
+                {post.excerpt}
               </div>
             )}
 
