@@ -17,6 +17,7 @@ interface Sponsor {
     logo_path?: string
     website_url?: string
     website?: string
+    instagram_url?: string
     description?: string
     active: boolean
     display_order: number
@@ -32,6 +33,7 @@ export default function CMSSponsorsPage() {
         name: '',
         logo_url: '',
         website_url: '',
+        instagram_url: '',
         display_order: 0,
         active: true
     })
@@ -52,7 +54,8 @@ export default function CMSSponsorsPage() {
         const normalizedData = (data || []).map(s => ({
             ...s,
             logo_url: s.logo_url || s.logo_path,
-            website_url: s.website_url || s.website
+            website_url: s.website_url || s.website,
+            instagram_url: s.instagram_url
         }))
 
         setSponsors(normalizedData)
@@ -89,13 +92,15 @@ export default function CMSSponsorsPage() {
                 ...currentSponsor,
                 id: currentSponsor.id || 'new',
                 logo_path: currentSponsor.logo_url,
-                website: currentSponsor.website_url
+                website: currentSponsor.website_url,
+                instagram_url: currentSponsor.instagram_url
             })
             setIsEditing(false)
             setCurrentSponsor({
                 name: '',
                 logo_url: '',
                 website_url: '',
+                instagram_url: '',
                 display_order: 0,
                 active: true
             })
@@ -111,7 +116,8 @@ export default function CMSSponsorsPage() {
         setCurrentSponsor({
             ...sponsor,
             logo_url: sponsor.logo_url || sponsor.logo_path,
-            website_url: sponsor.website_url || sponsor.website
+            website_url: sponsor.website_url || sponsor.website,
+            instagram_url: sponsor.instagram_url
         })
         setIsEditing(true)
     }
@@ -249,6 +255,7 @@ export default function CMSSponsorsPage() {
                             name: '',
                             logo_url: '',
                             website_url: '',
+                            instagram_url: '',
                             display_order: sponsors.length + 1,
                             active: true
                         })
@@ -395,6 +402,20 @@ export default function CMSSponsorsPage() {
                             </div>
                         </div>
 
+                        {/* Instagram */}
+                        <div className="space-y-2">
+                            <Label className="text-gray-400 text-[10px] font-bold uppercase">Instagram</Label>
+                            <div className="relative">
+                                <ExternalLink className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400" />
+                                <Input
+                                    value={currentSponsor.instagram_url || ''}
+                                    onChange={(e) => setCurrentSponsor(prev => ({ ...prev, instagram_url: e.target.value }))}
+                                    placeholder="https://www.instagram.com/perfil"
+                                    className="pl-8 bg-gray-50 border-gray-100 text-gray-900 focus:bg-white transition-colors"
+                                />
+                            </div>
+                        </div>
+
                         {/* Display Order */}
                         <div className="space-y-2">
                             <Label className="text-gray-400 text-[10px] font-bold uppercase">Ordem de Exibição</Label>
@@ -445,6 +466,7 @@ export default function CMSSponsorsPage() {
                                     name: '',
                                     logo_url: '',
                                     website_url: '',
+                                    instagram_url: '',
                                     display_order: 0,
                                     active: true
                                 })
