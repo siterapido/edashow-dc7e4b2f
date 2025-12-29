@@ -66,6 +66,27 @@ export async function updateSponsorOrder(sponsors: Array<{ id: string; display_o
     revalidatePath('/')
 }
 
+export async function bulkDeleteSponsors(ids: string[]) {
+    const supabase = await createClient()
+    const { error } = await supabase.from('sponsors').delete().in('id', ids)
+
+    if (error) throw error
+    revalidatePath('/cms/sponsors')
+    revalidatePath('/')
+}
+
+export async function bulkToggleSponsorActive(ids: string[], active: boolean) {
+    const supabase = await createClient()
+    const { error } = await supabase
+        .from('sponsors')
+        .update({ active })
+        .in('id', ids)
+
+    if (error) throw error
+    revalidatePath('/cms/sponsors')
+    revalidatePath('/')
+}
+
 export async function uploadSponsorLogo(formData: FormData) {
     const supabase = await createClient()
     const file = formData.get('file') as File

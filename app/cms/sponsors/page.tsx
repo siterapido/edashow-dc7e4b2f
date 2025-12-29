@@ -38,6 +38,8 @@ export default function CMSSponsorsPage() {
     const [saving, setSaving] = useState(false)
     const [uploadingLogo, setUploadingLogo] = useState(false)
 
+    const [selectedIds, setSelectedIds] = useState<string[]>([])
+
     const fetchSponsors = async () => {
         setLoading(true)
         const supabase = createClient()
@@ -131,6 +133,32 @@ export default function CMSSponsorsPage() {
             fetchSponsors()
         } catch (error) {
             console.error('Erro ao alternar status:', error)
+        }
+    }
+
+    // Bulk Actions
+    const handleBulkDelete = async () => {
+        if (!confirm(`Excluir ${selectedIds.length} patrocinadores?`)) return
+        try {
+            const { bulkDeleteSponsors } = await import('@/lib/actions/cms-sponsors')
+            await bulkDeleteSponsors(selectedIds)
+            setSelectedIds([])
+            fetchSponsors()
+        } catch (error) {
+            console.error('Erro ao excluir em massa:', error)
+            alert('Erro ao excluir patrocinadores')
+        }
+    }
+
+    const handleBulkToggle = async (active: boolean) => {
+        try {
+            const { bulkToggleSponsorActive } = await import('@/lib/actions/cms-sponsors')
+            await bulkToggleSponsorActive(selectedIds, active)
+            setSelectedIds([])
+            fetchSponsors()
+        } catch (error) {
+            console.error('Erro ao alterar status em massa:', error)
+            alert('Erro ao atualizar status')
         }
     }
 
@@ -232,6 +260,41 @@ export default function CMSSponsorsPage() {
                 </Button>
             </div>
 
+            {selectedIds.length > 0 && (
+                <div className="bg-orange-50 border border-orange-100 rounded-lg p-4 flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center gap-2 text-orange-800 font-medium">
+                        <span className="bg-orange-100 text-orange-600 px-2 py-1 rounded text-xs font-bold">{selectedIds.length}</span>
+                        itens selecionados
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="bg-white border-orange-200 text-orange-700 hover:bg-orange-100"
+                            onClick={() => handleBulkToggle(true)}
+                        >
+                            <Eye className="w-4 h-4 mr-2" /> Ativar
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="bg-white border-orange-200 text-orange-700 hover:bg-orange-100"
+                            onClick={() => handleBulkToggle(false)}
+                        >
+                            <EyeOff className="w-4 h-4 mr-2" /> Inativar
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            onClick={handleBulkDelete}
+                        >
+                            <Trash2 className="w-4 h-4 mr-2" /> Excluir
+                        </Button>
+                    </div>
+                </div>
+            )}
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     <DataTable
@@ -239,6 +302,8 @@ export default function CMSSponsorsPage() {
                         data={sponsors}
                         loading={loading}
                         onRowClick={handleEdit}
+                        selectedItems={selectedIds}
+                        onSelectionChange={setSelectedIds}
                     />
                 </div>
 

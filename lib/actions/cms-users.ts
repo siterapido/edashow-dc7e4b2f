@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export interface User {
     id: string
@@ -176,3 +177,37 @@ export async function createUser(data: { email: string; password: string; name: 
     revalidatePath('/cms/settings/users')
     return { success: true }
 }
+
+export async function updateUserPassword(userId: string, password: string): Promise<{ success: boolean; error?: string }> {
+    const supabase = await createClient()
+
+    // Verify if requester is admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        return { success: false, error: 'Usuário não autenticado' }
+    }
+
+    const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single()
+
+    if (roleData?.role !== 'admin') {
+        return { success: false, error: 'Apenas administradores podem alterar senhas' }
+    }
+
+    const supabaseAdmin = createAdminClient()
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(
+        userId,
+        { password }
+    )
+
+    if (error) {
+        console.error('Error updating password:', error)
+        return { success: false, error: error.message }
+    }
+
+    return { success: true }
+}
+

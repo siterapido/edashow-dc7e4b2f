@@ -31,7 +31,6 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
     { label: 'Dashboard', href: '/cms/dashboard', icon: LayoutDashboard },
-    { label: 'AI Studio', href: '/cms/ai', icon: Sparkles },
     { label: 'Posts', href: '/cms/posts', icon: FileText },
     { label: 'Categorias', href: '/cms/categories', icon: Tags },
     { label: 'Colunistas', href: '/cms/columnists', icon: Users },
