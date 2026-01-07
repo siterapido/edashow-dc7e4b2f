@@ -4,6 +4,8 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    // Fix for webpack module errors
+    optimizePackageImports: ['@supabase/supabase-js', '@supabase/ssr'],
   },
 
   typescript: {
@@ -26,6 +28,17 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+
+  // Fix for webpack caching issues
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: ['**/node_modules', '**/.git', '**/.next'],
+      }
+    }
+    return config
   },
 }
 

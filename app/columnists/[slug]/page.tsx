@@ -70,7 +70,9 @@ export default async function ColumnistPage({ params }: ColumnistPageProps) {
         {/* Header do Colunista */}
         <header className="mb-12 text-center">
           <Avatar className="h-32 w-32 mx-auto mb-6">
-            {columnist.avatar_url && (
+            {columnist.name === 'Eda' ? (
+              <AvatarImage src="/images/eda-profile.jpg" alt={columnist.name} />
+            ) : columnist.avatar_url && (
               <AvatarImage
                 src={columnist.avatar_url}
                 alt={columnist.name}

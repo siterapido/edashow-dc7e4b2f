@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer"
 import { Newsletter } from "@/components/newsletter"
 import { Events } from "@/components/events"
 import { LatestNews } from "@/components/latest-news"
+import { EdaBioSection } from "@/components/eda-bio-section"
 import BannerDisplay from "@/components/BannerDisplay"
 import { getPosts, getSponsors, getImageUrl, getEvents } from "@/lib/supabase/api"
 import { formatDistanceToNow } from "date-fns"
@@ -146,6 +147,7 @@ export default async function HomePage() {
 
         <SponsorCarousel sponsors={sponsors} />
         <LatestNews initialPosts={allPosts.slice(0, 8)} />
+        <EdaBioSection />
 
         {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}
         {allPosts.length > 0 ? (

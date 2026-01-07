@@ -13,7 +13,7 @@ interface Author {
   name: string;
   role?: string;
   bio?: string;
-  avatar_url?: string;
+  photo_url?: string;
   twitter_url?: string;
   instagram_url?: string;
 }
@@ -58,9 +58,9 @@ export function PostSidebar({ author, sponsors = [] }: PostSidebarProps) {
           <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
               <Avatar className="h-16 w-16 flex-shrink-0">
-                {author.avatar_url && (
+                {author.photo_url && (
                   <AvatarImage
-                    src={author.avatar_url}
+                    src={author.photo_url}
                     alt={author.name}
                   />
                 )}

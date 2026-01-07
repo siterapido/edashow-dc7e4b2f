@@ -39,21 +39,32 @@ export default function SobrePage() {
 
         {/* Sobre o Eda */}
         <InstitutionalSection title="Quem é o Eda">
-          <p className="text-lg leading-relaxed mb-4">
-            EDA SHOW é Edson Eda Show, comunicador, palestrante e criador de projetos que conectam o mercado de planos de saúde e seguros em todo o Brasil.
-            Reconhecido pela linguagem simples, direta e verdadeira, o Eda Show dá voz aos corretores, valoriza histórias reais e fortalece conexões que geram negócios.
-          </p>
-          <p className="text-lg leading-relaxed mb-4">
-            Criador de projetos como Jogo das Águias, EDA pelo Brasil, Águia-Visita, Circuito das Águias e do método Comunicação & Oratória – Corretor Faixa Preta, ele une comunicação, motivação, esporte e propósito.
-          </p>
-          <p className="text-lg leading-relaxed mb-4">
-            Com coberturas exclusivas de grandes eventos, entrevistas com líderes do mercado e conteúdos que inspiram, o Eda Show tem um só objetivo:
-            conectar pessoas, fortalecer o corretor e fazer o mercado voar mais alto.
-          </p>
-          <p className="text-lg leading-relaxed font-bold mt-6">
-            Águia anda com águia.<br />
-            E aqui, só o impossível interessa.
-          </p>
+          <div className="flex flex-col md:flex-row gap-8 items-start mb-6">
+            <div className="w-full md:w-1/3 relative aspect-square rounded-2xl overflow-hidden shadow-xl shrink-0">
+              <img
+                src="/images/eda-sobre.jpg"
+                alt="Edson Eda Show"
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="w-full md:w-2/3">
+              <p className="text-lg leading-relaxed mb-4">
+                EDA SHOW é Edson Eda Show, comunicador, palestrante e criador de projetos que conectam o mercado de planos de saúde e seguros em todo o Brasil.
+                Reconhecido pela linguagem simples, direta e verdadeira, o Eda Show dá voz aos corretores, valoriza histórias reais e fortalece conexões que geram negócios.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Criador de projetos como Jogo das Águias, EDA pelo Brasil, Águia-Visita, Circuito das Águias e do método Comunicação & Oratória – Corretor Faixa Preta, ele une comunicação, motivação, esporte e propósito.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                Com coberturas exclusivas de grandes eventos, entrevistas com líderes do mercado e conteúdos que inspiram, o Eda Show tem um só objetivo:
+                conectar pessoas, fortalecer o corretor e fazer o mercado voar mais alto.
+              </p>
+              <p className="text-lg leading-relaxed font-bold mt-6">
+                Águia anda com águia.<br />
+                E aqui, só o impossível interessa.
+              </p>
+            </div>
+          </div>
         </InstitutionalSection>
 
         {/* História e Missão */}

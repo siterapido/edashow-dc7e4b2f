@@ -13,6 +13,7 @@ export function SocialSettingsTab() {
     const [socialMedia, setSocialMedia] = useState({
         instagram: '',
         youtube: '',
+        threads: '',
         linkedin: '',
         facebook: '',
         twitter: '',
@@ -35,6 +36,7 @@ export function SocialSettingsTab() {
                 setSocialMedia({
                     instagram: data.social_media.instagram || '',
                     youtube: data.social_media.youtube || '',
+                    threads: data.social_media.threads || '',
                     linkedin: data.social_media.linkedin || '',
                     facebook: data.social_media.facebook || '',
                     twitter: data.social_media.twitter || '',
@@ -131,6 +133,23 @@ export function SocialSettingsTab() {
                                 value={socialMedia.youtube}
                                 onChange={handleChange}
                                 placeholder="@seu_canal ou link"
+                                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                            />
+                        </div>
+
+                        {/* Threads */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-semibold flex items-center gap-2">
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.6 1.4c-4.4 0-8 3.6-8 8 0 1.5.4 2.9 1.1 4.1-.1.4-.2 1-.3 1.7-.2.9.5 1.7 1.4 1.5.6-.1 1.3-.3 1.7-.3 1.3.7 2.7 1.1 4.1 1.1 4.4 0 8-3.6 8-8s-3.6-8-8-8zm0 14c-1.1 0-2.2-.3-3.1-.8l-.2-.1-1.7.4.4-1.7-.1-.2c-.5-.9-.8-2-.8-3.1 0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6z"/>
+                                </svg>
+                                Threads
+                            </label>
+                            <Input
+                                name="threads"
+                                value={socialMedia.threads}
+                                onChange={handleChange}
+                                placeholder="@seu_perfil"
                                 className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
                             />
                         </div>

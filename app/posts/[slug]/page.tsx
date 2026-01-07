@@ -110,8 +110,8 @@ export default async function PostPage({ params }: PostPageProps) {
                 {post.author && (
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 border-2 border-white/20">
-                      {post.author.avatar_url ? (
-                        <AvatarImage src={post.author.avatar_url} alt={post.author.name} />
+                      {post.author.photo_url ? (
+                        <AvatarImage src={post.author.photo_url} alt={post.author.name} />
                       ) : (
                         <AvatarFallback>
                           {post.author.name?.charAt(0) || 'E'}
@@ -243,21 +243,21 @@ export default async function PostPage({ params }: PostPageProps) {
                 <h3 className="text-2xl font-bold mb-6 text-slate-900">Sobre o Autor</h3>
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <Avatar className="h-24 w-24 shrink-0">
-                    {post.author.avatar_url ? (
+                    {post.author.photo_url ? (
                       <AvatarImage
-                        src={post.author.avatar_url}
+                        src={post.author.photo_url}
                         alt={post.author.name}
                       />
                     ) : (
                       <AvatarImage
-                        src="/logo-dark.png"
+                        src="/images/eda-redacao.png"
                         alt="EDA Show Logo"
                         className="object-contain p-2 bg-white"
                       />
                     )}
                     <AvatarFallback className="bg-white">
                       <Image
-                        src="/logo-dark.png"
+                        src="/images/eda-redacao.png"
                         alt="EDA Show Logo"
                         width={80}
                         height={80}

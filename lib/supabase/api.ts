@@ -14,7 +14,7 @@ export async function getPosts(options: {
         .select(`
       *,
       category:categories(id, name, slug),
-      author:columnists(id, name, slug, photo_url),
+      author:columnists(id, name, slug, photo_url, bio),
       cover_image_url
     `)
         .order('published_at', { ascending: false })
@@ -42,7 +42,7 @@ export async function getPosts(options: {
         console.error('Error fetching posts from Supabase:', error)
         return []
     }
-    return data || []
+    return (data || []).map(normalizePostData)
 }
 
 export async function getPostBySlug(slug: string) {
@@ -62,7 +62,8 @@ export async function getPostBySlug(slug: string) {
         console.error(`Error fetching post ${slug}:`, error)
         return null
     }
-    return data
+
+    return normalizePostData(data)
 }
 
 export async function getCategories() {
@@ -172,4 +173,25 @@ export function getImageUrl(media: any, size: 'card' | 'hero' | 'full' = 'full')
     if (!media) return '/placeholder.jpg'
     if (typeof media === 'string') return media
     return media.url || '/placeholder.jpg'
+}
+
+/**
+ * Normaliza dados de posts do Supabase para o formato esperado pelos componentes
+ * Transforma cover_image_url (string) em featured_image (objeto)
+ */
+function normalizePostData(post: any): any {
+    if (!post) return post
+
+    return {
+        ...post,
+        // Transform cover_image_url (string) → featured_image (object)
+        featured_image: post.cover_image_url
+            ? {
+                url: post.cover_image_url,
+                alt_text: post.title || 'Imagem do post'
+            }
+            : null,
+        // Mantém cover_image_url para compatibilidade
+        cover_image_url: post.cover_image_url
+    }
 }

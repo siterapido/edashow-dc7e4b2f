@@ -61,10 +61,13 @@ export default async function ColunistasPage() {
                                 <Card className="p-6 h-full flex flex-col items-center text-center hover:shadow-lg transition-all duration-300 border-slate-100 hover:border-primary/30 bg-white group-hover:-translate-y-1">
                                     <div className="mb-4">
                                         <Avatar className="w-24 h-24 border-4 border-slate-50 shadow-inner group-hover:border-primary/20 transition-colors">
-                                            {columnist.avatar_url && (
+                                            {columnist.name === 'Eda' ? (
+                                                <AvatarImage src="/images/eda-profile.jpg" alt={columnist.name} className="object-cover object-center" />
+                                            ) : columnist.avatar_url && (
                                                 <AvatarImage
                                                     src={columnist.avatar_url}
                                                     alt={columnist.name}
+                                                    className="object-cover object-center"
                                                 />
                                             )}
                                             <AvatarFallback className="bg-slate-100 text-slate-400 text-2xl font-bold">

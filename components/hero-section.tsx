@@ -1,12 +1,14 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Clock, Share2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Clock, Share2, ChevronLeft, ChevronRight, Instagram, Youtube, LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -21,7 +23,11 @@ interface SlideData {
   credit: string;
   statLabel: string;
   statValue: string;
+  statValue: string;
   slug?: string;
+  authorName?: string;
+  authorRole?: string;
+  authorImage?: string;
 }
 
 interface Post {
@@ -36,6 +42,8 @@ interface Post {
   slug?: string;
   author?: {
     name?: string;
+    photo_url?: string;
+    bio?: string;
   };
 }
 
@@ -111,6 +119,25 @@ function getCategoryBadge(category?: string): string {
 }
 
 export function HeroSection({ posts = [] }: HeroSectionProps) {
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
+  // Buscar configurações do site
+  useEffect(() => {
+    async function loadSiteSettings() {
+      try {
+        const response = await fetch('/api/globals/site-settings');
+        if (response.ok) {
+          const data = await response.json();
+          setSiteSettings(data);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar configurações do site:', error);
+      }
+    }
+
+    loadSiteSettings();
+  }, []);
+
   // Converter posts para slides
   const slides = useMemo(() => {
     if (posts.length === 0) {
@@ -133,6 +160,11 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
 
       const categorySlug = typeof post.category === 'object' ? post.category.slug : post.category;
 
+      // Author logic
+      const authorName = post.author?.name || "Redação Eda Show";
+      const authorRole = post.author?.bio || "Equipe Editorial";
+      const authorImage = post.author?.photo_url || "/images/eda-redacao.png";
+
       return {
         id: post.id || `post-${index}`,
         badge: getCategoryBadge(categorySlug),
@@ -141,10 +173,15 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
         description: post.excerpt || 'Leia a matéria completa para saber mais.',
         image: post.cover_image_url || post.featured_image?.url || '/placeholder.jpg',
         imageAlt: post.title || 'Imagem do post',
-        credit: post.author?.name ? `Foto: ${post.author.name}` : 'Foto: Divulgação',
+        credit: `Foto: ${authorName}`, // Or keep "Divulgação" if preferred, using author name for now
         statLabel: post.featured ? 'Destaque' : 'Novo',
         statValue: categorySlug === 'interviews' ? 'Entrevista exclusiva' : 'Matéria em destaque',
-        slug: post.slug
+        slug: post.slug,
+        // Passing specific author data to be used in rendering if needed, 
+        // effectively flattening it into the slide object for easier access
+        authorName,
+        authorRole,
+        authorImage
       };
     });
   }, [posts]);
@@ -229,7 +266,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
 
   return (
     <section
-      className="relative bg-[#0f172a] text-white overflow-hidden h-[400px] sm:h-[500px] md:h-screen"
+      className="relative bg-[#0f172a] text-white overflow-hidden h-[600px] sm:h-[650px] md:h-screen"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -344,6 +381,21 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                   <p className="text-sm sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none">
                     {currentSlideData.description}
                   </p>
+
+                  <div className="flex items-center gap-3 mt-2">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/30 flex-shrink-0 bg-white">
+                      <Image
+                        src={currentSlideData.authorImage || "/images/eda-redacao.png"}
+                        alt={currentSlideData.authorName || "Redação"}
+                        fill
+                        className="object-contain p-1"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs sm:text-sm font-semibold text-white">Por {currentSlideData.authorName || "Redação Eda Show"}</span>
+                      <span className="text-xs text-slate-400">{currentSlideData.authorRole || "Equipe Editorial"}</span>
+                    </div>
+                  </div>
 
                   <div className="flex flex-col items-start gap-3 pt-2 sm:pt-4">
                     <div className="flex justify-start">
