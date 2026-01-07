@@ -59,11 +59,12 @@ export function PostSidebar({ author, sponsors = [] }: PostSidebarProps) {
             <div className="flex items-start gap-4">
               <Avatar className="h-16 w-16 flex-shrink-0">
                 {(author.name.includes('Redação') || author.name.includes('Redacao')) ? (
-                  <AvatarImage src="/images/eda-redacao.png" alt={author.name} />
+                  <AvatarImage src="/images/eda-redacao.png" alt={author.name} className="object-cover" />
                 ) : author.photo_url && (
                   <AvatarImage
                     src={author.photo_url}
                     alt={author.name}
+                    className="object-cover"
                   />
                 )}
                 <AvatarFallback className="text-lg">

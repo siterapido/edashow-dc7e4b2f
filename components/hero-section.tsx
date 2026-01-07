@@ -384,12 +384,12 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                   </p>
 
                   <div className="flex items-center gap-3 mt-2">
-                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/30 flex-shrink-0 bg-white">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
                       <Image
                         src={currentSlideData.authorImage || "/images/eda-redacao.png"}
                         alt={currentSlideData.authorName || "Redação"}
                         fill
-                        className="object-contain p-1"
+                        className="object-cover"
                       />
                     </div>
                     <div className="flex flex-col">

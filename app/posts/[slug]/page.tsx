@@ -109,11 +109,11 @@ export default async function PostPage({ params }: PostPageProps) {
               <div className="flex flex-wrap items-center gap-6 text-slate-200">
                 {post.author && (
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border-2 border-white/20">
+                    <Avatar className="h-10 w-10 border-none">
                       {(post.author.name?.includes('Redação') || post.author.name?.includes('Redacao')) ? (
-                        <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} />
+                        <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} className="object-cover" />
                       ) : post.author.photo_url ? (
-                        <AvatarImage src={post.author.photo_url} alt={post.author.name} />
+                        <AvatarImage src={post.author.photo_url} alt={post.author.name} className="object-cover" />
                       ) : (
                         <AvatarFallback>
                           {post.author.name?.charAt(0) || 'E'}
@@ -246,17 +246,18 @@ export default async function PostPage({ params }: PostPageProps) {
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <Avatar className="h-24 w-24 shrink-0">
                     {(post.author.name?.includes('Redação') || post.author.name?.includes('Redacao')) ? (
-                      <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} />
+                      <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} className="object-cover" />
                     ) : post.author.photo_url ? (
                       <AvatarImage
                         src={post.author.photo_url}
                         alt={post.author.name}
+                        className="object-cover"
                       />
                     ) : (
                       <AvatarImage
                         src="/images/eda-redacao.png"
                         alt="EDA Show Logo"
-                        className="object-contain p-2 bg-white"
+                        className="object-cover"
                       />
                     )}
                     <AvatarFallback className="bg-white">
