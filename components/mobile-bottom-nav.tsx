@@ -42,10 +42,10 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
     if (!shareData) return;
     const fullUrl = typeof window !== "undefined"
       ? window.location.origin + shareData.url
-      : \`https://edashow.com.br\${shareData.url}\`;
+      : `https://edashow.com.br${shareData.url}`;
 
-    const shareText = \`*\${shareData.title}*\n\n\${shareData.description ? \`\${shareData.description}\n\n\` : ''}Leia completo em: \${fullUrl}\`;
-    const whatsappUrl = \`https://api.whatsapp.com/send?text=\${encodeURIComponent(shareText)}\`;
+    const shareText = `*${shareData.title}*\n\n${shareData.description ? `${shareData.description}\n\n` : ''}Leia completo em: ${fullUrl}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
     window.open(whatsappUrl, "_blank");
   };
 
