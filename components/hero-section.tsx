@@ -144,12 +144,17 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
       return fallbackSlides;
     }
 
-    // Priorizar posts em destaque, depois os mais recentes
+    // Priorizar posts em destaque, depois ordenar por data de publicação (mais recentes primeiro)
     const sortedPosts = [...posts]
       .sort((a, b) => {
+        // Posts em destaque vêm primeiro
         if (a.featured && !b.featured) return -1;
         if (!a.featured && b.featured) return 1;
-        return 0;
+
+        // Depois, ordenar por data de publicação (mais recentes primeiro)
+        const dateA = a.published_at ? new Date(a.published_at).getTime() : 0;
+        const dateB = b.published_at ? new Date(b.published_at).getTime() : 0;
+        return dateB - dateA; // Ordem decrescente (mais recentes primeiro)
       })
       .slice(0, 6); // Limitar a 6 slides
 
