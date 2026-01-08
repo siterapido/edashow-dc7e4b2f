@@ -1,8 +1,7 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 export interface User {
     id: string
@@ -49,7 +48,8 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function updateUserRole(userId: string, role: 'admin' | 'editor' | 'user'): Promise<{ success: boolean; error?: string }> {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
 
     // Check if role exists for user
     const { data: existingRole } = await supabase
@@ -86,7 +86,8 @@ export async function updateUserRole(userId: string, role: 'admin' | 'editor' | 
 }
 
 export async function updateUserProfile(userId: string, data: { name?: string; email?: string }): Promise<{ success: boolean; error?: string }> {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
 
     const { error } = await supabase
         .from('profiles')
@@ -106,7 +107,8 @@ export async function updateUserProfile(userId: string, data: { name?: string; e
 }
 
 export async function deleteUser(userId: string): Promise<{ success: boolean; error?: string }> {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
 
     // Delete role first
     await supabase

@@ -18,6 +18,45 @@ import { MobileQuickShare } from '@/components/mobile-quick-share'
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
+/**
+ * Normaliza o HTML do conteúdo do post
+ * Converte blockquotes que englobam todo o conteúdo em parágrafos normais
+ * Preserva citações explícitas (quando há parágrafos antes/depois)
+ */
+function normalizePostContent(html: string): string {
+  if (!html) return ''
+
+  // Remove espaços em branco do início e fim
+  const trimmed = html.trim()
+
+  // Verifica se TODO o conteúdo está dentro de um único blockquote
+  // Padrão: <blockquote>conteúdo</blockquote> (sem <p> antes ou depois)
+  const entireContentInBlockquote = /^<blockquote>([\s\S]*)<\/blockquote>$/.test(trimmed)
+
+  if (entireContentInBlockquote) {
+    // Extrai o conteúdo dentro do blockquote
+    const content = trimmed.match(/^<blockquote>([\s\S]*)<\/blockquote>$/)?.[1] || ''
+
+    // Converte para parágrafo normal
+    // Se o conteúdo já tem tags <p>, mantém
+    // Se não, envolve em <p>
+    if (content.includes('<p>')) {
+      return content
+    } else {
+      // Divide por quebras de linha e cria parágrafos
+      const paragraphs = content
+        .split(/\n\n+/)
+        .filter(p => p.trim())
+        .map(p => `<p>${p.trim()}</p>`)
+        .join('\n')
+      return paragraphs
+    }
+  }
+
+  // Caso contrário, retorna o HTML original (citações legítimas são preservadas)
+  return trimmed
+}
+
 interface PostPageProps {
   params: Promise<{
     slug: string
@@ -205,7 +244,7 @@ export default async function PostPage({ params }: PostPageProps) {
             {/* Conteúdo do Artigo */}
             <div
               className="prose prose-lg max-w-none mb-8 tiptap-content"
-              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+              dangerouslySetInnerHTML={{ __html: normalizePostContent(post.content || '') }}
             />
 
             {/* Banner In-Article - No meio do conteúdo */}

@@ -4,7 +4,7 @@
  * Server Actions for Image Settings Management
  */
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { ImageSettings } from '@/lib/images/image-optimizer'
 
@@ -58,7 +58,9 @@ export async function getImageSettings(): Promise<ImageSettings | null> {
  * Update image optimization settings
  */
 export async function updateImageSettings(settings: UpdateImageSettingsInput): Promise<{ success: boolean; error?: string }> {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
 
     // First get the existing settings ID
     const { data: existing, error: fetchError } = await supabase
@@ -92,7 +94,9 @@ export async function updateImageSettings(settings: UpdateImageSettingsInput): P
  * Upload watermark logo
  */
 export async function uploadWatermarkLogo(formData: FormData): Promise<{ success: boolean; url?: string; error?: string }> {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const file = formData.get('file') as File
 
     if (!file) {

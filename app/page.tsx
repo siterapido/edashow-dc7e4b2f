@@ -47,7 +47,7 @@ function postsToCards(posts: any[]): Array<{
 export default async function HomePage() {
   // Buscar posts publicados do Supabase
   const allPosts = await getPosts({
-    limit: 20,
+    limit: 18,
     status: 'published'
   })
 
@@ -141,7 +141,7 @@ export default async function HomePage() {
         <BannerDisplay location="home_hero" className="container mx-auto px-4 py-6" />
 
         <SponsorCarousel sponsors={sponsors} />
-        <LatestNews initialPosts={allPosts.slice(0, 8)} />
+        <LatestNews initialPosts={allPosts.slice(0, 6)} />
         <EdaBioSection />
 
         {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}

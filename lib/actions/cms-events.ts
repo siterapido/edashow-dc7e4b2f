@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function getEvents() {
@@ -27,7 +27,9 @@ export async function getEvent(id: string) {
 }
 
 export async function saveEvent(data: any) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { id, ...eventData } = data
 
     let result
@@ -44,7 +46,9 @@ export async function saveEvent(data: any) {
 }
 
 export async function deleteEvent(id: string) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { error } = await supabase.from('events').delete().eq('id', id)
     if (error) throw error
     revalidatePath('/cms/events')

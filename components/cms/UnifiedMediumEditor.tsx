@@ -144,7 +144,7 @@ export function UnifiedMediumEditor({
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
+                class: 'prose prose-lg max-w-none outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-[4px] prose-blockquote:border-l-orange-500 prose-blockquote:bg-orange-50/30 prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:my-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-gray-700 prose-blockquote:font-medium prose-blockquote:relative prose-blockquote:before:content-[""] prose-blockquote:before:absolute prose-blockquote:before:left-0 prose-blockquote:before:top-0 prose-blockquote:before:bottom-0 prose-blockquote:before:w-1 prose-blockquote:before:bg-orange-500 prose-ul:text-gray-700 prose-ol:text-gray-700 prose-li:text-gray-700 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {
@@ -447,8 +447,24 @@ export function UnifiedMediumEditor({
                         {/* Divider */}
                         <div className="border-b border-gray-100" />
 
+                        {/* Format Selector & Current Format Indicator */}
+                        <div className="flex flex-col gap-2 py-3 px-1 border-b border-gray-100 bg-gray-50/50 rounded-lg">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                        Formato atual:
+                                    </span>
+                                    <FormatIndicator editor={editor} />
+                                </div>
+                                <FormatSelector editor={editor} />
+                            </div>
+                            <div className="text-xs text-gray-400 px-1">
+                                💡 <strong>Dica:</strong> O formato padrão é "Parágrafo normal". Use o menu acima para alterar para citação, títulos, listas, etc.
+                            </div>
+                        </div>
+
                         {/* Content Editor */}
-                        <div className="min-h-[600px]">
+                        <div className="min-h-[600px] relative">
                             <EditorContent editor={editor} />
                         </div>
                     </div>
@@ -674,5 +690,148 @@ function FloatingButton({
         >
             {children}
         </button>
+    )
+}
+
+// Format Indicator Component - shows current format
+function FormatIndicator({ editor }: { editor: any }) {
+    const [currentFormat, setCurrentFormat] = useState('Parágrafo normal')
+
+    useEffect(() => {
+        if (!editor) return
+
+        const updateFormat = () => {
+            if (editor.isActive('heading', { level: 1 })) {
+                setCurrentFormat('Título 1')
+            } else if (editor.isActive('heading', { level: 2 })) {
+                setCurrentFormat('Título 2')
+            } else if (editor.isActive('heading', { level: 3 })) {
+                setCurrentFormat('Título 3')
+            } else if (editor.isActive('blockquote')) {
+                setCurrentFormat('Citação')
+            } else if (editor.isActive('bulletList')) {
+                setCurrentFormat('Lista com marcadores')
+            } else if (editor.isActive('orderedList')) {
+                setCurrentFormat('Lista numerada')
+            } else if (editor.isActive('codeBlock')) {
+                setCurrentFormat('Bloco de código')
+            } else {
+                setCurrentFormat('Parágrafo normal')
+            }
+        }
+
+        editor.on('selectionUpdate', updateFormat)
+        editor.on('update', updateFormat)
+        updateFormat()
+
+        return () => {
+            editor.off('selectionUpdate', updateFormat)
+            editor.off('update', updateFormat)
+        }
+    }, [editor])
+
+    const getFormatColor = () => {
+        switch (currentFormat) {
+            case 'Citação':
+                return 'text-orange-600 bg-orange-50'
+            case 'Título 1':
+            case 'Título 2':
+            case 'Título 3':
+                return 'text-blue-600 bg-blue-50'
+            case 'Lista com marcadores':
+            case 'Lista numerada':
+                return 'text-purple-600 bg-purple-50'
+            case 'Bloco de código':
+                return 'text-gray-700 bg-gray-100'
+            default:
+                return 'text-gray-700 bg-gray-50'
+        }
+    }
+
+    return (
+        <span className={cn(
+            "px-3 py-1 rounded-md text-xs font-medium transition-colors",
+            getFormatColor()
+        )}>
+            {currentFormat}
+        </span>
+    )
+}
+
+// Format Selector Component - dropdown to select format
+function FormatSelector({ editor }: { editor: any }) {
+    const [isOpen, setIsOpen] = useState(false)
+
+    if (!editor) return null
+
+    const formats = [
+        { label: 'Parágrafo normal', action: () => editor.chain().focus().setParagraph().run(), icon: Type },
+        { label: 'Título 1', action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), icon: Heading1 },
+        { label: 'Título 2', action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), icon: Heading2 },
+        { label: 'Título 3', action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(), icon: Heading3 },
+        { label: 'Citação', action: () => editor.chain().focus().toggleBlockquote().run(), icon: Quote },
+        { label: 'Lista com marcadores', action: () => editor.chain().focus().toggleBulletList().run(), icon: List },
+        { label: 'Lista numerada', action: () => editor.chain().focus().toggleOrderedList().run(), icon: ListOrdered },
+        { label: 'Bloco de código', action: () => editor.chain().focus().toggleCodeBlock().run(), icon: Code },
+    ]
+
+    return (
+        <div className="relative">
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+            >
+                <Type className="w-4 h-4" />
+                <span className="hidden sm:inline">Alterar formato</span>
+                <span className="sm:hidden">Formato</span>
+            </button>
+
+            {isOpen && (
+                <>
+                    <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setIsOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 min-w-[200px] py-1">
+                        {formats.map((format) => {
+                            const Icon = format.icon
+                            const isActive =
+                                (format.label === 'Parágrafo normal' && editor.isActive('paragraph')) ||
+                                (format.label === 'Título 1' && editor.isActive('heading', { level: 1 })) ||
+                                (format.label === 'Título 2' && editor.isActive('heading', { level: 2 })) ||
+                                (format.label === 'Título 3' && editor.isActive('heading', { level: 3 })) ||
+                                (format.label === 'Citação' && editor.isActive('blockquote')) ||
+                                (format.label === 'Lista com marcadores' && editor.isActive('bulletList')) ||
+                                (format.label === 'Lista numerada' && editor.isActive('orderedList')) ||
+                                (format.label === 'Bloco de código' && editor.isActive('codeBlock'))
+
+                            return (
+                                <button
+                                    key={format.label}
+                                    type="button"
+                                    onClick={() => {
+                                        format.action()
+                                        setIsOpen(false)
+                                    }}
+                                    className={cn(
+                                        "w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors",
+                                        isActive
+                                            ? "bg-orange-50 text-orange-600 font-medium"
+                                            : "text-gray-700 hover:bg-gray-50"
+                                    )}
+                                >
+                                    <Icon className="w-4 h-4 shrink-0" />
+                                    <span>{format.label}</span>
+                                    {isActive && (
+                                        <div className="ml-auto w-2 h-2 rounded-full bg-orange-500" />
+                                    )}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </>
+            )}
+        </div>
     )
 }

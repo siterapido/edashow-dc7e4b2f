@@ -1,11 +1,12 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 // Sponsors
 export async function saveSponsor(data: any) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { id, ...sponsorData } = data
 
     let result
@@ -22,7 +23,8 @@ export async function saveSponsor(data: any) {
 }
 
 export async function getSponsor(id: string) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { data, error } = await supabase
         .from('sponsors')
         .select('*')
@@ -34,7 +36,8 @@ export async function getSponsor(id: string) {
 }
 
 export async function deleteSponsor(id: string) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { error } = await supabase.from('sponsors').delete().eq('id', id)
     if (error) throw error
     revalidatePath('/cms/sponsors')
@@ -42,7 +45,8 @@ export async function deleteSponsor(id: string) {
 }
 
 export async function toggleSponsorActive(id: string, active: boolean) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { error } = await supabase
         .from('sponsors')
         .update({ active })
@@ -54,7 +58,8 @@ export async function toggleSponsorActive(id: string, active: boolean) {
 }
 
 export async function updateSponsorOrder(sponsors: Array<{ id: string; display_order: number }>) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
 
     // Update each sponsor's order
     const updates = sponsors.map(s =>
@@ -67,7 +72,8 @@ export async function updateSponsorOrder(sponsors: Array<{ id: string; display_o
 }
 
 export async function bulkDeleteSponsors(ids: string[]) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { error } = await supabase.from('sponsors').delete().in('id', ids)
 
     if (error) throw error
@@ -76,7 +82,8 @@ export async function bulkDeleteSponsors(ids: string[]) {
 }
 
 export async function bulkToggleSponsorActive(ids: string[], active: boolean) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { error } = await supabase
         .from('sponsors')
         .update({ active })
@@ -88,7 +95,8 @@ export async function bulkToggleSponsorActive(ids: string[], active: boolean) {
 }
 
 export async function uploadSponsorLogo(formData: FormData) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const file = formData.get('file') as File
 
     if (!file) {
@@ -117,7 +125,8 @@ export async function uploadSponsorLogo(formData: FormData) {
 
 // Newsletter
 export async function getNewsletterSubscribers() {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { data, error } = await supabase
         .from('newsletter_subscribers')
         .select('*')
@@ -128,7 +137,8 @@ export async function getNewsletterSubscribers() {
 }
 
 export async function toggleSubscriberStatus(id: string, active: boolean) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const { error } = await supabase
         .from('newsletter_subscribers')
         .update({ active })

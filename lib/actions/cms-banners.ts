@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { Banner, BannerLocation } from '@/lib/types/banner'
 
@@ -62,7 +62,9 @@ export async function getActiveBannersByLocation(location: BannerLocation): Prom
 
 export async function saveBanner(formData: FormData): Promise<{ success: boolean; error?: any; data?: Banner }> {
     try {
-        const supabase = await createClient()
+        const supabase = await createAdminClient()
+
+        // Use admin client to bypass RLS
         const id = formData.get('id') as string | null
 
         const bannerData: any = {
@@ -142,7 +144,9 @@ export async function saveBanner(formData: FormData): Promise<{ success: boolean
 
 export async function deleteBanner(id: string): Promise<{ success: boolean; error?: any }> {
     try {
-        const supabase = await createClient()
+        const supabase = await createAdminClient()
+
+        // Use admin client to bypass RLS
 
         // Get banner to delete image from storage
         const { data: banner } = await supabase
@@ -177,7 +181,9 @@ export async function deleteBanner(id: string): Promise<{ success: boolean; erro
 
 export async function uploadBannerImage(file: File): Promise<{ url: string | null; error: any }> {
     try {
-        const supabase = await createClient()
+        const supabase = await createAdminClient()
+
+        // Use admin client to bypass RLS
         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
 
         const { data, error } = await supabase.storage

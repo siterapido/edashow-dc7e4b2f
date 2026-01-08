@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export interface SiteSettings {
@@ -41,7 +41,9 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 }
 
 export async function updateSiteSettings(settings: Partial<SiteSettings>): Promise<{ success: boolean; error?: string }> {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
 
     // Get existing settings to get the ID
     const { data: existing } = await supabase
@@ -73,7 +75,9 @@ export async function updateSiteSettings(settings: Partial<SiteSettings>): Promi
 }
 
 export async function uploadSiteLogo(formData: FormData): Promise<{ success: boolean; url?: string; error?: string }> {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
 
     const file = formData.get('file') as File
     if (!file) {
@@ -106,7 +110,9 @@ export async function uploadSiteLogo(formData: FormData): Promise<{ success: boo
 }
 
 export async function uploadFavicon(formData: FormData): Promise<{ success: boolean; url?: string; error?: string }> {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
 
     const file = formData.get('file') as File
     if (!file) {

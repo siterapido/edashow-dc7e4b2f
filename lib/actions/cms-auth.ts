@@ -16,6 +16,7 @@ export interface AuthError {
 const REMEMBER_ME_COOKIE = 'cms_remember_me'
 
 export async function login(formData: { email: string; password: string; rememberMe?: boolean }): Promise<{ success: boolean } | AuthError> {
+  // Auth operations must use regular client, not admin client
   const supabase = await createClient()
   const cookieStore = await cookies()
 
@@ -65,6 +66,7 @@ export async function login(formData: { email: string; password: string; remembe
 }
 
 export async function logout() {
+  // Auth operations must use regular client, not admin client
   const supabase = await createClient()
   const cookieStore = await cookies()
 

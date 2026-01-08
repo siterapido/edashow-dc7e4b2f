@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { extractChannelId, getChannelInfo, getLatestVideos, YouTubeChannel } from '@/lib/youtube'
 
 export interface YouTubeConfig {
@@ -39,7 +39,9 @@ export async function getYouTubeConfig(): Promise<YouTubeConfig | null> {
  * Save YouTube configuration
  */
 export async function saveYouTubeConfig(config: YouTubeConfig): Promise<{ success: boolean; error?: string }> {
-    const supabase = createClient()
+    const supabase = createAdminClient()
+
+    // Use admin client to bypass RLS
 
     // If we have an existing config, update it
     if (config.id) {
@@ -120,6 +122,9 @@ export async function testYouTubeConnection(url: string): Promise<{
  * Get YouTube videos for public display
  */
 export async function getPublicYouTubeVideos(limit: number = 12) {
+    // Use regular client for read operations
+    const supabase = createClient()
+
     const config = await getYouTubeConfig()
 
     if (!config || !config.enabled || !config.channel_id) {

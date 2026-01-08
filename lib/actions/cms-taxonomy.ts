@@ -1,11 +1,13 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 // Categories
 export async function saveCategory(data: any) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { id, ...catData } = data
 
     let result
@@ -22,7 +24,9 @@ export async function saveCategory(data: any) {
 }
 
 export async function deleteCategory(id: string) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { error } = await supabase.from('categories').delete().eq('id', id)
     if (error) throw error
     revalidatePath('/cms/categories')
@@ -31,7 +35,9 @@ export async function deleteCategory(id: string) {
 
 // Columnists
 export async function saveColumnist(data: any) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { id, ...colData } = data
 
     let result
@@ -48,7 +54,9 @@ export async function saveColumnist(data: any) {
 }
 
 export async function deleteColumnist(id: string) {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
+
+    // Use admin client to bypass RLS
     const { error } = await supabase.from('columnists').delete().eq('id', id)
     if (error) throw error
     revalidatePath('/cms/columnists')

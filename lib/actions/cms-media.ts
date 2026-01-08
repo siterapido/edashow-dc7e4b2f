@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { processImageWithSettings, getMimeType, getExtension } from '@/lib/images/image-optimizer'
 
@@ -16,7 +16,8 @@ export async function getMedia() {
 }
 
 export async function uploadMedia(formData: FormData) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
     const file = formData.get('file') as File
 
     // Check if it's an image
@@ -107,7 +108,8 @@ export async function uploadMedia(formData: FormData) {
 
 
 export async function deleteMedia(id: string, filename: string) {
-    const supabase = await createClient()
+    // Use admin client to bypass RLS
+    const supabase = await createAdminClient()
 
     // 1. Delete from storage
     const { error: storageError } = await supabase.storage

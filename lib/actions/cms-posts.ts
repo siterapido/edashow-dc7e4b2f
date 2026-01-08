@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function getPost(id: string) {
@@ -16,7 +16,8 @@ export async function getPost(id: string) {
 }
 
 export async function savePost(data: any) {
-    const supabase = await createClient()
+    // Use admin client for CMS operations to bypass RLS
+    const supabase = await createAdminClient()
     const { id, categories, columnists, ...postData } = data
 
     // Normalize data types for PostgreSQL
@@ -75,13 +76,46 @@ export async function savePost(data: any) {
     }
 
     let result
+    const operation = (id === 'new' || !id) ? 'insert' : 'update'
+
+    console.log('[savePost] Operação:', operation)
+    console.log('[savePost] Dados normalizados:', JSON.stringify(normalizedData, null, 2))
+
     if (id === 'new' || !id) {
         result = await supabase.from('posts').insert([normalizedData]).select().single()
     } else {
         result = await supabase.from('posts').update(normalizedData).eq('id', id).select().single()
     }
 
-    if (result.error) throw result.error
+    if (result.error) {
+        console.error('[savePost] Erro do Supabase:', result.error)
+        console.error('[savePost] Código:', result.error.code)
+        console.error('[savePost] Mensagem:', result.error.message)
+        console.error('[savePost] Detalhes:', result.error.details)
+        console.error('[savePost] Hint:', result.error.hint)
+
+        // Melhorar mensagem de erro para o usuário
+        let userMessage = result.error.message || 'Erro desconhecido'
+
+        // Adicionar contexto baseado no código de erro
+        if (result.error.code === '42501') {
+            userMessage = 'Permissão negada. Verifique as políticas de segurança (RLS) do Supabase.'
+        } else if (result.error.code === '23505') {
+            userMessage = 'Já existe um post com este slug ou identificador único.'
+        } else if (result.error.code === '23503') {
+            userMessage = 'Categoria ou colunista referenciado não existe.'
+        } else if (result.error.code === '23502') {
+            userMessage = 'Campo obrigatório está faltando.'
+        } else if (result.error.code === '22P02') {
+            userMessage = 'Formato de dados inválido. Verifique os tipos dos campos.'
+        }
+
+        const error = new Error(userMessage) as any
+        error.code = result.error.code
+        error.details = result.error.details
+        error.hint = result.error.hint
+        throw error
+    }
 
     revalidatePath('/cms/posts')
     revalidatePath('/')
@@ -90,7 +124,8 @@ export async function savePost(data: any) {
 }
 
 export async function autoSavePost(data: any) {
-    const supabase = await createClient()
+    // Use admin client for CMS operations to bypass RLS
+    const supabase = await createAdminClient()
     const { id, categories, columnists, ...postData } = data
 
     if (!id || id === 'new') return null // Can't auto-save a new post without ID
@@ -134,11 +169,79 @@ export async function autoSavePost(data: any) {
 
 
 export async function deletePost(id: string) {
-    const supabase = await createClient()
+    // Use admin client for CMS operations to bypass RLS
+    const supabase = await createAdminClient()
+
+    console.log('[deletePost] Tentando excluir post com ID:', id)
+
     const { error } = await supabase.from('posts').delete().eq('id', id)
 
-    if (error) throw error
+    if (error) {
+        console.error('[deletePost] Erro do Supabase:', error)
+        console.error('[deletePost] Código:', error.code)
+        console.error('[deletePost] Mensagem:', error.message)
+        console.error('[deletePost] Detalhes:', error.details)
+        console.error('[deletePost] Hint:', error.hint)
 
+        // Melhorar mensagem de erro para o usuário
+        let userMessage = error.message || 'Erro desconhecido'
+
+        // Adicionar contexto baseado no código de erro
+        if (error.code === '23503') {
+            userMessage = 'Não é possível excluir este post pois existem registros relacionados. Remova as referências primeiro.'
+        } else if (error.code === '42501') {
+            userMessage = 'Permissão negada. Verifique as políticas de segurança (RLS) do Supabase.'
+        } else if (error.code === '22P02') {
+            userMessage = 'ID inválido fornecido.'
+        }
+
+        const enhancedError = new Error(userMessage) as any
+        enhancedError.code = error.code
+        enhancedError.details = error.details
+        enhancedError.hint = error.hint
+        throw enhancedError
+    }
+
+    console.log('[deletePost] Post excluído com sucesso:', id)
+    revalidatePath('/cms/posts')
+    revalidatePath('/')
+}
+
+export async function deleteMultiplePosts(ids: string[]) {
+    // Use admin client for CMS operations to bypass RLS
+    const supabase = await createAdminClient()
+
+    console.log('[deleteMultiplePosts] Tentando excluir posts com IDs:', ids)
+
+    const { error } = await supabase.from('posts').delete().in('id', ids)
+
+    if (error) {
+        console.error('[deleteMultiplePosts] Erro do Supabase:', error)
+        console.error('[deleteMultiplePosts] Código:', error.code)
+        console.error('[deleteMultiplePosts] Mensagem:', error.message)
+        console.error('[deleteMultiplePosts] Detalhes:', error.details)
+        console.error('[deleteMultiplePosts] Hint:', error.hint)
+
+        // Melhorar mensagem de erro para o usuário
+        let userMessage = error.message || 'Erro desconhecido'
+
+        // Adicionar contexto baseado no código de erro
+        if (error.code === '23503') {
+            userMessage = 'Não é possível excluir um ou mais posts pois existem registros relacionados. Remova as referências primeiro.'
+        } else if (error.code === '42501') {
+            userMessage = 'Permissão negada. Verifique as políticas de segurança (RLS) do Supabase.'
+        } else if (error.code === '22P02') {
+            userMessage = 'IDs inválidos fornecidos.'
+        }
+
+        const enhancedError = new Error(userMessage) as any
+        enhancedError.code = error.code
+        enhancedError.details = error.details
+        enhancedError.hint = error.hint
+        throw enhancedError
+    }
+
+    console.log('[deleteMultiplePosts] Posts excluídos com sucesso:', ids)
     revalidatePath('/cms/posts')
     revalidatePath('/')
 }
