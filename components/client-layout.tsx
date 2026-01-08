@@ -8,6 +8,7 @@ import { MobileSidebar } from "@/components/mobile-sidebar";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ShareProvider } from "@/context/share-context";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,30 +33,25 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      forcedTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
-      <Header onMenuClick={() => setIsSidebarOpen(true)} />
-      <main className="min-h-screen">
-        {children}
-      </main>
+    <ShareProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="light"
+        forcedTheme="light"
+        enableSystem={false}
+        disableTransitionOnChange
+      >
+        <Header onMenuClick={() => setIsSidebarOpen(true)} />
+        <main className="min-h-screen">
+          {children}
+        </main>
 
-      <MobileBottomNav onMenuClick={() => setIsSidebarOpen(true)} />
-      <MobileSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <MobileBottomNav onMenuClick={() => setIsSidebarOpen(true)} />
+        <MobileSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <Toaster position="top-right" richColors />
-      <Analytics />
-    </ThemeProvider>
+        <Toaster position="top-right" richColors />
+        <Analytics />
+      </ThemeProvider>
+    </ShareProvider>
   );
 }
-
-
-
-
-
-
-

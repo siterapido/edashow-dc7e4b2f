@@ -17,7 +17,7 @@ export function SocialShare({ url, title, description }: SocialShareProps) {
     ? window.location.origin + url
     : `https://edashow.com.br${url}`;
 
-  const shareText = `Confira esta notícia no EDA Show: ${title}`;
+  const shareText = `Confira esta notícia no EDA Show: ${title}${description ? `\n\n${description}` : ''}`;
 
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
@@ -40,7 +40,7 @@ export function SocialShare({ url, title, description }: SocialShareProps) {
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {

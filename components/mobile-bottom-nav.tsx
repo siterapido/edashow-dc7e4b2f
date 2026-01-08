@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Newspaper, Calendar, BarChart3, MoreHorizontal } from "lucide-react";
+import { Home, Newspaper, Calendar, BarChart3, MoreHorizontal, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useShare } from "@/context/share-context";
 
 const navItems = [
   {
@@ -35,11 +36,42 @@ interface MobileBottomNavProps {
 
 export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
   const pathname = usePathname();
+  const { shareData } = useShare();
+
+  const handleShare = () => {
+    if (!shareData) return;
+    const fullUrl = typeof window !== "undefined"
+      ? window.location.origin + shareData.url
+      : \`https://edashow.com.br\${shareData.url}\`;
+
+    const shareText = \`*\${shareData.title}*\n\n\${shareData.description ? \`\${shareData.description}\n\n\` : ''}Leia completo em: \${fullUrl}\`;
+    const whatsappUrl = \`https://api.whatsapp.com/send?text=\${encodeURIComponent(shareText)}\`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 md:hidden safe-area-pb">
       <div className="flex items-center justify-around h-16">
+
         {navItems.map((item) => {
+          // Lógica especial para o botão de "Eventos" ser substituído pelo WhatsApp se houver shareData?
+          // Ou apenas adicionar o botão.
+          
+          if (shareData && item.label === "Eventos") {
+             return (
+               <button
+                 key="share-whatsapp"
+                 onClick={handleShare}
+                 className="flex flex-col items-center justify-center flex-1 h-full gap-1 text-green-600 hover:text-green-700 transition-colors animate-in fade-in zoom-in duration-300"
+               >
+                 <MessageCircle className="w-6 h-6" />
+                 <span className="text-[10px] font-bold uppercase tracking-tight">
+                   WhatsApp
+                 </span>
+               </button>
+             );
+          }
+
           const Icon = item.iconComponent || item.icon;
           const isActive = pathname === item.href;
 

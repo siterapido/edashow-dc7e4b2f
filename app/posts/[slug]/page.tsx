@@ -12,6 +12,7 @@ import BannerDisplay from '@/components/BannerDisplay'
 import { PostImageGallery } from '@/components/post-image-gallery'
 import { RelatedPosts } from '@/components/related-posts'
 import { SocialShare } from '@/components/social-share'
+import { MobileQuickShare } from '@/components/mobile-quick-share'
 
 // Força renderização dinâmica para evitar erros de serialização durante build
 export const dynamic = 'force-dynamic'
@@ -304,7 +305,7 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Sidebar - Widgets */}
           <aside className="lg:col-span-4">
             <div className="sticky top-6">
-              <PostSidebar author={post.author} sponsors={sponsors} />
+              <PostSidebar sponsors={sponsors} />
             </div>
           </aside>
         </div>
@@ -314,6 +315,12 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* RelatedPosts might need update too if it uses Payload internaly */}
           <RelatedPosts currentSlug={slug} />
         </div>
+
+        <MobileQuickShare
+          url={`/posts/${slug}`}
+          title={post.title}
+          description={post.excerpt}
+        />
       </div>
     </div>
   )

@@ -180,19 +180,7 @@ export function PostSidebar({ author, sponsors = [] }: PostSidebarProps) {
         </CardContent>
       </Card>
 
-      {/* Espaço Publicitário - Vertical */}
-      <Card className="border border-slate-200 bg-slate-50">
-        <CardContent className="p-0">
-          <div className="w-full h-[600px] bg-slate-50 flex items-center justify-center border border-dashed border-slate-300">
-            <div className="text-center p-4">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                Espaço Publicitário
-              </p>
-              <p className="text-xs text-slate-400">300 x 600</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+
     </aside>
   );
 }
