@@ -109,7 +109,7 @@ export function MediumEditor({
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none min-h-[1500px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
+                class: 'prose prose-lg max-w-none min-h-[1500px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-4 prose-blockquote:my-4 prose-blockquote:italic prose-blockquote:text-gray-700',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {

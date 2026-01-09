@@ -40,7 +40,7 @@ function normalizePostContent(html: string): string {
 
   // Se o conteúdo não tem tags <p>, envolve em parágrafos
   if (!content.includes('<p>') && !content.includes('<h1>') && !content.includes('<h2>') &&
-      !content.includes('<h3>') && !content.includes('<ul>') && !content.includes('<ol>')) {
+    !content.includes('<h3>') && !content.includes('<ul>') && !content.includes('<ol>')) {
     // Divide por quebras de linha e cria parágrafos
     const paragraphs = content
       .split(/\n\n+/)
@@ -75,8 +75,8 @@ export async function generateMetadata({ params }: PostPageProps) {
 
   // Usa a imagem destacada do post, ou a imagem de capa, ou o logo padrão
   const imageUrl = post.featured_image?.url ||
-                   post.cover_image_url ||
-                   '/eda-show-logo.png'
+    post.cover_image_url ||
+    '/eda-show-logo.png'
 
   return {
     metadataBase: new URL(siteUrl),
@@ -258,9 +258,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
             {/* Resumo do Post (apenas se tiver imagem de capa, se não tiver, já aparece no header fallback) */}
             {post.featured_image && post.excerpt && (
-              <div className="border-l-4 border-primary pl-6 mb-8 italic text-xl text-slate-700 leading-relaxed font-serif">
+              <p className="text-xl text-slate-700 leading-relaxed font-serif mb-8 whitespace-pre-line">
                 {post.excerpt}
-              </div>
+              </p>
             )}
 
             {/* Conteúdo do Artigo */}
