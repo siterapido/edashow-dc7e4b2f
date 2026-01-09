@@ -72,17 +72,6 @@ export default async function HomePage() {
 
 
   // Separar posts por categoria
-  const politicaPosts = allPosts
-    .filter((post: any) =>
-      post.category?.slug === 'politica' ||
-      post.tags?.some((tag: string) =>
-        tag.toLowerCase().includes('política') ||
-        tag.toLowerCase().includes('regulação') ||
-        tag.toLowerCase().includes('ans')
-      )
-    )
-    .slice(0, 4)
-
   const tecnologiaPosts = allPosts
     .filter((post: any) =>
       post.category?.slug === 'tecnologia' ||
@@ -95,42 +84,13 @@ export default async function HomePage() {
     .slice(0, 4)
 
   // Sempre usar posts do banco quando disponíveis, mesmo que sejam poucos
-  const politicaPostIds = new Set(politicaPosts.map((p: any) => p.id))
   const tecnologiaPostIds = new Set(tecnologiaPosts.map((p: any) => p.id))
-
-  const politicaCards = politicaPosts.length > 0
-    ? postsToCards(politicaPosts.length >= 4 ? politicaPosts : [...politicaPosts, ...allPosts.filter((p: any) => !politicaPostIds.has(p.id))].slice(0, 4))
-    : allPosts.length > 0
-      ? postsToCards(allPosts.slice(0, 4))
-      : []
 
   const tecnologiaCards = tecnologiaPosts.length > 0
     ? postsToCards(tecnologiaPosts.length >= 4 ? tecnologiaPosts : [...tecnologiaPosts, ...allPosts.filter((p: any) => !tecnologiaPostIds.has(p.id))].slice(0, 4))
     : allPosts.length > 0
       ? postsToCards(allPosts.slice(4, 8))
       : []
-
-  // Dados fallback caso não haja posts
-  const fallbackPoliticaCards = [
-    {
-      type: "news" as CardType,
-      title: "ANS define novas regras para portabilidade de carências",
-      excerpt: "Medida visa facilitar a troca de planos para beneficiários em todo o país a partir do próximo mês.",
-      image: "/regulatory-agency-logo.jpg",
-      category: "Regulação",
-      date: "Há 4 horas",
-      slug: "ans-define-novas-regras-para-portabilidade-de-carencias"
-    },
-    {
-      type: "news" as CardType,
-      title: "Ministério da Saúde anuncia investimento recorde no SUS",
-      excerpt: "Recursos serão destinados à digitalização e modernização de hospitais públicos.",
-      image: "/modern-healthcare-building.jpg",
-      category: "Governo",
-      date: "Há 6 horas",
-      slug: "ministerio-da-saude-anuncia-investimento-recorde-no-sus"
-    }
-  ]
 
   return (
     <div className="min-h-screen bg-white">
@@ -147,15 +107,6 @@ export default async function HomePage() {
         {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}
         {allPosts.length > 0 ? (
           <>
-            {politicaCards.length > 0 && (
-              <EditorialBlock
-                title="Política e Regulação"
-                subtitle="Acompanhe as decisões que impactam o setor"
-                ctaText="Ver cobertura completa"
-                ctaLink="/posts"
-                cards={politicaCards}
-              />
-            )}
             {tecnologiaCards.length > 0 && (
               <EditorialBlock
                 title="Tecnologia e Inovação"

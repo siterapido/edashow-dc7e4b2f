@@ -21,9 +21,8 @@ interface SlideData {
   image: string;
   imageAlt: string;
   credit: string;
-  statLabel: string;
-  statValue: string;
-  statValue: string;
+  statLabel: string | null;
+  statValue: string | null;
   slug?: string;
   authorName?: string;
   authorRole?: string;
@@ -62,8 +61,8 @@ const fallbackSlides: SlideData[] = [
     image: "/modern-healthcare-building.jpg",
     imageAlt: "Saúde Suplementar",
     credit: "Foto: Divulgação",
-    statLabel: "Em Alta",
-    statValue: "+15% de crescimento no setor este ano",
+    statLabel: "Destaque",
+    statValue: "Saúde Suplementar",
     slug: undefined
   },
   {
@@ -76,7 +75,7 @@ const fallbackSlides: SlideData[] = [
     imageAlt: "Tecnologia em Saúde",
     credit: "Foto: Divulgação",
     statLabel: "Tendência",
-    statValue: "70% redução no tempo de diagnóstico",
+    statValue: "Tecnologia e Inovação",
     slug: undefined
   },
   {
@@ -89,7 +88,7 @@ const fallbackSlides: SlideData[] = [
     imageAlt: "ANS",
     credit: "Foto: Divulgação / ANS",
     statLabel: "Novidade",
-    statValue: "Novas diretrizes em vigor",
+    statValue: "Política e Regulação",
     slug: undefined
   },
   {
@@ -102,7 +101,7 @@ const fallbackSlides: SlideData[] = [
     imageAlt: "Evento de Saúde",
     credit: "Foto: Divulgação",
     statLabel: "Destaque",
-    statValue: "5.000+ participantes esperados",
+    statValue: "Eventos",
     slug: undefined
   }
 ];
@@ -180,10 +179,10 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
         image: post.cover_image_url || post.featured_image?.url || '/placeholder.jpg',
         imageAlt: post.title || 'Imagem do post',
         credit: `Foto: ${authorName}`, // Or keep "Divulgação" if preferred, using author name for now
-        statLabel: post.featured ? 'Destaque' : 'Novo',
-        statValue: categorySlug === 'interviews' ? 'Entrevista exclusiva' : 'Matéria em destaque',
+        statLabel: post.featured ? 'Destaque' : (post.category?.name || null),
+        statValue: post.category?.name || null,
         slug: post.slug,
-        // Passing specific author data to be used in rendering if needed, 
+        // Passing specific author data to be used in rendering if needed,
         // effectively flattening it into the slide object for easier access
         authorName,
         authorRole,
@@ -387,7 +386,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                     {currentSlideData.title}
                   </h1>
 
-                  <p className="text-sm sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none">
+                  <p className="text-sm sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl line-clamp-2">
                     {currentSlideData.description}
                   </p>
 
@@ -450,21 +449,23 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                     </div>
                   </div>
 
-                  {/* Floating Card */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                    className="absolute -bottom-4 lg:-bottom-6 -left-4 lg:-left-6 bg-white dark:bg-slate-800 p-3 lg:p-4 rounded-xl shadow-xl max-w-[180px] lg:max-w-[200px] hidden lg:block"
-                  >
-                    <div className="flex items-center gap-2 lg:gap-3 mb-1.5 lg:mb-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                      <span className="text-xs font-bold text-slate-500 uppercase">{currentSlideData.statLabel}</span>
-                    </div>
-                    <p className="text-xs lg:text-sm font-bold text-slate-800 dark:text-white leading-tight">
-                      {currentSlideData.statValue}
-                    </p>
-                  </motion.div>
+                  {/* Floating Card - Only show if category exists */}
+                  {currentSlideData.statLabel && currentSlideData.statValue && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 }}
+                      className="absolute -bottom-4 lg:-bottom-6 -left-4 lg:-left-6 bg-white dark:bg-slate-800 p-3 lg:p-4 rounded-xl shadow-xl max-w-[180px] lg:max-w-[200px] hidden lg:block"
+                    >
+                      <div className="flex items-center gap-2 lg:gap-3 mb-1.5 lg:mb-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-xs font-bold text-slate-500 uppercase">{currentSlideData.statLabel}</span>
+                      </div>
+                      <p className="text-xs lg:text-sm font-bold text-slate-800 dark:text-white leading-tight">
+                        {currentSlideData.statValue}
+                      </p>
+                    </motion.div>
+                  )}
                 </motion.div>
 
               </div>
