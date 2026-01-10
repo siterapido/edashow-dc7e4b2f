@@ -71,27 +71,6 @@ export default async function HomePage() {
 
 
 
-  // Separar posts por categoria
-  const tecnologiaPosts = allPosts
-    .filter((post: any) =>
-      post.category?.slug === 'tecnologia' ||
-      post.tags?.some((tag: string) =>
-        tag.toLowerCase().includes('tecnologia') ||
-        tag.toLowerCase().includes('inovação') ||
-        tag.toLowerCase().includes('digital')
-      )
-    )
-    .slice(0, 4)
-
-  // Sempre usar posts do banco quando disponíveis, mesmo que sejam poucos
-  const tecnologiaPostIds = new Set(tecnologiaPosts.map((p: any) => p.id))
-
-  const tecnologiaCards = tecnologiaPosts.length > 0
-    ? postsToCards(tecnologiaPosts.length >= 4 ? tecnologiaPosts : [...tecnologiaPosts, ...allPosts.filter((p: any) => !tecnologiaPostIds.has(p.id))].slice(0, 4))
-    : allPosts.length > 0
-      ? postsToCards(allPosts.slice(4, 8))
-      : []
-
   return (
     <div className="min-h-screen bg-white">
       <main>
@@ -101,29 +80,11 @@ export default async function HomePage() {
         <BannerDisplay location="home_hero" className="container mx-auto px-4 py-6" />
 
         <SponsorCarousel sponsors={sponsors} />
-        <LatestNews initialPosts={allPosts.slice(0, 6)} />
+        <LatestNews initialPosts={allPosts.slice(0, 12)} />
         <EdaBioSection />
 
-        {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}
-        {allPosts.length > 0 ? (
-          <>
-            {tecnologiaCards.length > 0 && (
-              <EditorialBlock
-                title="Tecnologia e Inovação"
-                subtitle="O futuro da saúde digital"
-                ctaText="Explorar tecnologia"
-                ctaLink="/posts"
-                cards={tecnologiaCards}
-              />
-            )}
-          </>
-        ) : (
-          <div className="py-20 text-center">
-            <p className="text-slate-500">Nenhum post encontrado no momento.</p>
-          </div>
-        )}
-
-        <Events initialEvents={events} />
+        {/* Só mostra a seção de eventos se houver eventos cadastrados no banco */}
+        {events && events.length > 0 && <Events initialEvents={events} />}
 
         {/* Banner Rodapé - Antes do Footer */}
         <BannerDisplay location="home_footer" className="container mx-auto px-4 py-6" />

@@ -44,10 +44,12 @@ interface EventsProps {
 
 export function Events({ initialEvents = [] }: EventsProps) {
   const [events, setEvents] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (initialEvents.length > 0) {
       setEvents(initialEvents.map((event: any, index: number) => ensureEventImage(event, index)));
+      setIsLoading(false);
     } else {
       const fetchData = async () => {
         try {
@@ -65,11 +67,18 @@ export function Events({ initialEvents = [] }: EventsProps) {
           setEvents(data);
         } catch (e) {
           console.error("Error fetching events:", e);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchData();
     }
   }, [initialEvents]);
+
+  // Não renderiza nada se não houver eventos após o carregamento
+  if (!isLoading && events.length === 0) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-gradient-to-r from-orange-500 to-amber-500 py-12 md:py-16">
