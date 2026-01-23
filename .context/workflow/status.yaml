@@ -1,0 +1,28 @@
+project:
+  name: "ai-rewriter-context-integration"
+  scale: SMALL
+  started: "2026-01-22T00:15:42.839Z"
+  current_phase: P
+
+phases:
+  P:
+    status: in_progress
+    started_at: "2026-01-22T00:15:42.837Z"
+  R:
+    status: skipped
+    reason: "Not required for scale SMALL"
+  E:
+    status: pending
+  V:
+    status: pending
+  C:
+    status: skipped
+    reason: "Not required for scale SMALL"
+
+roles:
+  planner:
+    status: pending
+  developer:
+    status: pending
+  qa:
+    status: pending

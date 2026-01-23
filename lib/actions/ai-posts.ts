@@ -18,7 +18,7 @@ import {
 import { suggestKeywords, analyzeTopic, generateContentIdeas } from '@/lib/ai/keyword-planner'
 import { categorizeContent, suggestTags } from '@/lib/ai/categorizer'
 import { analyzeSEO, optimizeContent, generateOptimizedMeta } from '@/lib/ai/seo-optimizer'
-import { rewriteContent, fetchContentFromUrl } from '@/lib/ai/rewriter'
+import { rewriteContent } from '@/lib/ai/content-generator'
 import { openrouter } from '@/lib/ai/openrouter'
 
 // Types
@@ -54,8 +54,8 @@ export async function checkAIConfiguration(): Promise<{
     unsplash: boolean
 }> {
     return {
-        configured: openrouter.isConfigured(),
-        openrouter: openrouter.isConfigured(),
+        configured: !!process.env.OPENROUTER_API_KEY,
+        openrouter: !!process.env.OPENROUTER_API_KEY,
         pexels: !!process.env.PEXELS_API_KEY,
         unsplash: !!process.env.UNSPLASH_ACCESS_KEY
     }
@@ -255,26 +255,36 @@ export async function rewriteFromSource(config: {
         throw new Error('OpenRouter API não configurada')
     }
 
-    const result = await rewriteContent(config)
+    const result = await rewriteContent({
+        sourceContent: config.sourceContent,
+        tone: config.tone || 'professional',
+        instructions: config.guidelines
+    })
 
     // Log generation
     await logGeneration(
         'rewrite',
         { sourceUrl: config.sourceUrl, originalLength: config.sourceContent.length },
-        { title: result.title, newLength: result.newLength },
+        { title: result.title, newLength: result.content.length },
         'anthropic/claude-3.5-sonnet',
         0,
         0
     )
 
-    return result
+    return {
+        ...result,
+        newLength: result.content.length,
+        originalLength: config.sourceContent.length,
+        similarityEstimate: 0
+    }
 }
 
 /**
  * Fetch content from URL for rewriting
+ * @deprecated Use API route /api/ai/fetch-url instead
  */
 export async function fetchUrlContent(url: string) {
-    return fetchContentFromUrl(url)
+    throw new Error('Use API route /api/ai/fetch-url instead')
 }
 
 /**

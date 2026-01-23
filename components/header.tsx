@@ -154,8 +154,11 @@ export function Header({ onMenuClick }: HeaderProps) {
               <Logo
                 containerClassName="flex items-center gap-2 group cursor-pointer"
                 imageClassName="h-10 lg:h-12"
+                variant="white"
                 priority
-              />
+              >
+                <span className="text-white font-semibold text-base">Portal</span>
+              </Logo>
             </motion.div>
 
             <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-white/90">
@@ -300,12 +303,15 @@ export function Header({ onMenuClick }: HeaderProps) {
               <Menu className="w-7 h-7" />
             </Button>
 
-            <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
-              <span className="text-white font-semibold text-sm">Portal</span>
+            <div className="absolute left-1/2 -translate-x-1/2">
               <Logo
-                imageClassName="h-7 w-auto brightness-0 invert"
+                containerClassName="flex items-center gap-2"
+                imageClassName="h-7 w-auto"
+                variant="white"
                 priority
-              />
+              >
+                <span className="text-white font-semibold text-sm">Portal</span>
+              </Logo>
             </div>
 
             <div className="flex items-center gap-1">

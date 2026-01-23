@@ -1,0 +1,1752 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-01-16T14:53:43.073Z",
+  "stack": {
+    "primaryLanguage": "typescript",
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [
+      "nextjs"
+    ],
+    "buildTools": [],
+    "testFrameworks": [],
+    "packageManager": "pnpm",
+    "isMonorepo": false,
+    "hasDocker": false,
+    "hasCI": false
+  },
+  "structure": {
+    "totalFiles": 881,
+    "topDirectories": [
+      {
+        "name": "admin_backup_legacy",
+        "fileCount": 4
+      },
+      {
+        "name": "ADMIN_POSTS_README.md",
+        "fileCount": 1
+      },
+      {
+        "name": "app",
+        "fileCount": 46
+      },
+      {
+        "name": "ATUALIZACAO_SENHA_COMPLETA.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CHECKLIST_MIGRACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CLAUDE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "COMANDOS_RAPIDOS.md",
+        "fileCount": 1
+      },
+      {
+        "name": "COMECE_AQUI.md",
+        "fileCount": 1
+      },
+      {
+        "name": "COMO_COMECAR.md",
+        "fileCount": 1
+      },
+      {
+        "name": "COMO_CONFIGURAR_DATABASE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "components",
+        "fileCount": 83
+      },
+      {
+        "name": "components.json",
+        "fileCount": 1
+      },
+      {
+        "name": "CONFIGURACAO_DATABASE_URI.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CONFIGURAR_VARIAVEIS_VERCEL.md",
+        "fileCount": 1
+      },
+      {
+        "name": "context",
+        "fileCount": 1
+      },
+      {
+        "name": "CORRECAO_ADMIN_COMPLETA.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CORREÇÃO_ADMIN_PAYLOAD.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CORRECOES_ADMIN.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CORRIGIR_SENHA_DATABASE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "CREDENCIAIS_ADMIN.md",
+        "fileCount": 1
+      },
+      {
+        "name": "DEPLOY_AGORA.md",
+        "fileCount": 1
+      },
+      {
+        "name": "DEPLOY.md",
+        "fileCount": 1
+      },
+      {
+        "name": "deploy.sh",
+        "fileCount": 1
+      },
+      {
+        "name": "DESIGN_GUIDE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "ESTRUTURA_PROJETO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "EXEMPLOS_USO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "Fotos",
+        "fileCount": 2
+      },
+      {
+        "name": "GUIA_CUSTOMIZACAO_VISUAL.md",
+        "fileCount": 1
+      },
+      {
+        "name": "GUIA_UI_UX.md",
+        "fileCount": 1
+      },
+      {
+        "name": "guia-empresa.md",
+        "fileCount": 1
+      },
+      {
+        "name": "hooks",
+        "fileCount": 1
+      },
+      {
+        "name": "IMPLEMENTACAO_ADMIN_POSTS.md",
+        "fileCount": 1
+      },
+      {
+        "name": "IMPLEMENTACAO_COMPLETA.md",
+        "fileCount": 1
+      },
+      {
+        "name": "IMPLEMENTACAO_CUSTOMIZACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "INDEX_DOCUMENTACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "INSTRUCOES-FINAIS.md",
+        "fileCount": 1
+      },
+      {
+        "name": "instrumentation.ts",
+        "fileCount": 1
+      },
+      {
+        "name": "INTEGRACAO_PAYLOAD.md",
+        "fileCount": 1
+      },
+      {
+        "name": "lib",
+        "fileCount": 46
+      },
+      {
+        "name": "LOGA EDA SHOW 03.png",
+        "fileCount": 1
+      },
+      {
+        "name": "LOGOS PATROCINADORES",
+        "fileCount": 43
+      },
+      {
+        "name": "middleware.ts",
+        "fileCount": 1
+      },
+      {
+        "name": "MIGRACAO_FALLBACK_POSTS.md",
+        "fileCount": 1
+      },
+      {
+        "name": "MIGRACAO_MONGODB_SUPABASE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "next-env.d.ts",
+        "fileCount": 1
+      },
+      {
+        "name": "next.config.mjs",
+        "fileCount": 1
+      },
+      {
+        "name": "OPEN_GRAPH_CONFIG.md",
+        "fileCount": 1
+      },
+      {
+        "name": "package.json",
+        "fileCount": 1
+      },
+      {
+        "name": "PASSOS-RAPIDOS.md",
+        "fileCount": 1
+      },
+      {
+        "name": "PAYLOAD_README.md",
+        "fileCount": 1
+      },
+      {
+        "name": "pnpm-lock.yaml",
+        "fileCount": 1
+      },
+      {
+        "name": "postcss.config.mjs",
+        "fileCount": 1
+      },
+      {
+        "name": "public",
+        "fileCount": 540
+      },
+      {
+        "name": "README.md",
+        "fileCount": 1
+      },
+      {
+        "name": "RESUMO_CONFIGURACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "RESUMO_MIGRACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "SCRAPE_CONEXAO_SAUDE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "scripts",
+        "fileCount": 46
+      },
+      {
+        "name": "SENHA_SUPABASE_NEEDED.md",
+        "fileCount": 1
+      },
+      {
+        "name": "SPONSOR_SETUP_GUIDE.md",
+        "fileCount": 1
+      },
+      {
+        "name": "STATUS_CONFIGURACAO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "STATUS_VERCEL_CONECTADO.md",
+        "fileCount": 1
+      },
+      {
+        "name": "styles",
+        "fileCount": 1
+      },
+      {
+        "name": "supabase",
+        "fileCount": 9
+      },
+      {
+        "name": "SUPABASE_SETUP.md",
+        "fileCount": 1
+      },
+      {
+        "name": "tsconfig.json",
+        "fileCount": 1
+      },
+      {
+        "name": "tsconfig.scripts.json",
+        "fileCount": 1
+      },
+      {
+        "name": "tsconfig.tsbuildinfo",
+        "fileCount": 1
+      },
+      {
+        "name": "USAR_NEON_DB.md",
+        "fileCount": 1
+      },
+      {
+        "name": "vercel.json",
+        "fileCount": 1
+      },
+      {
+        "name": "WARP.md",
+        "fileCount": 1
+      }
+    ],
+    "languageDistribution": [
+      {
+        "extension": ".png",
+        "count": 332
+      },
+      {
+        "extension": ".jpg",
+        "count": 227
+      },
+      {
+        "extension": ".tsx",
+        "count": 126
+      },
+      {
+        "extension": ".ts",
+        "count": 85
+      },
+      {
+        "extension": ".md",
+        "count": 46
+      },
+      {
+        "extension": ".sql",
+        "count": 15
+      },
+      {
+        "extension": ".sh",
+        "count": 9
+      },
+      {
+        "extension": ".jpeg",
+        "count": 9
+      },
+      {
+        "extension": ".gif",
+        "count": 8
+      },
+      {
+        "extension": ".json",
+        "count": 6
+      }
+    ]
+  },
+  "architecture": {
+    "layers": [
+      {
+        "name": "Utils",
+        "description": "Shared utilities and helpers",
+        "directories": [
+          "lib",
+          "lib/types",
+          "lib/supabase",
+          "lib/scripts",
+          "lib/images",
+          "lib/hooks",
+          "lib/actions",
+          "lib/ai",
+          "lib/admin/posts"
+        ],
+        "symbolCount": 251,
+        "dependsOn": [
+          "Controllers"
+        ]
+      },
+      {
+        "name": "Controllers",
+        "description": "Request handling and routing",
+        "directories": [
+          "lib/supabase",
+          "lib/ai",
+          "app/auth/callback",
+          "app/api/search",
+          "app/api/globals/site-settings",
+          "app/api/globals/header",
+          "app/api/globals/footer"
+        ],
+        "symbolCount": 24,
+        "dependsOn": []
+      },
+      {
+        "name": "Services",
+        "description": "Business logic and orchestration",
+        "directories": [
+          "lib/images"
+        ],
+        "symbolCount": 11,
+        "dependsOn": []
+      },
+      {
+        "name": "Components",
+        "description": "UI components and views",
+        "directories": [
+          "app",
+          "components",
+          "app/youtube",
+          "app/trabalhe-conosco",
+          "app/termos",
+          "app/sobre",
+          "app/register",
+          "app/posts",
+          "app/patrocinadores",
+          "app/privacidade",
+          "app/media-kit",
+          "app/noticias",
+          "app/events",
+          "app/login",
+          "app/colunistas",
+          "app/busca",
+          "app/anuncie",
+          "app/[category-slug]",
+          "components/cms",
+          "components/ui",
+          "app/posts/[slug]",
+          "app/events/[slug]",
+          "app/columnists/[slug]",
+          "app/cms/youtube",
+          "app/cms/sponsors",
+          "app/cms/settings",
+          "app/cms/posts",
+          "app/cms/newsletter",
+          "app/cms/media",
+          "app/cms/login",
+          "app/cms/events",
+          "app/cms/docs",
+          "app/cms/dashboard",
+          "app/cms/columnists",
+          "app/cms/categories",
+          "app/cms/banners",
+          "components/cms/settings",
+          "components/admin/posts",
+          "app/cms/posts/[id]",
+          "app/cms/events/[id]"
+        ],
+        "symbolCount": 364,
+        "dependsOn": [
+          "Repositories"
+        ]
+      },
+      {
+        "name": "Repositories",
+        "description": "Data access and persistence",
+        "directories": [
+          "components/cms"
+        ],
+        "symbolCount": 5,
+        "dependsOn": []
+      }
+    ],
+    "patterns": [],
+    "entryPoints": [
+      "lib/supabase/server.ts"
+    ]
+  },
+  "symbols": {
+    "classes": [
+      {
+        "name": "OpenRouterClient",
+        "kind": "class",
+        "file": "lib/ai/openrouter.ts",
+        "line": 84,
+        "exported": false
+      },
+      {
+        "name": "PexelsClient",
+        "kind": "class",
+        "file": "lib/images/pexels.ts",
+        "line": 49,
+        "exported": false
+      },
+      {
+        "name": "UnsplashClient",
+        "kind": "class",
+        "file": "lib/images/unsplash.ts",
+        "line": 57,
+        "exported": false
+      }
+    ],
+    "interfaces": [
+      {
+        "name": "AIGeneratedPost",
+        "kind": "interface",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 35,
+        "exported": true
+      },
+      {
+        "name": "AuthError",
+        "kind": "interface",
+        "file": "lib/actions/cms-auth.ts",
+        "line": 7,
+        "exported": true
+      },
+      {
+        "name": "BadgeProps",
+        "kind": "interface",
+        "file": "components/ui/badge.tsx",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "Banner",
+        "kind": "interface",
+        "file": "lib/types/banner.ts",
+        "line": 10,
+        "exported": true
+      },
+      {
+        "name": "BannerFormData",
+        "kind": "interface",
+        "file": "lib/types/banner.ts",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "ButtonProps",
+        "kind": "interface",
+        "file": "components/ui/button.tsx",
+        "line": 42,
+        "exported": true
+      },
+      {
+        "name": "CategorizationResult",
+        "kind": "interface",
+        "file": "lib/ai/categorizer.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "CategoryHeroProps",
+        "kind": "interface",
+        "file": "components/category-hero.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "CategoryInfo",
+        "kind": "interface",
+        "file": "lib/categories.ts",
+        "line": 8,
+        "exported": true
+      },
+      {
+        "name": "CategoryPostsGridProps",
+        "kind": "interface",
+        "file": "components/category-posts-grid.tsx",
+        "line": 8,
+        "exported": true
+      },
+      {
+        "name": "CategoryPreviewCardProps",
+        "kind": "interface",
+        "file": "components/category-preview-card.tsx",
+        "line": 13,
+        "exported": true
+      },
+      {
+        "name": "CategorySidebarProps",
+        "kind": "interface",
+        "file": "components/category-sidebar.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "ContentIdea",
+        "kind": "interface",
+        "file": "lib/ai/keyword-planner.ts",
+        "line": 22,
+        "exported": true
+      },
+      {
+        "name": "GeneratedNewsletter",
+        "kind": "interface",
+        "file": "lib/ai/newsletter-generator.ts",
+        "line": 19,
+        "exported": true
+      },
+      {
+        "name": "GeneratedPost",
+        "kind": "interface",
+        "file": "lib/ai/content-generator.ts",
+        "line": 18,
+        "exported": true
+      },
+      {
+        "name": "GeneratePostConfig",
+        "kind": "interface",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 25,
+        "exported": true
+      },
+      {
+        "name": "ImageSearchOptions",
+        "kind": "interface",
+        "file": "lib/images/image-service.ts",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "ImageSearchParams",
+        "kind": "interface",
+        "file": "lib/actions/ai-images.ts",
+        "line": 12,
+        "exported": true
+      },
+      {
+        "name": "ImageSearchResult",
+        "kind": "interface",
+        "file": "lib/images/image-service.ts",
+        "line": 35,
+        "exported": true
+      },
+      {
+        "name": "ImageSettings",
+        "kind": "interface",
+        "file": "lib/images/image-optimizer.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "KeywordSuggestion",
+        "kind": "interface",
+        "file": "lib/ai/keyword-planner.ts",
+        "line": 8,
+        "exported": true
+      },
+      {
+        "name": "NewsletterConfig",
+        "kind": "interface",
+        "file": "lib/ai/newsletter-generator.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "NormalizedImage",
+        "kind": "interface",
+        "file": "lib/images/unsplash.ts",
+        "line": 171,
+        "exported": true
+      },
+      {
+        "name": "NormalizedImage",
+        "kind": "interface",
+        "file": "lib/images/pexels.ts",
+        "line": 154,
+        "exported": true
+      },
+      {
+        "name": "NormalizedImage",
+        "kind": "interface",
+        "file": "lib/images/image-service.ts",
+        "line": 12,
+        "exported": true
+      },
+      {
+        "name": "OpenRouterMessage",
+        "kind": "interface",
+        "file": "lib/ai/openrouter.ts",
+        "line": 6,
+        "exported": true
+      },
+      {
+        "name": "OpenRouterModel",
+        "kind": "interface",
+        "file": "lib/ai/openrouter.ts",
+        "line": 49,
+        "exported": true
+      },
+      {
+        "name": "OpenRouterRequest",
+        "kind": "interface",
+        "file": "lib/ai/openrouter.ts",
+        "line": 11,
+        "exported": true
+      },
+      {
+        "name": "OpenRouterResponse",
+        "kind": "interface",
+        "file": "lib/ai/openrouter.ts",
+        "line": 21,
+        "exported": true
+      },
+      {
+        "name": "OpenRouterStreamChunk",
+        "kind": "interface",
+        "file": "lib/ai/openrouter.ts",
+        "line": 38,
+        "exported": true
+      },
+      {
+        "name": "OptimizedMeta",
+        "kind": "interface",
+        "file": "lib/ai/seo-optimizer.ts",
+        "line": 22,
+        "exported": true
+      },
+      {
+        "name": "OptimizeOptions",
+        "kind": "interface",
+        "file": "lib/images/image-optimizer.ts",
+        "line": 23,
+        "exported": true
+      },
+      {
+        "name": "PexelsPhoto",
+        "kind": "interface",
+        "file": "lib/images/pexels.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "PexelsSearchOptions",
+        "kind": "interface",
+        "file": "lib/images/pexels.ts",
+        "line": 39,
+        "exported": true
+      },
+      {
+        "name": "PexelsSearchResponse",
+        "kind": "interface",
+        "file": "lib/images/pexels.ts",
+        "line": 31,
+        "exported": true
+      },
+      {
+        "name": "PostCardProps",
+        "kind": "interface",
+        "file": "components/post-card.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "PostGenerationConfig",
+        "kind": "interface",
+        "file": "lib/ai/content-generator.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "RewriteConfig",
+        "kind": "interface",
+        "file": "lib/ai/rewriter.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "RewrittenContent",
+        "kind": "interface",
+        "file": "lib/ai/rewriter.ts",
+        "line": 18,
+        "exported": true
+      },
+      {
+        "name": "SEOAnalysis",
+        "kind": "interface",
+        "file": "lib/ai/seo-optimizer.ts",
+        "line": 8,
+        "exported": true
+      },
+      {
+        "name": "SEOIssue",
+        "kind": "interface",
+        "file": "lib/ai/seo-optimizer.ts",
+        "line": 16,
+        "exported": true
+      },
+      {
+        "name": "SiteSettings",
+        "kind": "interface",
+        "file": "lib/actions/cms-settings.ts",
+        "line": 6,
+        "exported": true
+      },
+      {
+        "name": "ThemeSettings",
+        "kind": "interface",
+        "file": "lib/theme.ts",
+        "line": 1,
+        "exported": true
+      },
+      {
+        "name": "TopicAnalysis",
+        "kind": "interface",
+        "file": "lib/ai/keyword-planner.ts",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "UnsplashPhoto",
+        "kind": "interface",
+        "file": "lib/images/unsplash.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "UnsplashSearchOptions",
+        "kind": "interface",
+        "file": "lib/images/unsplash.ts",
+        "line": 48,
+        "exported": true
+      },
+      {
+        "name": "UnsplashSearchResponse",
+        "kind": "interface",
+        "file": "lib/images/unsplash.ts",
+        "line": 42,
+        "exported": true
+      },
+      {
+        "name": "UpdateImageSettingsInput",
+        "kind": "interface",
+        "file": "lib/actions/cms-image-settings.ts",
+        "line": 11,
+        "exported": true
+      },
+      {
+        "name": "User",
+        "kind": "interface",
+        "file": "lib/actions/cms-users.ts",
+        "line": 6,
+        "exported": true
+      },
+      {
+        "name": "YouTubeChannel",
+        "kind": "interface",
+        "file": "lib/youtube.ts",
+        "line": 8,
+        "exported": true
+      }
+    ],
+    "functions": [
+      {
+        "name": "adaptTone",
+        "kind": "function",
+        "file": "lib/ai/rewriter.ts",
+        "line": 122,
+        "exported": true
+      },
+      {
+        "name": "AdBanner",
+        "kind": "function",
+        "file": "components/ad-banner.tsx",
+        "line": 12,
+        "exported": true
+      },
+      {
+        "name": "AdBanners",
+        "kind": "function",
+        "file": "components/ad-banners.tsx",
+        "line": 5,
+        "exported": true
+      },
+      {
+        "name": "analyzeContentTopic",
+        "kind": "function",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 129,
+        "exported": true
+      },
+      {
+        "name": "analyzeKeywordCompetition",
+        "kind": "function",
+        "file": "lib/ai/keyword-planner.ts",
+        "line": 128,
+        "exported": true
+      },
+      {
+        "name": "analyzeSEO",
+        "kind": "function",
+        "file": "lib/ai/seo-optimizer.ts",
+        "line": 33,
+        "exported": true
+      },
+      {
+        "name": "analyzeTopic",
+        "kind": "function",
+        "file": "lib/ai/keyword-planner.ts",
+        "line": 69,
+        "exported": true
+      },
+      {
+        "name": "analyzPostSEO",
+        "kind": "function",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 195,
+        "exported": true
+      },
+      {
+        "name": "autoCategorizeContent",
+        "kind": "function",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 173,
+        "exported": true
+      },
+      {
+        "name": "AutoSaveIndicator",
+        "kind": "function",
+        "file": "components/admin/posts/auto-save-indicator.tsx",
+        "line": 13,
+        "exported": true
+      },
+      {
+        "name": "autoSavePost",
+        "kind": "function",
+        "file": "lib/actions/cms-posts.ts",
+        "line": 126,
+        "exported": true
+      },
+      {
+        "name": "batchCategorize",
+        "kind": "function",
+        "file": "lib/ai/categorizer.ts",
+        "line": 187,
+        "exported": true
+      },
+      {
+        "name": "BrandingSettingsTab",
+        "kind": "function",
+        "file": "components/cms/settings/BrandingSettingsTab.tsx",
+        "line": 37,
+        "exported": true
+      },
+      {
+        "name": "bulkDeleteSponsors",
+        "kind": "function",
+        "file": "lib/actions/cms-sponsors.ts",
+        "line": 74,
+        "exported": true
+      },
+      {
+        "name": "bulkToggleSponsorActive",
+        "kind": "function",
+        "file": "lib/actions/cms-sponsors.ts",
+        "line": 84,
+        "exported": true
+      },
+      {
+        "name": "cancelScheduledPost",
+        "kind": "function",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 322,
+        "exported": true
+      },
+      {
+        "name": "categorizeContent",
+        "kind": "function",
+        "file": "lib/ai/categorizer.ts",
+        "line": 43,
+        "exported": true
+      },
+      {
+        "name": "CategoryHero",
+        "kind": "function",
+        "file": "components/category-hero.tsx",
+        "line": 29,
+        "exported": true
+      },
+      {
+        "name": "CategoryMegaMenu",
+        "kind": "function",
+        "file": "components/category-mega-menu.tsx",
+        "line": 19,
+        "exported": true
+      },
+      {
+        "name": "CategoryPostsGrid",
+        "kind": "function",
+        "file": "components/category-posts-grid.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "CategoryPreviewCard",
+        "kind": "function",
+        "file": "components/category-preview-card.tsx",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "CategorySidebar",
+        "kind": "function",
+        "file": "components/category-sidebar.tsx",
+        "line": 21,
+        "exported": true
+      },
+      {
+        "name": "checkAIConfiguration",
+        "kind": "function",
+        "file": "lib/actions/ai-posts.ts",
+        "line": 50,
+        "exported": true
+      },
+      {
+        "name": "checkDuplicateContent",
+        "kind": "function",
+        "file": "lib/ai/seo-optimizer.ts",
+        "line": 194,
+        "exported": true
+      },
+      {
+        "name": "checkImageProviders",
+        "kind": "function",
+        "file": "lib/actions/ai-images.ts",
+        "line": 24,
+        "exported": true
+      },
+      {
+        "name": "checkOriginality",
+        "kind": "function",
+        "file": "lib/ai/rewriter.ts",
+        "line": 204,
+        "exported": true
+      },
+      {
+        "name": "ClientLayout",
+        "kind": "function",
+        "file": "components/client-layout.tsx",
+        "line": 13,
+        "exported": true
+      },
+      {
+        "name": "cn",
+        "kind": "function",
+        "file": "lib/utils.ts",
+        "line": 4,
+        "exported": true
+      },
+      {
+        "name": "Columnists",
+        "kind": "function",
+        "file": "components/columnists.tsx",
+        "line": 15,
+        "exported": true
+      },
+      {
+        "name": "CoverImageUpload",
+        "kind": "function",
+        "file": "components/cms/CoverImageUpload.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "createAdminClient",
+        "kind": "function",
+        "file": "lib/supabase/server.ts",
+        "line": 41,
+        "exported": true
+      },
+      {
+        "name": "createAdminClient",
+        "kind": "function",
+        "file": "lib/supabase/admin.ts",
+        "line": 3,
+        "exported": true
+      },
+      {
+        "name": "createClient",
+        "kind": "function",
+        "file": "lib/supabase/server.ts",
+        "line": 5,
+        "exported": true
+      },
+      {
+        "name": "createClient",
+        "kind": "function",
+        "file": "lib/supabase/client.ts",
+        "line": 3,
+        "exported": true
+      },
+      {
+        "name": "createUser",
+        "kind": "function",
+        "file": "lib/actions/cms-users.ts",
+        "line": 137,
+        "exported": true
+      },
+      {
+        "name": "DataTable",
+        "kind": "function",
+        "file": "components/cms/DataTable.tsx",
+        "line": 33,
+        "exported": true
+      },
+      {
+        "name": "deleteBanner",
+        "kind": "function",
+        "file": "lib/actions/cms-banners.ts",
+        "line": 145,
+        "exported": true
+      },
+      {
+        "name": "deleteCategory",
+        "kind": "function",
+        "file": "lib/actions/cms-taxonomy.ts",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "deleteColumnist",
+        "kind": "function",
+        "file": "lib/actions/cms-taxonomy.ts",
+        "line": 56,
+        "exported": true
+      },
+      {
+        "name": "deleteEvent",
+        "kind": "function",
+        "file": "lib/actions/cms-events.ts",
+        "line": 48,
+        "exported": true
+      },
+      {
+        "name": "deleteMedia",
+        "kind": "function",
+        "file": "lib/actions/cms-media.ts",
+        "line": 110,
+        "exported": true
+      },
+      {
+        "name": "deleteMultiplePosts",
+        "kind": "function",
+        "file": "lib/actions/cms-posts.ts",
+        "line": 210,
+        "exported": true
+      },
+      {
+        "name": "deleteNewsletter",
+        "kind": "function",
+        "file": "lib/actions/ai-newsletter.ts",
+        "line": 123,
+        "exported": true
+      },
+      {
+        "name": "deletePost",
+        "kind": "function",
+        "file": "lib/actions/cms-posts.ts",
+        "line": 171,
+        "exported": true
+      },
+      {
+        "name": "deleteSchedule",
+        "kind": "function",
+        "file": "lib/actions/ai-newsletter.ts",
+        "line": 187,
+        "exported": true
+      },
+      {
+        "name": "deleteSponsor",
+        "kind": "function",
+        "file": "lib/actions/cms-sponsors.ts",
+        "line": 38,
+        "exported": true
+      },
+      {
+        "name": "deleteUser",
+        "kind": "function",
+        "file": "lib/actions/cms-users.ts",
+        "line": 109,
+        "exported": true
+      },
+      {
+        "name": "detectContentType",
+        "kind": "function",
+        "file": "lib/ai/categorizer.ts",
+        "line": 152,
+        "exported": true
+      },
+      {
+        "name": "displayValidationErrors",
+        "kind": "function",
+        "file": "lib/validate-env.ts",
+        "line": 116,
+        "exported": true
+      },
+      {
+        "name": "downloadAndSaveImage",
+        "kind": "function",
+        "file": "lib/images/image-service.ts",
+        "line": 152,
+        "exported": true
+      }
+    ],
+    "types": [
+      {
+        "name": "AuthError",
+        "kind": "type",
+        "file": "lib/actions/auth.ts",
+        "line": 20,
+        "exported": true
+      },
+      {
+        "name": "AuthResponse",
+        "kind": "type",
+        "file": "lib/actions/auth.ts",
+        "line": 15,
+        "exported": true
+      },
+      {
+        "name": "BannerLocation",
+        "kind": "type",
+        "file": "lib/types/banner.ts",
+        "line": 1,
+        "exported": true
+      },
+      {
+        "name": "CardType",
+        "kind": "type",
+        "file": "components/editorial-block.tsx",
+        "line": 10,
+        "exported": true
+      },
+      {
+        "name": "CategoryValue",
+        "kind": "type",
+        "file": "lib/categories.ts",
+        "line": 6,
+        "exported": true
+      },
+      {
+        "name": "ImageProvider",
+        "kind": "type",
+        "file": "lib/images/image-service.ts",
+        "line": 10,
+        "exported": true
+      },
+      {
+        "name": "LoginFormData",
+        "kind": "type",
+        "file": "lib/actions/auth.ts",
+        "line": 10,
+        "exported": true
+      },
+      {
+        "name": "Action",
+        "kind": "type",
+        "file": "hooks/use-toast.ts",
+        "line": 31,
+        "exported": false
+      },
+      {
+        "name": "ActionType",
+        "kind": "type",
+        "file": "hooks/use-toast.ts",
+        "line": 29,
+        "exported": false
+      },
+      {
+        "name": "Args",
+        "kind": "type",
+        "file": "admin_backup_legacy/layout.tsx",
+        "line": 10,
+        "exported": false
+      },
+      {
+        "name": "LogoProps",
+        "kind": "type",
+        "file": "components/logo.tsx",
+        "line": 9,
+        "exported": false
+      },
+      {
+        "name": "TabId",
+        "kind": "type",
+        "file": "app/cms/settings/page.tsx",
+        "line": 14,
+        "exported": false
+      },
+      {
+        "name": "Toast",
+        "kind": "type",
+        "file": "hooks/use-toast.ts",
+        "line": 135,
+        "exported": false
+      },
+      {
+        "name": "ToastActionElement",
+        "kind": "type",
+        "file": "components/ui/toast.tsx",
+        "line": 115,
+        "exported": false
+      },
+      {
+        "name": "ToastActionElement",
+        "kind": "type",
+        "file": "components/ui/toast.tsx",
+        "line": 119,
+        "exported": false
+      },
+      {
+        "name": "ToasterToast",
+        "kind": "type",
+        "file": "hooks/use-toast.ts",
+        "line": 8,
+        "exported": false
+      },
+      {
+        "name": "ToastProps",
+        "kind": "type",
+        "file": "components/ui/toast.tsx",
+        "line": 113,
+        "exported": false
+      },
+      {
+        "name": "ToastProps",
+        "kind": "type",
+        "file": "components/ui/toast.tsx",
+        "line": 118,
+        "exported": false
+      }
+    ],
+    "enums": []
+  },
+  "publicAPI": [
+    {
+      "name": "adaptTone",
+      "kind": "function",
+      "file": "lib/ai/rewriter.ts",
+      "line": 122,
+      "exported": true
+    },
+    {
+      "name": "AdBanner",
+      "kind": "function",
+      "file": "components/ad-banner.tsx",
+      "line": 12,
+      "exported": true
+    },
+    {
+      "name": "AdBanners",
+      "kind": "function",
+      "file": "components/ad-banners.tsx",
+      "line": 5,
+      "exported": true
+    },
+    {
+      "name": "AIGeneratedPost",
+      "kind": "interface",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 35,
+      "exported": true
+    },
+    {
+      "name": "analyzeContentTopic",
+      "kind": "function",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 129,
+      "exported": true
+    },
+    {
+      "name": "analyzeKeywordCompetition",
+      "kind": "function",
+      "file": "lib/ai/keyword-planner.ts",
+      "line": 128,
+      "exported": true
+    },
+    {
+      "name": "analyzeSEO",
+      "kind": "function",
+      "file": "lib/ai/seo-optimizer.ts",
+      "line": 33,
+      "exported": true
+    },
+    {
+      "name": "analyzeTopic",
+      "kind": "function",
+      "file": "lib/ai/keyword-planner.ts",
+      "line": 69,
+      "exported": true
+    },
+    {
+      "name": "analyzPostSEO",
+      "kind": "function",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 195,
+      "exported": true
+    },
+    {
+      "name": "AuthError",
+      "kind": "interface",
+      "file": "lib/actions/cms-auth.ts",
+      "line": 7,
+      "exported": true
+    },
+    {
+      "name": "AuthError",
+      "kind": "type",
+      "file": "lib/actions/auth.ts",
+      "line": 20,
+      "exported": true
+    },
+    {
+      "name": "AuthResponse",
+      "kind": "type",
+      "file": "lib/actions/auth.ts",
+      "line": 15,
+      "exported": true
+    },
+    {
+      "name": "autoCategorizeContent",
+      "kind": "function",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 173,
+      "exported": true
+    },
+    {
+      "name": "AutoSaveIndicator",
+      "kind": "function",
+      "file": "components/admin/posts/auto-save-indicator.tsx",
+      "line": 13,
+      "exported": true
+    },
+    {
+      "name": "autoSavePost",
+      "kind": "function",
+      "file": "lib/actions/cms-posts.ts",
+      "line": 126,
+      "exported": true
+    },
+    {
+      "name": "BadgeProps",
+      "kind": "interface",
+      "file": "components/ui/badge.tsx",
+      "line": 26,
+      "exported": true
+    },
+    {
+      "name": "Banner",
+      "kind": "interface",
+      "file": "lib/types/banner.ts",
+      "line": 10,
+      "exported": true
+    },
+    {
+      "name": "BannerFormData",
+      "kind": "interface",
+      "file": "lib/types/banner.ts",
+      "line": 26,
+      "exported": true
+    },
+    {
+      "name": "BannerLocation",
+      "kind": "type",
+      "file": "lib/types/banner.ts",
+      "line": 1,
+      "exported": true
+    },
+    {
+      "name": "batchCategorize",
+      "kind": "function",
+      "file": "lib/ai/categorizer.ts",
+      "line": 187,
+      "exported": true
+    },
+    {
+      "name": "BrandingSettingsTab",
+      "kind": "function",
+      "file": "components/cms/settings/BrandingSettingsTab.tsx",
+      "line": 37,
+      "exported": true
+    },
+    {
+      "name": "bulkDeleteSponsors",
+      "kind": "function",
+      "file": "lib/actions/cms-sponsors.ts",
+      "line": 74,
+      "exported": true
+    },
+    {
+      "name": "bulkToggleSponsorActive",
+      "kind": "function",
+      "file": "lib/actions/cms-sponsors.ts",
+      "line": 84,
+      "exported": true
+    },
+    {
+      "name": "ButtonProps",
+      "kind": "interface",
+      "file": "components/ui/button.tsx",
+      "line": 42,
+      "exported": true
+    },
+    {
+      "name": "cancelScheduledPost",
+      "kind": "function",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 322,
+      "exported": true
+    },
+    {
+      "name": "CardType",
+      "kind": "type",
+      "file": "components/editorial-block.tsx",
+      "line": 10,
+      "exported": true
+    },
+    {
+      "name": "CategorizationResult",
+      "kind": "interface",
+      "file": "lib/ai/categorizer.ts",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "categorizeContent",
+      "kind": "function",
+      "file": "lib/ai/categorizer.ts",
+      "line": 43,
+      "exported": true
+    },
+    {
+      "name": "CategoryHero",
+      "kind": "function",
+      "file": "components/category-hero.tsx",
+      "line": 29,
+      "exported": true
+    },
+    {
+      "name": "CategoryHeroProps",
+      "kind": "interface",
+      "file": "components/category-hero.tsx",
+      "line": 14,
+      "exported": true
+    },
+    {
+      "name": "CategoryInfo",
+      "kind": "interface",
+      "file": "lib/categories.ts",
+      "line": 8,
+      "exported": true
+    },
+    {
+      "name": "CategoryMegaMenu",
+      "kind": "function",
+      "file": "components/category-mega-menu.tsx",
+      "line": 19,
+      "exported": true
+    },
+    {
+      "name": "CategoryPostsGrid",
+      "kind": "function",
+      "file": "components/category-posts-grid.tsx",
+      "line": 14,
+      "exported": true
+    },
+    {
+      "name": "CategoryPostsGridProps",
+      "kind": "interface",
+      "file": "components/category-posts-grid.tsx",
+      "line": 8,
+      "exported": true
+    },
+    {
+      "name": "CategoryPreviewCard",
+      "kind": "function",
+      "file": "components/category-preview-card.tsx",
+      "line": 26,
+      "exported": true
+    },
+    {
+      "name": "CategoryPreviewCardProps",
+      "kind": "interface",
+      "file": "components/category-preview-card.tsx",
+      "line": 13,
+      "exported": true
+    },
+    {
+      "name": "CategorySidebar",
+      "kind": "function",
+      "file": "components/category-sidebar.tsx",
+      "line": 21,
+      "exported": true
+    },
+    {
+      "name": "CategorySidebarProps",
+      "kind": "interface",
+      "file": "components/category-sidebar.tsx",
+      "line": 14,
+      "exported": true
+    },
+    {
+      "name": "CategoryValue",
+      "kind": "type",
+      "file": "lib/categories.ts",
+      "line": 6,
+      "exported": true
+    },
+    {
+      "name": "checkAIConfiguration",
+      "kind": "function",
+      "file": "lib/actions/ai-posts.ts",
+      "line": 50,
+      "exported": true
+    },
+    {
+      "name": "checkDuplicateContent",
+      "kind": "function",
+      "file": "lib/ai/seo-optimizer.ts",
+      "line": 194,
+      "exported": true
+    },
+    {
+      "name": "checkImageProviders",
+      "kind": "function",
+      "file": "lib/actions/ai-images.ts",
+      "line": 24,
+      "exported": true
+    },
+    {
+      "name": "checkOriginality",
+      "kind": "function",
+      "file": "lib/ai/rewriter.ts",
+      "line": 204,
+      "exported": true
+    },
+    {
+      "name": "ClientLayout",
+      "kind": "function",
+      "file": "components/client-layout.tsx",
+      "line": 13,
+      "exported": true
+    },
+    {
+      "name": "cn",
+      "kind": "function",
+      "file": "lib/utils.ts",
+      "line": 4,
+      "exported": true
+    },
+    {
+      "name": "Columnists",
+      "kind": "function",
+      "file": "components/columnists.tsx",
+      "line": 15,
+      "exported": true
+    },
+    {
+      "name": "ContentIdea",
+      "kind": "interface",
+      "file": "lib/ai/keyword-planner.ts",
+      "line": 22,
+      "exported": true
+    },
+    {
+      "name": "CoverImageUpload",
+      "kind": "function",
+      "file": "components/cms/CoverImageUpload.tsx",
+      "line": 14,
+      "exported": true
+    },
+    {
+      "name": "createAdminClient",
+      "kind": "function",
+      "file": "lib/supabase/server.ts",
+      "line": 41,
+      "exported": true
+    },
+    {
+      "name": "createAdminClient",
+      "kind": "function",
+      "file": "lib/supabase/admin.ts",
+      "line": 3,
+      "exported": true
+    }
+  ],
+  "dependencies": {
+    "mostImported": [
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/ai/openrouter.ts",
+        "importedBy": 6
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/validate-env.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/supabase/public-client.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/images/pexels.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/images/unsplash.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/lib/actions/cms-auth.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/admin_backup_legacy/importMap.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/partner-logo-fallback.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/maintenance-page.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/category-preview-card.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/app/youtube/YouTubePageClient.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/cms/UnifiedMediumEditor.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/cms/SettingsDrawer.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/cms/CoverImageUpload.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/admin/posts/post-preview.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/admin/posts/quick-publish-button.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/admin/posts/post-form-enhancements.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "/Users/marcosalexandre/edashow-1/components/admin/posts/auto-save-indicator.tsx",
+        "importedBy": 1
+      }
+    ]
+  },
+  "stats": {
+    "totalSymbols": 745,
+    "exportedSymbols": 333,
+    "analysisTimeMs": 170
+  }
+}
