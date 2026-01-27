@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
     ArrowLeft,
     Trash2,
@@ -39,6 +39,7 @@ interface PostEditorProps {
 
 export function PostEditor({ post, categories, columnists }: PostEditorProps) {
     const router = useRouter()
+    const searchParams = useSearchParams()
 
     const [settingsOpen, setSettingsOpen] = useState(false)
     const [isPublishing, setIsPublishing] = useState(false)
@@ -57,6 +58,32 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
         source_url: post?.source_url || '',
         tags: post?.tags || []
     })
+
+    // Load AI generated post from sessionStorage
+    useEffect(() => {
+        const fromAI = searchParams.get('fromAI')
+        if (fromAI === 'true' && !post) {
+            try {
+                const aiData = sessionStorage.getItem('ai_generated_post')
+                if (aiData) {
+                    const parsed = JSON.parse(aiData)
+                    setFormData(prev => ({
+                        ...prev,
+                        title: parsed.title || prev.title,
+                        slug: parsed.slug || slugify(parsed.title || ''),
+                        excerpt: parsed.excerpt || prev.excerpt,
+                        content: parsed.content || prev.content,
+                        category_id: parsed.categoryId || prev.category_id,
+                        tags: parsed.suggestedTags || prev.tags
+                    }))
+                    // Clean up sessionStorage after loading
+                    sessionStorage.removeItem('ai_generated_post')
+                }
+            } catch (e) {
+                console.error('Error loading AI generated post:', e)
+            }
+        }
+    }, [searchParams, post])
 
     // Intelligent metrics
     const readingTime = useMemo(() => calculateReadingTime(formData.content), [formData.content])

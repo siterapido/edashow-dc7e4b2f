@@ -1,0 +1,106 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Sparkles, RefreshCw, Search, Settings } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { GeneratePostTab } from '@/components/cms/ia/GeneratePostTab'
+import { RewriteContentTab } from '@/components/cms/ia/RewriteContentTab'
+import { SEOToolsTab } from '@/components/cms/ia/SEOToolsTab'
+import { AISettingsTab } from '@/components/cms/ia/AISettingsTab'
+
+type TabId = 'gerar' | 'reescrever' | 'seo' | 'configuracoes'
+
+interface Tab {
+    id: TabId
+    label: string
+    icon: React.ElementType
+    component: React.ComponentType
+}
+
+const tabs: Tab[] = [
+    { id: 'gerar', label: 'Gerar Post', icon: Sparkles, component: GeneratePostTab },
+    { id: 'reescrever', label: 'Reescrever', icon: RefreshCw, component: RewriteContentTab },
+    { id: 'seo', label: 'SEO', icon: Search, component: SEOToolsTab },
+    { id: 'configuracoes', label: 'Configurações', icon: Settings, component: AISettingsTab }
+]
+
+export default function IAPage() {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const tabFromUrl = searchParams.get('tab') as TabId | null
+
+    const [activeTab, setActiveTab] = useState<TabId>(() => {
+        if (tabFromUrl && tabs.find(t => t.id === tabFromUrl)) {
+            return tabFromUrl
+        }
+        return 'gerar'
+    })
+
+    // Update URL when tab changes
+    const handleTabChange = (tabId: TabId) => {
+        setActiveTab(tabId)
+        const newUrl = `/cms/ia?tab=${tabId}`
+        router.push(newUrl, { scroll: false })
+    }
+
+    // Sync with URL changes
+    useEffect(() => {
+        if (tabFromUrl && tabs.find(t => t.id === tabFromUrl) && tabFromUrl !== activeTab) {
+            setActiveTab(tabFromUrl)
+        }
+    }, [tabFromUrl, activeTab])
+
+    const ActiveComponent = tabs.find(t => t.id === activeTab)?.component || GeneratePostTab
+
+    return (
+        <div className="h-full flex flex-col bg-gray-50">
+            {/* Tabs Header - Fixed at top */}
+            <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+                <div className="px-6 py-4">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl shadow-lg">
+                            <Sparkles className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">AI Content Studio</h1>
+                            <p className="text-sm text-gray-500">Crie e otimize conteúdo com inteligência artificial</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                        {tabs.map((tab) => {
+                            const Icon = tab.icon
+                            const isActive = activeTab === tab.id
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => handleTabChange(tab.id)}
+                                    className={cn(
+                                        "flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all whitespace-nowrap",
+                                        "border-2",
+                                        isActive
+                                            ? "bg-orange-500 text-white border-orange-500 shadow-md"
+                                            : "bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50"
+                                    )}
+                                >
+                                    <Icon className={cn(
+                                        "w-4 h-4",
+                                        isActive ? "text-white" : "text-gray-500"
+                                    )} />
+                                    {tab.label}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* Content Area - Scrollable */}
+            <div className="flex-1 overflow-y-auto">
+                <div className="p-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <ActiveComponent />
+                </div>
+            </div>
+        </div>
+    )
+}
