@@ -4,7 +4,7 @@
  */
 
 import { openrouter, MODELS } from './openrouter'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 export interface RewriteConfig {
     sourceContent: string
@@ -29,7 +29,7 @@ export interface RewrittenContent {
  */
 async function getRewriteGuidelines(): Promise<string> {
     try {
-        const supabase = await createClient()
+        const supabase = createAdminClient()
         const { data } = await supabase
             .from('ai_settings')
             .select('setting_value')

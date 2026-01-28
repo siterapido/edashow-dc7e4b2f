@@ -6,7 +6,7 @@
 import { generateObject, generateText } from 'ai'
 import { z } from 'zod'
 import { openrouter, DEFAULT_MODEL, PREMIUM_MODEL } from './vercel-ai'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { POST_GENERATION_PROMPT } from './prompts'
 import { ContextAssembler } from './context-engine/assembler'
 
@@ -286,7 +286,7 @@ export async function logGeneration(
     costUsd: number
 ): Promise<void> {
     try {
-        const supabase = await createClient()
+        const supabase = createAdminClient()
         await supabase.from('ai_generations').insert({
             type,
             input_data: inputData,

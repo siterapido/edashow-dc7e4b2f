@@ -1,7 +1,7 @@
 import { ContextConfig, Persona, KnowledgeBlock } from './types';
 import { EdaPro, EdaRaiz } from './personas';
 import { BrandVoice, SeoRules } from './knowledge/brand-voice';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 const LOCAL_PERSONAS: Record<string, Persona> = {
   'eda-pro': EdaPro,
@@ -16,10 +16,11 @@ const LOCAL_KNOWLEDGE: Record<string, KnowledgeBlock> = {
 export class ContextAssembler {
   /**
    * Fetch persona from DB or Fallback
+   * Uses admin client to avoid cookies() dependency in server actions
    */
   static async getPersona(slug: string): Promise<Persona> {
     try {
-      const supabase = await createClient();
+      const supabase = createAdminClient();
       const { data, error } = await supabase
         .from('ai_personas')
         .select('*')
@@ -46,10 +47,11 @@ export class ContextAssembler {
 
   /**
    * Fetch knowledge block from DB or Fallback
+   * Uses admin client to avoid cookies() dependency in server actions
    */
   static async getKnowledge(slug: string): Promise<KnowledgeBlock | null> {
     try {
-      const supabase = await createClient();
+      const supabase = createAdminClient();
       const { data, error } = await supabase
         .from('ai_knowledge_blocks')
         .select('*')

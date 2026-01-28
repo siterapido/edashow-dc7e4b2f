@@ -4,7 +4,7 @@
  */
 
 import { openrouter, MODELS } from './openrouter'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 export interface CategorizationResult {
     category: string
@@ -19,7 +19,7 @@ export interface CategorizationResult {
  */
 async function getAvailableCategories(): Promise<Array<{ id: string; name: string; slug: string }>> {
     try {
-        const supabase = await createClient()
+        const supabase = createAdminClient()
         const { data } = await supabase
             .from('categories')
             .select('id, name, slug')

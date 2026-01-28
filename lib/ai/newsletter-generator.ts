@@ -4,7 +4,7 @@
  */
 
 import { openrouter, MODELS } from './openrouter'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 export interface NewsletterConfig {
     postIds?: string[]
@@ -44,7 +44,7 @@ async function getRecentPosts(
     daysBack: number = 7,
     categoryFilter?: string[]
 ): Promise<PostForNewsletter[]> {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const sinceDate = new Date()
     sinceDate.setDate(sinceDate.getDate() - daysBack)
 
@@ -83,7 +83,7 @@ async function getRecentPosts(
 async function getPostsByIds(postIds: string[]): Promise<PostForNewsletter[]> {
     if (!postIds.length) return []
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const { data, error } = await supabase
         .from('posts')
         .select('id, title, excerpt, slug, published_at, categories(name)')
@@ -279,7 +279,7 @@ export async function saveNewsletter(
     config: NewsletterConfig,
     scheduledFor?: Date
 ): Promise<string> {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { data, error } = await supabase
         .from('newsletters')
@@ -308,7 +308,7 @@ export async function saveNewsletter(
  * Get newsletter schedules
  */
 export async function getNewsletterSchedules() {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { data, error } = await supabase
         .from('newsletter_schedules')
@@ -339,7 +339,7 @@ export async function upsertNewsletterSchedule(schedule: {
     categoryFilter?: string[]
     isActive?: boolean
 }): Promise<string> {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Calculate next run time
     const nextRunAt = calculateNextRunTime(schedule)
