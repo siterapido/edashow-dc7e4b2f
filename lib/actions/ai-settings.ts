@@ -268,6 +268,7 @@ export async function deleteAIPrompt(id: string): Promise<{ success: boolean; er
  */
 export async function getAvailableModels(): Promise<Array<{ id: string; name: string; description: string }>> {
     return [
+        { id: 'z-ai/glm-4.7-flash', name: 'GLM-4.7-Flash', description: 'Rápido, econômico e multimodal' },
         { id: 'anthropic/claude-3-haiku', name: 'Claude 3 Haiku', description: 'Rápido e econômico' },
         { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', description: 'Melhor equilíbrio qualidade/custo' },
         { id: 'anthropic/claude-3-opus', name: 'Claude 3 Opus', description: 'Máxima qualidade' },

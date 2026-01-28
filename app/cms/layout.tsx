@@ -42,7 +42,6 @@ const navItems = [
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
     { label: 'Galeria & Mídia', href: '/cms/media', icon: ImageIcon },
     { label: 'Configurações', href: '/cms/settings', icon: Settings },
-    { label: 'IA', href: '/cms/ai', icon: Sparkles },
     { label: 'Documentação', href: '/cms/docs', icon: BookOpen },
 ]
 

@@ -92,7 +92,7 @@ export function AISettingsTab() {
                 setPrompts(promptsData)
                 setModels(modelsData)
                 setCategories(categoriesData)
-                setSelectedModel(settings.default_model || 'anthropic/claude-3-haiku')
+                setSelectedModel(settings.default_model || 'z-ai/glm-4.7-flash')
                 setTemperature(settings.default_temperature || 0.7)
             } catch (err) {
                 setError('Erro ao carregar configurações')

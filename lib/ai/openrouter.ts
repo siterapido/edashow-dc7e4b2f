@@ -68,6 +68,7 @@ export const MODELS = {
     CLAUDE_HAIKU: 'anthropic/claude-3-haiku',
     GPT_4O_MINI: 'openai/gpt-4o-mini',
     GEMINI_FLASH: 'google/gemini-flash-1.5',
+    GLM_FLASH: 'z-ai/glm-4.7-flash',
 
     // Quality
     CLAUDE_SONNET: 'anthropic/claude-3.5-sonnet',
@@ -287,6 +288,7 @@ class OpenRouterClient {
             'openai/gpt-4o-mini': { prompt: 0.15, completion: 0.60 },
             'openai/gpt-4o': { prompt: 2.50, completion: 10 },
             'google/gemini-flash-1.5': { prompt: 0.075, completion: 0.30 },
+            'z-ai/glm-4.7-flash': { prompt: 0.05, completion: 0.10 },
         }
 
         const modelPricing = pricing[model] || { prompt: 0, completion: 0 }
