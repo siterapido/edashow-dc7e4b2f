@@ -2,10 +2,16 @@
 
 /**
  * AI Image Server Actions
- * Server actions for image search and management
+ * Server actions for image search, management and AI cover generation
  */
 
 import { searchImages, downloadAndSaveImage, getCuratedImages, getAvailableProviders, NormalizedImage } from '@/lib/images/image-service'
+import {
+  getCoverImages,
+  extractVisualKeywords,
+  getAvailableProviders as getAIImageProviders,
+  type ImageGenerationResult
+} from '@/lib/ai/image-generator'
 
 export type { NormalizedImage }
 
@@ -179,6 +185,87 @@ export async function uploadImageFromUrl(
         return {
             url: null,
             error: error instanceof Error ? error.message : 'Erro ao fazer upload'
+        }
+    }
+}
+
+// ============================================
+// AI-Powered Cover Image Search (Pexels - FREE)
+// ============================================
+
+export interface CoverImageRequest {
+    title: string
+    content?: string
+    count?: number
+}
+
+/**
+ * Check which AI image providers are available
+ */
+export async function checkAIImageProviders(): Promise<{
+    pexels: boolean
+}> {
+    return getAIImageProviders()
+}
+
+/**
+ * Get AI-powered cover image suggestions based on post content
+ * Uses Pexels (FREE) with AI-powered keyword extraction
+ */
+export async function getAICoverSuggestions(
+    request: CoverImageRequest
+): Promise<ImageGenerationResult> {
+    const { title, content, count = 8 } = request
+
+    return getCoverImages(title, {
+        content,
+        count
+    })
+}
+
+/**
+ * Get visual keywords for AI image search
+ */
+export async function getAIVisualKeywords(
+    title: string,
+    content?: string
+): Promise<string[]> {
+    return extractVisualKeywords(title, content)
+}
+
+/**
+ * Select and upload cover image to storage
+ */
+export async function selectAICoverImage(
+    imageUrl: string,
+    source: 'pexels' | 'unsplash'
+): Promise<{ url: string | null; error: string | null }> {
+    try {
+        // Fetch the image
+        const response = await fetch(imageUrl)
+        if (!response.ok) {
+            throw new Error('Failed to fetch image')
+        }
+
+        // Create NormalizedImage for upload
+        const image: NormalizedImage = {
+            id: `${source}-${Date.now()}`,
+            provider: source,
+            url: imageUrl,
+            thumbnailUrl: imageUrl,
+            width: 1280,
+            height: 720,
+            alt: `Cover image from ${source}`,
+            downloadUrl: imageUrl
+        }
+
+        const url = await downloadAndSaveImage(image, 'covers')
+        return { url, error: null }
+    } catch (error) {
+        console.error('Error selecting cover image:', error)
+        return {
+            url: null,
+            error: error instanceof Error ? error.message : 'Failed to upload cover image'
         }
     }
 }

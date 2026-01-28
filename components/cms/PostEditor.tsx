@@ -6,8 +6,12 @@ import {
     ArrowLeft,
     Trash2,
     Settings,
-    ExternalLink
+    ExternalLink,
+    ImageIcon,
+    Mic,
+    Sparkles
 } from 'lucide-react'
+import { CoverImageGenerator, AudioTranscriber } from './ai'
 import { Button } from '@/components/ui/button'
 import { UnifiedMediumEditor } from './UnifiedMediumEditor'
 import { SettingsDrawer } from './SettingsDrawer'
@@ -43,6 +47,8 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
 
     const [settingsOpen, setSettingsOpen] = useState(false)
     const [isPublishing, setIsPublishing] = useState(false)
+    const [showCoverGenerator, setShowCoverGenerator] = useState(false)
+    const [showAudioTranscriber, setShowAudioTranscriber] = useState(false)
     const [formData, setFormData] = useState({
         id: post?.id || 'new',
         title: post?.title || '',
@@ -107,6 +113,21 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
             ...(field === 'title' && formData.id === 'new' ? { slug: slugify(value) } : {})
         }))
     }, [formData.id])
+
+    // Handle transcription completion
+    const handleTranscriptionComplete = useCallback((result: {
+        title: string
+        excerpt: string
+        content: string
+    }) => {
+        setFormData(prev => ({
+            ...prev,
+            title: result.title || prev.title,
+            slug: result.title ? slugify(result.title) : prev.slug,
+            excerpt: result.excerpt || prev.excerpt,
+            content: result.content || prev.content
+        }))
+    }, [])
 
     const handleSave = async () => {
         if (!formData.title) {
@@ -185,6 +206,35 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
+                        {/* AI Tools */}
+                        <div className="flex items-center gap-1 px-2 py-1 bg-purple-50 rounded-lg border border-purple-100">
+                            <Sparkles className="w-4 h-4 text-purple-500" />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setShowCoverGenerator(true)}
+                                className="text-purple-600 hover:text-purple-700 hover:bg-purple-100 h-7 px-2 text-xs"
+                                title="Gerar capa com IA"
+                            >
+                                <ImageIcon className="w-4 h-4 mr-1" />
+                                Capa
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setShowAudioTranscriber(true)}
+                                className="text-purple-600 hover:text-purple-700 hover:bg-purple-100 h-7 px-2 text-xs"
+                                title="Transcrever áudio"
+                            >
+                                <Mic className="w-4 h-4 mr-1" />
+                                Áudio
+                            </Button>
+                        </div>
+
+                        <div className="w-px h-6 bg-gray-200" />
+
                         {/* View Published Post Button */}
                         {formData.status === 'published' && formData.slug && (
                             <Button
@@ -252,6 +302,24 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                 onDelete={handleDelete}
                 isNew={formData.id === 'new'}
             />
+
+            {/* AI Cover Image Generator Modal */}
+            {showCoverGenerator && (
+                <CoverImageGenerator
+                    title={formData.title}
+                    content={formData.content}
+                    onSelect={(url) => updateField('cover_image_url', url)}
+                    onClose={() => setShowCoverGenerator(false)}
+                />
+            )}
+
+            {/* Audio Transcriber Modal */}
+            {showAudioTranscriber && (
+                <AudioTranscriber
+                    onTranscriptionComplete={handleTranscriptionComplete}
+                    onClose={() => setShowAudioTranscriber(false)}
+                />
+            )}
         </div>
     )
 }

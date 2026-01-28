@@ -40,8 +40,12 @@ import {
     EyeOff,
     Clock,
     FileText,
-    X
+    X,
+    Sparkles,
+    Wand2,
+    Mic
 } from 'lucide-react'
+import { AIBubbleMenu } from './ai/AIBubbleMenu'
 import { cn } from '@/lib/utils'
 import { uploadMedia } from '@/lib/actions/cms-media'
 
@@ -525,87 +529,93 @@ export function UnifiedMediumEditor({
             {/* Bubble Menu - appears on text selection */}
             <BubbleMenu
                 editor={editor}
-                className="bg-white border border-gray-200 rounded-lg shadow-xl flex items-center gap-0.5 p-1 overflow-hidden"
+                className="bg-white border border-gray-200 rounded-lg shadow-xl flex flex-col overflow-hidden"
             >
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    isActive={editor.isActive('bold')}
-                    title="Negrito (Cmd+B)"
-                >
-                    <Bold className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    isActive={editor.isActive('italic')}
-                    title="Itálico (Cmd+I)"
-                >
-                    <Italic className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    isActive={editor.isActive('underline')}
-                    title="Sublinhado (Cmd+U)"
-                >
-                    <UnderlineIcon className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
-                    isActive={editor.isActive('strike')}
-                    title="Tachado"
-                >
-                    <Strikethrough className="w-4 h-4" />
-                </BubbleButton>
+                {/* Formatting Row */}
+                <div className="flex items-center gap-0.5 p-1">
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        isActive={editor.isActive('bold')}
+                        title="Negrito (Cmd+B)"
+                    >
+                        <Bold className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        isActive={editor.isActive('italic')}
+                        title="Itálico (Cmd+I)"
+                    >
+                        <Italic className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        isActive={editor.isActive('underline')}
+                        title="Sublinhado (Cmd+U)"
+                    >
+                        <UnderlineIcon className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().toggleStrike().run()}
+                        isActive={editor.isActive('strike')}
+                        title="Tachado"
+                    >
+                        <Strikethrough className="w-4 h-4" />
+                    </BubbleButton>
 
-                <div className="w-px h-5 bg-gray-200 mx-1" />
+                    <div className="w-px h-5 bg-gray-200 mx-1" />
 
-                <BubbleButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    isActive={editor.isActive('heading', { level: 2 })}
-                    title="Título 2"
-                >
-                    <Heading2 className="w-4 h-4" />
-                </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        isActive={editor.isActive('heading', { level: 2 })}
+                        title="Título 2"
+                    >
+                        <Heading2 className="w-4 h-4" />
+                    </BubbleButton>
 
-                <div className="w-px h-5 bg-gray-200 mx-1" />
+                    <div className="w-px h-5 bg-gray-200 mx-1" />
 
-                <BubbleButton
-                    onClick={setLink}
-                    isActive={editor.isActive('link')}
-                    title="Link"
-                >
-                    <LinkIcon className="w-4 h-4" />
-                </BubbleButton>
+                    <BubbleButton
+                        onClick={setLink}
+                        isActive={editor.isActive('link')}
+                        title="Link"
+                    >
+                        <LinkIcon className="w-4 h-4" />
+                    </BubbleButton>
 
-                <div className="w-px h-5 bg-gray-200 mx-1" />
+                    <div className="w-px h-5 bg-gray-200 mx-1" />
 
-                <BubbleButton
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                    isActive={editor.isActive({ textAlign: 'left' })}
-                    title="Alinhar à esquerda"
-                >
-                    <AlignLeft className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                    isActive={editor.isActive({ textAlign: 'center' })}
-                    title="Centralizar"
-                >
-                    <AlignCenter className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                    isActive={editor.isActive({ textAlign: 'right' })}
-                    title="Alinhar à direita"
-                >
-                    <AlignRight className="w-4 h-4" />
-                </BubbleButton>
-                <BubbleButton
-                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-                    isActive={editor.isActive({ textAlign: 'justify' })}
-                    title="Justificar"
-                >
-                    <AlignJustify className="w-4 h-4" />
-                </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                        isActive={editor.isActive({ textAlign: 'left' })}
+                        title="Alinhar à esquerda"
+                    >
+                        <AlignLeft className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                        isActive={editor.isActive({ textAlign: 'center' })}
+                        title="Centralizar"
+                    >
+                        <AlignCenter className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                        isActive={editor.isActive({ textAlign: 'right' })}
+                        title="Alinhar à direita"
+                    >
+                        <AlignRight className="w-4 h-4" />
+                    </BubbleButton>
+                    <BubbleButton
+                        onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                        isActive={editor.isActive({ textAlign: 'justify' })}
+                        title="Justificar"
+                    >
+                        <AlignJustify className="w-4 h-4" />
+                    </BubbleButton>
+                </div>
+
+                {/* AI Row */}
+                <AIBubbleMenu editor={editor} />
             </BubbleMenu>
 
             {/* Floating Menu - appears on empty lines */}
