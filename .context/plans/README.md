@@ -4,7 +4,8 @@ This directory contains plans for coordinating work across documentation and pla
 
 ## Plan Queue
 1. [Admin Ia Tab Integration](./admin-ia-tab-integration.md)
-2. [Ai Rewriter Integration](./ai-rewriter-integration.md)
+2. [Ai Editor Integration](./ai-editor-integration.md)
+3. [Ai Rewriter Integration](./ai-rewriter-integration.md)
 
 ## How To Create Or Update Plans
 - Run "ai-context plan <name>" to scaffold a new plan template.

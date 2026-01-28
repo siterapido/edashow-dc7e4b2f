@@ -1,0 +1,14 @@
+{
+  "active": [
+    {
+      "slug": "ai-editor-integration",
+      "path": "plans/ai-editor-integration.md",
+      "title": "Integração Avançada de IA ao Editor de Posts",
+      "summary": "Expandir a integração de IA existente com funcionalidades diretamente no editor: geração de capas, transcrição de áudio, IA inline, sugestões em tempo real e ferramentas de produtividade.",
+      "linkedAt": "2026-01-28T08:22:20.622Z",
+      "status": "active"
+    }
+  ],
+  "completed": [],
+  "primary": "ai-editor-integration"
+}

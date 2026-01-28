@@ -1,28 +1,35 @@
 project:
-  name: "ai-rewriter-context-integration"
-  scale: SMALL
-  started: "2026-01-22T00:15:42.839Z"
+  name: "ai-editor-integration"
+  scale: LARGE
+  started: "2026-01-28T08:22:16.210Z"
   current_phase: P
 
 phases:
   P:
     status: in_progress
-    started_at: "2026-01-22T00:15:42.837Z"
+    started_at: "2026-01-28T08:22:16.210Z"
   R:
-    status: skipped
-    reason: "Not required for scale SMALL"
+    status: pending
   E:
     status: pending
   V:
     status: pending
   C:
-    status: skipped
-    reason: "Not required for scale SMALL"
+    status: pending
 
-roles:
-  planner:
-    status: pending
-  developer:
-    status: pending
-  qa:
-    status: pending
+execution:
+  history:
+    - timestamp: "2026-01-28T08:22:16.210Z"
+      phase: P
+      action: started
+    - timestamp: "2026-01-28T08:22:20.623Z"
+      phase: P
+      action: plan_linked
+      plan: "ai-editor-integration"
+  last_activity: "2026-01-28T08:22:20.623Z"
+  resume_context: "Plano vinculado - aguardando revisão"
+
+approval:
+  plan_created: true
+  plan_approved: false
+
