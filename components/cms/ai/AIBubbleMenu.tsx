@@ -12,7 +12,9 @@ import {
   RefreshCw,
   ChevronDown,
   Loader2,
-  Undo2
+  Undo2,
+  PenLine,
+  Zap
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -22,7 +24,9 @@ import {
   aiTranslate,
   aiAdjustTone,
   aiFixGrammar,
-  aiQuickImprove
+  aiQuickImprove,
+  aiSimplify,
+  aiContinue
 } from '@/lib/actions/ai-inline'
 
 interface AIBubbleMenuProps {
@@ -40,6 +44,7 @@ export function AIBubbleMenu({ editor, className }: AIBubbleMenuProps) {
   const [showRewriteMenu, setShowRewriteMenu] = useState(false)
   const [showToneMenu, setShowToneMenu] = useState(false)
   const [showTranslateMenu, setShowTranslateMenu] = useState(false)
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [lastOriginal, setLastOriginal] = useState<string | null>(null)
   const [lastSelection, setLastSelection] = useState<{ from: number; to: number } | null>(null)
 
@@ -138,6 +143,36 @@ export function AIBubbleMenu({ editor, className }: AIBubbleMenuProps) {
       'improve'
     )
   }, [getSelectedText, handleAIAction])
+
+  const handleSimplify = useCallback(() => {
+    const selectedText = getSelectedText()
+    handleAIAction(
+      () => aiSimplify(selectedText),
+      'simplify'
+    )
+  }, [getSelectedText, handleAIAction])
+
+  const handleContinue = useCallback(() => {
+    const selectedText = getSelectedText()
+    // Para continuar, inserimos no final da seleção ao invés de substituir
+    const { from, to } = editor.state.selection
+    setLastOriginal(selectedText)
+    setLastSelection({ from, to })
+
+    setIsLoading(true)
+    setLoadingAction('continue')
+
+    aiContinue(selectedText).then(result => {
+      // Insere o texto continuado após a seleção
+      editor.chain().focus().setTextSelection(to).insertContent(' ' + result.result).run()
+    }).catch(error => {
+      console.error('AI continue error:', error)
+      alert(`Erro ao continuar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`)
+    }).finally(() => {
+      setIsLoading(false)
+      setLoadingAction(null)
+    })
+  }, [editor, getSelectedText])
 
   const handleUndo = useCallback(() => {
     if (lastOriginal && lastSelection) {
@@ -303,6 +338,32 @@ export function AIBubbleMenu({ editor, className }: AIBubbleMenuProps) {
         <CheckCircle className="w-3.5 h-3.5" />
       </AIButton>
 
+      {/* More Options Dropdown */}
+      <div className="relative">
+        <AIButton
+          onClick={() => setShowMoreMenu(!showMoreMenu)}
+          isLoading={loadingAction === 'simplify' || loadingAction === 'continue'}
+          disabled={isLoading}
+          title="Mais opções"
+        >
+          <Zap className="w-3.5 h-3.5" />
+          <ChevronDown className="w-3 h-3" />
+        </AIButton>
+
+        {showMoreMenu && (
+          <DropdownMenu onClose={() => setShowMoreMenu(false)}>
+            <DropdownItem onClick={handleSimplify}>
+              <Shrink className="w-3.5 h-3.5" />
+              Simplificar texto
+            </DropdownItem>
+            <DropdownItem onClick={handleContinue}>
+              <PenLine className="w-3.5 h-3.5" />
+              Continuar escrevendo
+            </DropdownItem>
+          </DropdownMenu>
+        )}
+      </div>
+
       {/* Undo AI Change */}
       {lastOriginal && (
         <>
@@ -382,16 +443,18 @@ function DropdownMenu({
 // Dropdown Item Component
 function DropdownItem({
   onClick,
-  children
+  children,
+  icon
 }: {
   onClick: () => void
   children: React.ReactNode
+  icon?: React.ReactNode
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
     >
       {children}
     </button>

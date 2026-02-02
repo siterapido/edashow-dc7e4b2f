@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
     Settings,
     X,
@@ -16,12 +16,15 @@ import {
     CheckCircle2,
     Archive,
     ChevronDown,
-    Sparkles
+    Sparkles,
+    Loader2,
+    Wand2
 } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { autoCategorizeContent } from '@/lib/actions/ai-posts'
 
 interface SettingsDrawerProps {
     open: boolean
@@ -39,6 +42,10 @@ interface SettingsDrawerProps {
     columnists: Array<{ id: string; name: string }>
     onDelete?: () => void
     isNew?: boolean
+    // New props for AI categorization
+    postTitle?: string
+    postContent?: string
+    postExcerpt?: string
 }
 
 // Premium Settings Card Component
@@ -283,13 +290,49 @@ function SettingsModal({
     categories,
     columnists,
     onDelete,
-    isNew
+    isNew,
+    postTitle,
+    postContent,
+    postExcerpt
 }: SettingsDrawerProps) {
     const [showDangerZone, setShowDangerZone] = useState(false)
     const [isClosing, setIsClosing] = useState(false)
+    const [isAICategorizing, setIsAICategorizing] = useState(false)
+    const [aiSuggestion, setAiSuggestion] = useState<string | null>(null)
 
     const today = new Date().toISOString().split('T')[0]
     const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0]
+
+    // AI Auto-categorize handler
+    const handleAICategorize = useCallback(async () => {
+        if (!postTitle || !postContent) {
+            alert('Adicione um titulo e conteudo para usar a categorizacao automatica')
+            return
+        }
+
+        setIsAICategorizing(true)
+        setAiSuggestion(null)
+
+        try {
+            const result = await autoCategorizeContent(postTitle, postContent, postExcerpt)
+
+            if (result.categoryId) {
+                onChange('category_id', result.categoryId)
+                setAiSuggestion(`Categoria "${result.category}" aplicada!`)
+            } else {
+                setAiSuggestion(`Sugestao: "${result.category}" (nao cadastrada)`)
+            }
+
+            // Clear suggestion after 3 seconds
+            setTimeout(() => setAiSuggestion(null), 3000)
+        } catch (error) {
+            console.error('AI categorization error:', error)
+            setAiSuggestion('Erro ao categorizar')
+            setTimeout(() => setAiSuggestion(null), 3000)
+        } finally {
+            setIsAICategorizing(false)
+        }
+    }, [postTitle, postContent, postExcerpt, onChange])
 
     const handleClose = () => {
         setIsClosing(true)
@@ -405,7 +448,36 @@ function SettingsModal({
                         {/* Category & Author */}
                         <div className="grid grid-cols-1 gap-6">
                             <div className="space-y-4">
-                                <SectionHeader icon={Tag} label="Categoria" />
+                                <div className="flex items-center justify-between">
+                                    <SectionHeader icon={Tag} label="Categoria" />
+                                    <button
+                                        type="button"
+                                        onClick={handleAICategorize}
+                                        disabled={isAICategorizing || !postTitle || !postContent}
+                                        className={cn(
+                                            "flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-all",
+                                            "bg-purple-50 text-purple-600 hover:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed",
+                                            "border border-purple-100"
+                                        )}
+                                        title="Sugerir categoria com IA"
+                                    >
+                                        {isAICategorizing ? (
+                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                        ) : (
+                                            <Wand2 className="w-3.5 h-3.5" />
+                                        )}
+                                        <span>Auto</span>
+                                    </button>
+                                </div>
+                                {aiSuggestion && (
+                                    <div className={cn(
+                                        "text-xs px-3 py-2 rounded-xl flex items-center gap-2",
+                                        aiSuggestion.includes('Erro') ? "bg-red-50 text-red-600" : "bg-green-50 text-green-600"
+                                    )}>
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                        {aiSuggestion}
+                                    </div>
+                                )}
                                 <CustomSelect
                                     value={formData.category_id}
                                     onChange={(val) => onChange('category_id', val)}
