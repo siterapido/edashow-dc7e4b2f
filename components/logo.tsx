@@ -11,6 +11,7 @@ type LogoProps = {
   imageClassName?: string;
   priority?: boolean;
   variant?: "light" | "dark" | "white";
+  children?: React.ReactNode;
 };
 
 /**
@@ -21,6 +22,7 @@ export function Logo({
   imageClassName,
   priority = false,
   variant = "light",
+  children,
 }: LogoProps) {
   const router = useRouter();
   const [logoSrc, setLogoSrc] = useState<string>("");
@@ -51,8 +53,12 @@ export function Logo({
   }, [variant])
 
   const setDefaultLogo = () => {
-    // Logo padrão - usando placeholder-logo.svg que existe na pasta public
-    setLogoSrc("/placeholder-logo.svg")
+    // Logo padrão - usa logo branco para variante white, senão placeholder
+    if (variant === "white") {
+      setLogoSrc("/logo-white.svg")
+    } else {
+      setLogoSrc("/placeholder-logo.svg")
+    }
   }
 
   const handleClick = (e: React.MouseEvent) => {
@@ -88,11 +94,11 @@ export function Logo({
         className={cn(
           "h-10 w-auto object-contain drop-shadow-lg md:h-12",
           imageClassName,
-          // Se for uma URL externa ou vinda do Supabase, talvez queiramos manter o brilho original
-          // No mobile, anteriormente usávamos brightness-0 invert para o logo padrão
-          variant === "white" && !logoSrc.startsWith('http') && "brightness-0 invert"
+          // Aplica filtro apenas se for logo externo em variante white (logo-white.svg já é branco)
+          variant === "white" && logoSrc.startsWith('http') && "brightness-0 invert"
         )}
       />
+      {children}
     </Link>
   )
 }

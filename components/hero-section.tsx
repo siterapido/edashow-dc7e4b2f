@@ -307,6 +307,23 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-16 md:px-20 lg:px-24 py-12 sm:py-20 md:py-24 lg:py-28 relative z-10">
+              {/* Hero Logo */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="mb-6 sm:mb-8"
+              >
+                <Image
+                  src="/logo-white.svg"
+                  alt="EDA Show"
+                  width={180}
+                  height={80}
+                  priority
+                  className="h-12 sm:h-14 md:h-16 w-auto drop-shadow-lg"
+                />
+              </motion.div>
+
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
 
                 {/* Main Content */}
