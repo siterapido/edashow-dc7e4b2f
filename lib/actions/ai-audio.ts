@@ -12,8 +12,11 @@ import {
   validateAudioFile,
   getSupportedFormats,
   type TranscriptionResult,
-  type ProcessedTranscription
+  type ProcessedTranscription as ProcessedTranscriptionType
 } from '@/lib/ai/transcription'
+
+// Re-export type for consumers
+export type ProcessedTranscription = ProcessedTranscriptionType
 
 /**
  * Check if transcription service is available

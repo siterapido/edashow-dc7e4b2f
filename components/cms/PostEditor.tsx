@@ -9,9 +9,10 @@ import {
     ExternalLink,
     ImageIcon,
     Mic,
-    Sparkles
+    Sparkles,
+    Wand2
 } from 'lucide-react'
-import { CoverImageGenerator, AudioTranscriber } from './ai'
+import { CoverImageGenerator, AudioTranscriber, AIToolsPanel } from './ai'
 import { Button } from '@/components/ui/button'
 import { UnifiedMediumEditor } from './UnifiedMediumEditor'
 import { SettingsDrawer } from './SettingsDrawer'
@@ -49,6 +50,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
     const [isPublishing, setIsPublishing] = useState(false)
     const [showCoverGenerator, setShowCoverGenerator] = useState(false)
     const [showAudioTranscriber, setShowAudioTranscriber] = useState(false)
+    const [showAIToolsPanel, setShowAIToolsPanel] = useState(false)
     const [formData, setFormData] = useState({
         id: post?.id || 'new',
         title: post?.title || '',
@@ -213,6 +215,17 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
+                                onClick={() => setShowAIToolsPanel(true)}
+                                className="text-purple-600 hover:text-purple-700 hover:bg-purple-100 h-7 px-2 text-xs"
+                                title="Ferramentas de IA"
+                            >
+                                <Wand2 className="w-4 h-4 mr-1" />
+                                Ferramentas
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => setShowCoverGenerator(true)}
                                 className="text-purple-600 hover:text-purple-700 hover:bg-purple-100 h-7 px-2 text-xs"
                                 title="Gerar capa com IA"
@@ -301,6 +314,9 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                 columnists={columnists}
                 onDelete={handleDelete}
                 isNew={formData.id === 'new'}
+                postTitle={formData.title}
+                postContent={formData.content}
+                postExcerpt={formData.excerpt}
             />
 
             {/* AI Cover Image Generator Modal */}
@@ -318,6 +334,21 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                 <AudioTranscriber
                     onTranscriptionComplete={handleTranscriptionComplete}
                     onClose={() => setShowAudioTranscriber(false)}
+                />
+            )}
+
+            {/* AI Tools Panel Modal */}
+            {showAIToolsPanel && (
+                <AIToolsPanel
+                    title={formData.title}
+                    content={formData.content}
+                    excerpt={formData.excerpt}
+                    onExcerptChange={(value) => updateField('excerpt', value)}
+                    onTitleChange={(value) => updateField('title', value)}
+                    onTagsChange={(tags) => updateField('tags', tags)}
+                    onCategoryChange={(categoryId) => updateField('category_id', categoryId)}
+                    categories={categories}
+                    onClose={() => setShowAIToolsPanel(false)}
                 />
             )}
         </div>
