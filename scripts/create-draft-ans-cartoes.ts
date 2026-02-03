@@ -1,7 +1,17 @@
 import pg from 'pg'
+import * as dotenv from 'dotenv'
+import * as path from 'path'
 
-// DATABASE_URI from .env.local.bak
-const DATABASE_URI = 'postgresql://postgres.exeuuqbgyfaxgbwygfuu:Gi1hnQuYVo0zr7Eo@aws-0-sa-east-1.pooler.supabase.com:6543/postgres'
+// Load environment variables from .env.local
+dotenv.config({ path: path.join(__dirname, '../.env.local') })
+
+const DATABASE_URI = process.env.DATABASE_URI
+
+if (!DATABASE_URI) {
+    console.error('Erro: Variável DATABASE_URI não encontrada.')
+    console.error('Configure no arquivo .env.local ou como variável de ambiente.')
+    process.exit(1)
+}
 
 const pool = new pg.Pool({
     connectionString: DATABASE_URI,
