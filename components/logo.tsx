@@ -51,14 +51,8 @@ export function Logo({
   }, [variant])
 
   const setDefaultLogo = () => {
-    // Logos padrão baseados na variante
-    if (variant === "dark") {
-      setLogoSrc("/logo-dark.png")
-    } else if (variant === "white") {
-      setLogoSrc("/eda-show-logo.png")
-    } else {
-      setLogoSrc("/eda-show-logo.png")
-    }
+    // Logo padrão - usando placeholder-logo.svg que existe na pasta public
+    setLogoSrc("/placeholder-logo.svg")
   }
 
   const handleClick = (e: React.MouseEvent) => {
