@@ -123,7 +123,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/cms/dashboard" className="flex items-center gap-3">
                         <div className="relative w-10 h-10 shrink-0">
                             <Image
-                                src="/placeholder-logo.svg"
+                                src="/eda-show-logo.png"
                                 alt="EDA Show"
                                 width={40}
                                 height={40}

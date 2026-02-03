@@ -51,8 +51,8 @@ export function Logo({
   }, [variant])
 
   const setDefaultLogo = () => {
-    // Logo padrão - usando placeholder-logo.svg que existe na pasta public
-    setLogoSrc("/placeholder-logo.svg")
+    // Logo padrão EDA Show
+    setLogoSrc("/eda-show-logo.png")
   }
 
   const handleClick = (e: React.MouseEvent) => {
@@ -87,10 +87,7 @@ export function Logo({
         sizes="(max-width: 768px) 140px, 180px"
         className={cn(
           "h-10 w-auto object-contain drop-shadow-lg md:h-12",
-          imageClassName,
-          // Se for uma URL externa ou vinda do Supabase, talvez queiramos manter o brilho original
-          // No mobile, anteriormente usávamos brightness-0 invert para o logo padrão
-          variant === "white" && !logoSrc.startsWith('http') && "brightness-0 invert"
+          imageClassName
         )}
       />
     </Link>

@@ -39,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings?.site_name || "EDA.Show",
       images: [
         {
-          url: settings?.site_favicon_url || '/placeholder-logo.svg',
+          url: settings?.site_favicon_url || '/eda-show-logo.png',
           width: 1200,
           height: 630,
           alt: settings?.site_name || "EDA.Show",
@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: settings?.site_name || "EDA.Show",
       description: settings?.site_description || "Portal editorial do mercado de saúde suplementar",
-      images: [settings?.site_favicon_url || '/placeholder-logo.svg'],
+      images: [settings?.site_favicon_url || '/eda-show-logo.png'],
     },
   }
 }

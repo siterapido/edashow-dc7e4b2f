@@ -43,14 +43,14 @@ export function EventOrganizers({ organizers, className }: EventOrganizersProps)
                   />
                 ) : (
                   <AvatarImage
-                    src="/placeholder-logo.svg"
+                    src="/eda-show-logo.png"
                     alt="EDA Show Logo"
                     className="object-contain p-2 bg-white"
                   />
                 )}
                 <AvatarFallback className="bg-white">
                   <Image
-                    src="/placeholder-logo.svg"
+                    src="/eda-show-logo.png"
                     alt="EDA Show Logo"
                     width={64}
                     height={64}
