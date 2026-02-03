@@ -45,14 +45,14 @@ export function EventSpeakers({ speakers, className }: EventSpeakersProps) {
                   />
                 ) : (
                   <AvatarImage
-                    src="/logo-dark.png"
+                    src="/placeholder-logo.svg"
                     alt="EDA Show Logo"
                     className="object-contain p-2 bg-white"
                   />
                 )}
                 <AvatarFallback className="bg-white">
                   <Image
-                    src="/logo-dark.png"
+                    src="/placeholder-logo.svg"
                     alt="EDA Show Logo"
                     width={96}
                     height={96}
