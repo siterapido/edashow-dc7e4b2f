@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { ClientLayout } from "@/components/client-layout"
 import { DynamicThemeProvider } from "@/components/dynamic-theme-provider"
 import { getPublicSupabaseClient } from "@/lib/supabase/public-client"
+import { getAbsoluteImageUrl } from "@/lib/utils"
 import "./globals.css"
 import Script from "next/script"
 import MaintenancePage from "@/components/maintenance-page"
@@ -22,6 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://edashow.com.br'
 
+  // Garante URL absoluta para a imagem OG (essencial para WhatsApp)
+  const ogImageUrl = getAbsoluteImageUrl(settings?.site_og_image_url || settings?.site_favicon_url, siteUrl)
+
   return {
     metadataBase: new URL(siteUrl),
     title: settings?.site_name || "EDA.Show",
@@ -39,10 +43,11 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings?.site_name || "EDA.Show",
       images: [
         {
-          url: settings?.site_favicon_url || '/placeholder-logo.svg',
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: settings?.site_name || "EDA.Show",
+          type: 'image/png',
         },
       ],
     },
@@ -50,7 +55,11 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: settings?.site_name || "EDA.Show",
       description: settings?.site_description || "Portal editorial do mercado de saúde suplementar",
-      images: [settings?.site_favicon_url || '/placeholder-logo.svg'],
+      images: [ogImageUrl],
+    },
+    other: {
+      // Meta tags adicionais para melhor compatibilidade com WhatsApp
+      'og:image:secure_url': ogImageUrl,
     },
   }
 }

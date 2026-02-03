@@ -1,4 +1,5 @@
 import { getPostBySlug, getImageUrl, getSponsors } from '@/lib/supabase/api'
+import { getAbsoluteImageUrl } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -59,7 +60,7 @@ interface PostPageProps {
   }>
 }
 
-// Metadados da página
+// Metadados da página - otimizado para WhatsApp e redes sociais
 export async function generateMetadata({ params }: PostPageProps) {
   const { slug } = await params
   const post = await getPostBySlug(slug)
@@ -73,21 +74,23 @@ export async function generateMetadata({ params }: PostPageProps) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://edashow.com.br'
   const postUrl = `${siteUrl}/posts/${slug}`
 
-  // Usa a imagem destacada do post, ou a imagem de capa, ou o logo padrão
-  const imageUrl = post.featured_image?.url ||
-    post.cover_image_url ||
-    '/placeholder-logo.svg'
+  // Garante URL absoluta para a imagem (essencial para WhatsApp)
+  const rawImageUrl = post.featured_image?.url || post.cover_image_url
+  const imageUrl = getAbsoluteImageUrl(rawImageUrl, siteUrl)
+
+  // Descrição com fallback adequado
+  const description = post.excerpt || `Leia "${post.title}" no EDA.Show`
 
   return {
     metadataBase: new URL(siteUrl),
     title: `${post.title} | EdaShow`,
-    description: post.excerpt || 'Leia mais no EdaShow',
+    description: description,
     openGraph: {
       type: 'article',
       locale: 'pt_BR',
       url: postUrl,
       title: post.title,
-      description: post.excerpt || 'Leia mais no EdaShow',
+      description: description,
       siteName: 'EDA.Show',
       images: [
         {
@@ -95,14 +98,21 @@ export async function generateMetadata({ params }: PostPageProps) {
           width: 1200,
           height: 630,
           alt: post.title,
+          type: 'image/jpeg',
         },
       ],
+      publishedTime: post.published_at,
+      authors: post.author?.name ? [post.author.name] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
-      description: post.excerpt || 'Leia mais no EdaShow',
+      description: description,
       images: [imageUrl],
+    },
+    other: {
+      // Meta tags adicionais para melhor compatibilidade com WhatsApp
+      'og:image:secure_url': imageUrl,
     },
   }
 }
