@@ -22,15 +22,6 @@ interface EventPageProps {
   }
 }
 
-// Gerar páginas estáticas para eventos existentes
-export async function generateStaticParams() {
-  const events = await getEvents({ limit: 100, status: 'upcoming' })
-
-  return events.map((event: any) => ({
-    slug: event.slug,
-  }))
-}
-
 // Metadados da página
 export async function generateMetadata({ params }: EventPageProps) {
   const event = await getEventBySlug(params.slug)

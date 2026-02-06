@@ -4,6 +4,17 @@ import { getPublicSupabaseClient } from '@/lib/supabase/public-client'
 export async function GET() {
     try {
         const supabase = getPublicSupabaseClient()
+        if (!supabase) {
+            return NextResponse.json({
+                themeColors: {
+                    primary: '#FF6F00',
+                    background: '#ffffff',
+                    foreground: '#0f172a',
+                },
+                site_name: 'EDA Show',
+                site_description: 'Portal editorial do mercado de saúde suplementar'
+            })
+        }
         const { data: theme, error } = await supabase
             .from('theme_settings')
             .select('*')

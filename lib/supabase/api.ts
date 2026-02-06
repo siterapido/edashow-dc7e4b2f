@@ -9,6 +9,8 @@ export async function getPosts(options: {
     featured?: boolean
 } = {}) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return []
+
     let query = supabase
         .from('posts')
         .select(`
@@ -32,7 +34,7 @@ export async function getPosts(options: {
     }
 
     if (options.category) {
-        // Buscar o ID da categoria pelo slug primeiro se necessário, 
+        // Buscar o ID da categoria pelo slug primeiro se necessário,
         // ou usar join filtrado. No Supabase, se categories é uma tabela relacionada:
         query = query.filter('categories.slug', 'eq', options.category)
     }
@@ -47,6 +49,8 @@ export async function getPosts(options: {
 
 export async function getPostBySlug(slug: string) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return null
+
     const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -68,6 +72,8 @@ export async function getPostBySlug(slug: string) {
 
 export async function getCategories() {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return []
+
     const { data, error } = await supabase
         .from('categories')
         .select('*')
@@ -82,6 +88,7 @@ export async function getCategories() {
 
 export async function getSponsors(options: { active?: boolean } = {}) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return []
 
     let query = supabase.from('sponsors').select('*').order('display_order', { ascending: true })
 
@@ -98,6 +105,8 @@ export async function getSponsors(options: { active?: boolean } = {}) {
 
 export async function getEvents(options: { limit?: number, status?: string } = {}) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return []
+
     let query = supabase.from('events').select('*').order('event_date', { ascending: true })
 
     if (options.limit) query = query.limit(options.limit)
@@ -113,6 +122,8 @@ export async function getEvents(options: { limit?: number, status?: string } = {
 
 export async function getEventBySlug(slug: string) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return null
+
     const { data, error } = await supabase
         .from('events')
         .select('*')
@@ -128,6 +139,8 @@ export async function getEventBySlug(slug: string) {
 
 export async function getColumnists(options: { limit?: number } = {}) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return []
+
     let query = supabase.from('columnists').select('*')
     if (options.limit) query = query.limit(options.limit)
 
@@ -141,6 +154,8 @@ export async function getColumnists(options: { limit?: number } = {}) {
 
 export async function getColumnistBySlug(slug: string) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return null
+
     const { data, error } = await supabase
         .from('columnists')
         .select('*')
@@ -156,6 +171,8 @@ export async function getColumnistBySlug(slug: string) {
 
 export async function getCategoryBySlug(slug: string) {
     const supabase = getPublicSupabaseClient()
+    if (!supabase) return null
+
     const { data, error } = await supabase
         .from('categories')
         .select('*')

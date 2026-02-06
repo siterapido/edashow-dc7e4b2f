@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 async function getSiteSettings() {
   const supabase = getPublicSupabaseClient()
+  if (!supabase) return null
   const { data } = await supabase.from('theme_settings').select('*').single()
   return data
 }
