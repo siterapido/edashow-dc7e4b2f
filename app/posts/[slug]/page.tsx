@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: PostPageProps) {
   // Usa a imagem destacada do post, ou a imagem de capa, ou o logo padrão
   const imageUrl = post.featured_image?.url ||
     post.cover_image_url ||
-    '/placeholder-logo.svg'
+    '/eda-show-logo.png'
 
   return {
     metadataBase: new URL(siteUrl),
