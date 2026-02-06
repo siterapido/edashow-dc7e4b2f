@@ -28,7 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description: settings?.site_description || "Portal editorial do mercado de saúde suplementar",
     keywords: settings?.seo_keywords,
     icons: {
-      icon: settings?.site_favicon_url || "/favicon.ico",
+      icon: settings?.site_favicon_url || "/icon.svg",
+      apple: "/apple-icon.png",
     },
     openGraph: {
       type: 'website',
