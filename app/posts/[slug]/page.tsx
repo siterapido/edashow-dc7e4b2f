@@ -1,4 +1,5 @@
 import { getPostBySlug, getImageUrl, getSponsors } from '@/lib/supabase/api'
+import { normalizePostContent } from '@/lib/utils/post-content'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -17,41 +18,6 @@ import { MobileQuickShare } from '@/components/mobile-quick-share'
 // Força renderização dinâmica para evitar erros de serialização durante build
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
-
-/**
- * Normaliza o HTML do conteúdo do post
- * Remove TODAS as tags blockquote e converte o conteúdo para parágrafos normais
- */
-function normalizePostContent(html: string): string {
-  if (!html) return ''
-
-  // Remove espaços em branco do início e fim
-  let content = html.trim()
-
-  // Remove TODAS as tags de abertura e fechamento de blockquote
-  // Isso garante que nenhum blockquote seja renderizado como citação
-  content = content.replace(/<\/?blockquote[^>]*>/gi, '')
-
-  // Remove espaços extras que possam ter sobrado
-  content = content.trim()
-
-  // Se o conteúdo resultante estiver vazio, retorna string vazia
-  if (!content) return ''
-
-  // Se o conteúdo não tem tags <p>, envolve em parágrafos
-  if (!content.includes('<p>') && !content.includes('<h1>') && !content.includes('<h2>') &&
-    !content.includes('<h3>') && !content.includes('<ul>') && !content.includes('<ol>')) {
-    // Divide por quebras de linha e cria parágrafos
-    const paragraphs = content
-      .split(/\n\n+/)
-      .filter(p => p.trim())
-      .map(p => `<p>${p.trim()}</p>`)
-      .join('\n')
-    return paragraphs
-  }
-
-  return content
-}
 
 interface PostPageProps {
   params: Promise<{
