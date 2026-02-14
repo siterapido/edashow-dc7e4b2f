@@ -1,4 +1,5 @@
 import { getPostBySlug, getImageUrl, getSponsors } from '@/lib/supabase/api'
+import { normalizePostContent } from '@/lib/utils/post-content'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

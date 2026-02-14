@@ -10,7 +10,8 @@ import {
     ImageIcon,
     Mic,
     Sparkles,
-    Wand2
+    Wand2,
+    Eye
 } from 'lucide-react'
 import { CoverImageGenerator, AudioTranscriber, AIToolsPanel } from './ai'
 import { Button } from '@/components/ui/button'
@@ -48,6 +49,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
 
     const [settingsOpen, setSettingsOpen] = useState(false)
     const [isPublishing, setIsPublishing] = useState(false)
+    const [isSavingForPreview, setIsSavingForPreview] = useState(false)
     const [showCoverGenerator, setShowCoverGenerator] = useState(false)
     const [showAudioTranscriber, setShowAudioTranscriber] = useState(false)
     const [showAIToolsPanel, setShowAIToolsPanel] = useState(false)
@@ -247,6 +249,37 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         </div>
 
                         <div className="w-px h-6 bg-gray-200" />
+
+                        {/* Preview Button - for saved posts */}
+                        {formData.id !== 'new' && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                disabled={isSavingForPreview}
+                                onClick={async () => {
+                                    if (!formData.title) {
+                                        alert('Por favor, adicione um título ao post.')
+                                        return
+                                    }
+                                    setIsSavingForPreview(true)
+                                    try {
+                                        await savePost(formData)
+                                        window.open(`/cms/posts/${formData.id}/preview`, '_blank')
+                                    } catch (error: any) {
+                                        console.error('Erro ao salvar para preview:', error)
+                                        alert(`Erro ao salvar: ${error?.message || 'Erro desconhecido'}`)
+                                    } finally {
+                                        setIsSavingForPreview(false)
+                                    }
+                                }}
+                                className="text-gray-500 hover:text-gray-900 gap-1.5"
+                                title="Pré-visualizar como publicado"
+                            >
+                                <Eye className="w-4 h-4" />
+                                <span className="hidden sm:inline text-xs">Visualizar</span>
+                            </Button>
+                        )}
 
                         {/* View Published Post Button */}
                         {formData.status === 'published' && formData.slug && (
