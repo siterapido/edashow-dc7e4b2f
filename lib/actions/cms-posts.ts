@@ -246,6 +246,70 @@ export async function deleteMultiplePosts(ids: string[]) {
     revalidatePath('/')
 }
 
+export async function getPostForPreview(id: string) {
+    const supabase = await createAdminClient()
+    const { data, error } = await supabase
+        .from('posts')
+        .select(`
+            *,
+            category:categories(id, name, slug),
+            author:columnists(id, name, slug, bio, photo_url, instagram_url, twitter_url),
+            cover_image_url
+        `)
+        .eq('id', id)
+        .single()
+
+    if (error) {
+        console.error(`[getPostForPreview] Erro ao buscar post ${id}:`, error)
+        return null
+    }
+
+    return {
+        ...data,
+        featured_image: data.cover_image_url
+            ? { url: data.cover_image_url, alt_text: data.title || 'Imagem do post' }
+            : null,
+    }
+}
+
+export async function publishPost(id: string) {
+    const supabase = await createAdminClient()
+
+    // Buscar post atual para verificar published_at
+    const { data: current } = await supabase
+        .from('posts')
+        .select('published_at, slug')
+        .eq('id', id)
+        .single()
+
+    const updateData: any = {
+        status: 'published',
+    }
+
+    // Só define published_at se ainda não tiver
+    if (!current?.published_at) {
+        updateData.published_at = new Date().toISOString()
+    }
+
+    const { data, error } = await supabase
+        .from('posts')
+        .update(updateData)
+        .eq('id', id)
+        .select('slug')
+        .single()
+
+    if (error) {
+        console.error('[publishPost] Erro:', error)
+        throw new Error(error.message || 'Erro ao publicar post')
+    }
+
+    revalidatePath('/cms/posts')
+    revalidatePath('/')
+    revalidatePath(`/posts/${data.slug}`)
+
+    return data
+}
+
 export async function getCategories() {
     const supabase = await createClient()
     const { data, error } = await supabase.from('categories').select('*').order('name')
